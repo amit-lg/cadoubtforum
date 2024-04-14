@@ -89,23 +89,19 @@ const ResetPassword = () => {
   }, []);
 
   return (
-    <main className="flex flex-col justify-center min-h-screen">
-      <div id="content" role="main" className="w-full   max-w-md mx-auto p-6">
+    <div id="content" role="main" className="w-full max-w-md mx-auto md:pr-3">
+      <div id="content" role="main" className="w-full mx-auto">
         <div
-          className={`mt-7 bg-white  rounded-xl ${
-            verified ? "shadow-lg" : "shadow-none"
-          }`}
+          className={``}
           >
           {verified ? (
             <div>
               <div className="p-4 sm:p-7">
                 <div className="text-center">
-                  <h1 className="block text-2xl font-bold text-gray-800">
+                  <h1 className="block lg:text-2xl text-xl font-bold text-gray-800">
                     Reset Password
                   </h1>
-                  <h3 className="mt-1 text-lg">
-                    Please enter your new password
-                  </h3>
+                  
                 </div>
 
                 <div className="mt-5">
@@ -149,13 +145,6 @@ const ResetPassword = () => {
                             setError={setCPassError}
                           />
                         </div>
-                        <p
-                          className="hidden text-xs text-red-600 mt-2"
-                          id="email-error"
-                        >
-                          Please include a valid email address so we can get
-                          back to you
-                        </p>
                         <div className="h-2">
                           {error && (
                             <p className="text-xs text-center text-red-600">
@@ -168,13 +157,13 @@ const ResetPassword = () => {
                     </div>
                   </form>
 
-                  <p className="text-center mt-2 text-sm text-gray-600 ">
+                  <p className="text-center mt-2 text-sm lg:text-base text-gray-600 ">
                     Remember your password?
                     <Link
                       className="text-blue-600 decoration-2 hover:underline font-medium"
                       to="/"
                     >
-                      Login here
+                      &nbsp;Login here
                     </Link>
                   </p>
                 </div>
@@ -203,7 +192,7 @@ const ResetPassword = () => {
           <ResetSuccessPopup />
         </div>
       )}
-    </main>
+    </div>
   );
 };
 

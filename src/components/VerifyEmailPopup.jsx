@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
-import { resendForgetPasswordMail, resendMailToUser } from "../apiCalls/user/auth";
+import {
+  resendForgetPasswordMail,
+  resendMailToUser,
+} from "../apiCalls/user/auth";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
@@ -12,10 +15,10 @@ const VerifyEmailPopup = () => {
   const [disabled, setDisabled] = useState(true);
   const [count, setCount] = useState(time); // Initial countdown value (in seconds)
   const [start, setStart] = useState(false);
-  const {tempToken} = useSelector((state) => state.app);
+  const { tempToken } = useSelector((state) => state.app);
+  const [error, setError] = useState("");
 
-  const location = useLocation()
-
+  const location = useLocation();
 
   const toggleTimer = () => {
     setStart(!start);
@@ -37,20 +40,23 @@ const VerifyEmailPopup = () => {
   }, [start]);
 
   const resendMail = async () => {
-
-    if(location.pathname === "/"){
+    if (location.pathname === "/") {
       const response = await resendMailToUser(tempToken);
       if (response.status === 200) {
         setDisabled(true);
         toggleTimer();
         setCount(time);
+      } else {
+        setError(response?.msg);
       }
-    }else{
+    } else {
       const response = await resendForgetPasswordMail(tempToken);
       if (response.status === 200) {
         setDisabled(true);
         toggleTimer();
         setCount(time);
+      } else {
+        setError(response?.msg);
       }
     }
   };
@@ -78,6 +84,11 @@ const VerifyEmailPopup = () => {
                 src={url}
                 alt="Verify email"
               />
+
+              <div className="h-2">
+                {error && <span className="text-red-500">{error}</span>}
+              </div>
+
               <Button onClick={resendMail} disabled={disabled}>
                 Resend Email{" "}
               </Button>

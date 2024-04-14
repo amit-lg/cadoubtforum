@@ -36,6 +36,8 @@ const ForgetPassword = () => {
       setError("");
       dispatch(setTempToken(response?.data?.accessToken));
       dispatch(openVerifyEmail());
+    }else{
+      setError(response?.msg);
     }
   };
 
@@ -87,7 +89,7 @@ const ForgetPassword = () => {
                     <div className="h-2">
                       {error && (
                         <p
-                          className="text-xs text-red-600 mt-2"
+                          className="text-xs text-center text-red-600 mt-2"
                           id="email-error"
                         >
                           {error}
