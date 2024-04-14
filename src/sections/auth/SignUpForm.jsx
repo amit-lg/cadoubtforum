@@ -199,7 +199,7 @@ const SigninForm = ({
 
   useEffect(() => {
     fetchCourses();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -329,14 +329,7 @@ const SigninForm = ({
               onClick={openTermsAndConditions}
               className="text-blue-500 cursor-pointer"
             >
-              terms
-            </span>{" "}
-            and{" "}
-            <span
-              onClick={openTermsAndConditions}
-              className="text-blue-500 cursor-pointer"
-            >
-              conditions
+              terms and conditions
             </span>
           </label>
         </div>

@@ -188,10 +188,10 @@ const ResetPassword = () => {
                 </h1>
 
                 <h2 className="text-2xl">
-                  !! Seems like the link has been expired
+                  Seems like the link has been expired
                 </h2>
 
-                <Button onClick={goToForgetPassPage}>Forgot Password</Button>
+                <Button onClick={goToForgetPassPage}>Reset Password</Button>
               </div>
             </div>
           )}

@@ -55,21 +55,18 @@ const ForgetPassword = () => {
         <div className="mt-7 bg-white  rounded-xl">
           <div className="p-4 sm:p-2">
             <div className="text-center">
-              <h1 className="block text-2xl font-bold text-gray-800">
-                OOPS!!
+              <h1 className="block text-3xl font-bold text-gray-800">
+                Forgot Your Password?
               </h1>
-              <h3 className="mt-1 md:text-lg text-base">
-                You forgot your password dont&apos;t worry.
-              </h3>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-7">
               <form onSubmit={handleSubmit}>
                 <div className="grid gap-y-4">
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-bold ml-1 mb-2 "
+                      className="block text-sm font-bold ml-1 mb-2 text-blue-500"
                     >
                       Email address
                     </label>
@@ -108,7 +105,7 @@ const ForgetPassword = () => {
                   className="text-blue-600 decoration-2 hover:underline font-medium"
                   to="/"
                 >
-                  Login here
+                  &nbsp;Login here
                 </Link>
               </p>
             </div>

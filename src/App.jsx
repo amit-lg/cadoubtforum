@@ -21,7 +21,6 @@ import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Calendar from "./pages/Calender";
 import PasswordLayout from "./layouts/PasswordLayout";
-// import AuthComponent from "./pages/TestLoginPage";
 
 function App() {
   return (

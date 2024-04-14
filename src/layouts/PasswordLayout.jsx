@@ -5,10 +5,10 @@ const PasswordLayout = () => {
 
   return (
     <div className="relative overflow-hidden h-screen w-full bg-white flex justify-center items-center p-5">
-      <div className="w-[90%] sm:w-[70%] md:w-[80%] xl:w-[70%] h-[400px] md:h-[500px] xl:h-[700px] flex bg-white shadow-lg shadow-blue-200 rounded-lg items-center relative z-10">
+      <div className="w-[90%] sm:w-[70%] md:w-[80%] xl:w-[70%] h-[400px] md:h-[500px] xl:h-[700px] flex bg-white shadow-custom-blue rounded-lg items-center relative z-10">
         {/* Img */}
         <div className="hidden md:flex h-full w-[50%] items-center">
-          <img className="w-full h-full object-contain" src={location.pathname === "/forgot-password" ? "/forget-password.svg" : "/reset-password.svg"} alt="" />
+          <img className="w-full h-full object-contain" src={location.pathname === "/forgot-password" ? `/forget-password.svg?date=${new Date().getTime()}` : `/reset-password.svg?date=${new Date().getTime()}`} alt={location.pathname === "/forgot-password" ? "forget password" : "reset password"} />
         </div>
 
         {/* Form */}
