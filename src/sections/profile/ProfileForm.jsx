@@ -16,11 +16,12 @@ import {
   updateProfileWithImage,
 } from "../../apiCalls/user/user";
 import PropTypes from "prop-types";
+import DateInput from "../../components/DateInput";
 // import { validateLink } from "../../utils/validators";
 
 // Avatar will come as prop
 
-const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdated }) => {
+const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdated , setCanUpdate}) => {
   const { user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -55,22 +56,6 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!validateLink(user?.fbUrl)) {
-    //   setFbUrlError("Please enter a valid url");
-    //   return;
-    // }
-    // if (!validateLink(user?.instaUrl)) {
-    //   setInstaUrlError("Please enter a valid url");
-    //   return;
-    // }
-    // if (!validateLink(user?.twitterUrl)) {
-    //   setTwitterUrlError("Please enter a valid url");
-    //   return;
-    // }
-    // if (!validateLink(user?.linkedInUrl)) {
-    //   setLinkedinUrlError("Please enter a valid url");
-    //   return;
-    // }
     let data;
     if (picUpdated) {
       data = new FormData();
@@ -86,23 +71,42 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
       data.append("bio", user?.bio);
       data.append("pictures", avatar);
 
+      if(canUpdateDOB){
+        data.append("dob" , user?.dob)
+      }
+
       const response = await updateProfileWithImage(data);
       if (response?.status === 200) {
         setPicUpdated(false);
+        setCanUpdate(false);
       }
     } else {
-      data = {
-        socials: JSON.stringify({
-          facebook: user?.fbUrl,
-          instagram: user?.instaUrl,
-          twitter: user?.twitterUrl,
-          linkedin: user?.linkedInUrl,
-        }),
-        bio: user?.bio,
-      };
+      const socials = JSON.stringify({
+        facebook: user?.fbUrl,
+        instagram: user?.instaUrl,
+        twitter: user?.twitterUrl,
+        linkedin: user?.linkedInUrl,
+      })
+
+      const bio = user?.bio;
+      const dob = user?.dob;
+
+      if(canUpdateDOB){
+        data = {
+          socials,
+          bio,
+          dob
+        }
+      }else{
+        data = {
+          socials,
+          bio
+        }
+      }
       const response = await updateProfile(data);
       if (response?.status === 200) {
         setPicUpdated(false);
+        setCanUpdate(false);
       }
     }
   };
@@ -125,7 +129,7 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
               disabled={true}
             />
 
-            <ProfileInput
+            <DateInput
               required={true}
               name="dob"
               id="dob"
@@ -134,7 +138,7 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
               placeholder="Enter your date of birth"
               onChange={handleDOB}
               value={user?.dob}
-              disabled={canUpdateDOB}
+              disabled={!canUpdateDOB}
             />
 
             <ProfileInput
@@ -247,4 +251,5 @@ ProfileForm.propTypes = {
   canUpdateDOB: PropTypes.bool,
   avatar: PropTypes.string,
   picUpdated: PropTypes.bool,
+  setPicUpdated: PropTypes.func
 };

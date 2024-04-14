@@ -15,14 +15,35 @@ import { useDispatch } from "react-redux";
 import { getCourses } from "../../apiCalls/courses";
 import { openVerifyEmail } from "../../redux/reducers/appReducer";
 
-const SigninForm = ({openTermsAndConditions , termsChecked }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState();
-  const [countryCode, setCountryCode] = useState("+91");
+const SigninForm = ({
+  openTermsAndConditions,
+  termsChecked,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  confirmPassword,
+  setConfirmPassword,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  phone,
+  setPhone,
+  countryCode,
+  setCountryCode,
+  courseLevels,
+  setCoursesLevels,
+  batch,
+  setBatch,
+}) => {
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [phone, setPhone] = useState();
+  // const [countryCode, setCountryCode] = useState("+91");
 
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -34,8 +55,6 @@ const SigninForm = ({openTermsAndConditions , termsChecked }) => {
   const [termsAccepted, setTermsAccepted] = useState(termsChecked);
 
   // const [course, setCourse] = useState([]);
-  const [courseLevels, setCoursesLevels] = useState([]);
-  const [batch, setBatch] = useState("");
 
   const dispatch = useDispatch();
 
@@ -180,7 +199,8 @@ const SigninForm = ({openTermsAndConditions , termsChecked }) => {
 
   useEffect(() => {
     fetchCourses();
-  }, [termsAccepted]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
@@ -220,18 +240,24 @@ const SigninForm = ({openTermsAndConditions , termsChecked }) => {
 
         <select
           onChange={(e) => setBatch(e.target.value)}
-          defaultValue=""
+          defaultValue={batch}
           required
           className={`
              p-2 bg-gray-100 w-full rounded-md  text-sm outline-none relative z-20 shadow-md
             ${batch === "" ? "text-gray-400" : "text-black"}
           `}
         >
-          <option value="" disabled className="text-gray-400">Select your course</option>
-          {courseLevels.map((level) => (
+          <option value="" disabled className="text-gray-400">
+            Select your course
+          </option>
+          {courseLevels?.map((level) => (
             <>
               {level?.Batches?.map((batch) => (
-                <option key={batch?.id} value={batch?.id} className="text-black">
+                <option
+                  key={batch?.id}
+                  value={batch?.id}
+                  className="text-black"
+                >
                   {level.Name + " - " + batch.Name}
                 </option>
               ))}
@@ -289,8 +315,30 @@ const SigninForm = ({openTermsAndConditions , termsChecked }) => {
         </div>
 
         <div className="flex items-center gap-2 2xl:text-base text-sm">
-          <input required checked={termsAccepted} onChange={handleTerm}  type="checkbox" name="terms" id="terms" />
-          <label className="text-sm" htmlFor="terms">I Agree to the <span onClick={openTermsAndConditions} className="text-blue-500 cursor-pointer">terms</span> and <span onClick={openTermsAndConditions} className="text-blue-500 cursor-pointer">conditions</span></label>
+          <input
+            required
+            checked={termsAccepted}
+            onChange={handleTerm}
+            type="checkbox"
+            name="terms"
+            id="terms"
+          />
+          <label className="text-sm" htmlFor="terms">
+            I Agree to the{" "}
+            <span
+              onClick={openTermsAndConditions}
+              className="text-blue-500 cursor-pointer"
+            >
+              terms
+            </span>{" "}
+            and{" "}
+            <span
+              onClick={openTermsAndConditions}
+              className="text-blue-500 cursor-pointer"
+            >
+              conditions
+            </span>
+          </label>
         </div>
         <Button
           className="bg-blue-500 font-semibold hover:bg-blue-600 shadow-md"
@@ -309,4 +357,23 @@ SigninForm.propTypes = {
   handleLoginView: PropTypes.func,
   openTermsAndConditions: PropTypes.func,
   termsChecked: PropTypes.bool,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
+  phone: PropTypes.string,
+  password: PropTypes.string,
+  confirmPassword: PropTypes.string,
+  setFirstName: PropTypes.func,
+  setLastName: PropTypes.func,
+  setEmail: PropTypes.func,
+  setPhone: PropTypes.func,
+  setPassword: PropTypes.func,
+  setConfirmPassword: PropTypes.func,
+  setTerm: PropTypes.func,
+  countryCode: PropTypes.string,
+  setCountryCode: PropTypes.func,
+  courseLevels: PropTypes.array,
+  setBatch: PropTypes.func,
+  setCoursesLevels: PropTypes.func,
+  batch: PropTypes.string,
 };

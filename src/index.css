@@ -26,6 +26,8 @@ option:first {
   color: #999;
 }
 
+/* create a class which I can use to view element afetr a delay of 3 s */
+
 .bg-blue-gradient {
   background: rgb(2, 0, 36);
   background: linear-gradient(90deg,
@@ -64,6 +66,35 @@ option:first {
   }
 }
 
+@keyframes delay {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes delay {
+  0% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+.delay{
+  animation: delay 0.3s ease-in;
+}
+
 .fade-enter {
   animation: fadeIn 0.3s ease-in;
 }
@@ -74,6 +105,22 @@ option:first {
 
 .fade-enter-active {
   opacity: 1;
+}
+
+input[type="date"] {
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent; 
 }
 
 @keyframes questionAnimate {

@@ -52,12 +52,19 @@ const Profile = () => {
       dispatch(setPhone(response?.data?.phone));
       dispatch(setImage(response?.data?.profile));
       dispatch(setBio(response?.data?.Contact?.Bio));
-      const socials = JSON.parse(response?.data?.Contact?.SocialMedia);
-      dispatch(setFbUrl(socials?.facebook));
-      dispatch(setDOB(response?.data?.Contact?.Birth));
-      dispatch(setInstaUrl(socials?.instagram));
-      dispatch(setTwitterUrl(socials?.twitter));
-      dispatch(setLinkedInUrl(socials?.linkedin));
+      if (response?.data?.Contact) {
+        if(!response?.data?.Contact?.Birth){
+          setCanUpdateDOB(true);
+        }else{
+          setCanUpdateDOB(false);
+        }
+        dispatch(setDOB(response?.data?.Contact?.Birth));
+        const socials = JSON.parse(response?.data?.Contact?.SocialMedia);
+        dispatch(setFbUrl(socials?.facebook));
+        dispatch(setTwitterUrl(socials?.twitter));
+        dispatch(setInstaUrl(socials?.instagram));
+        dispatch(setLinkedInUrl(socials?.linkedin));
+      }
     }
   };
 
@@ -102,7 +109,7 @@ const Profile = () => {
           </div>
           <div className="flex flex-col w-full gap-2">
             <div className="flex flex-col-reverse gap-1 md:flex-row items-center justify-center md:justify-between w-full">
-              <h4 className="text-lg font-semibold text-center md:text-left">
+              <h4 className="text-lg font-semibold text-center md:text-left text-orange-500">
                 {user?.name}
               </h4>
               {user?.batch?.Level && (
@@ -153,10 +160,11 @@ const Profile = () => {
       </Card>
       <div className="flex items-center justify-between">
         <SectionHeading text="Profile" />
-        <Button onClick={toggleCanUpdate}>Edit</Button>
+        <Button onClick={toggleCanUpdate}>{canUpdate ? "Edit" : "Done"}</Button>
       </div>
       <ProfileForm
         canUpdate={canUpdate}
+        setCanUpdate={setCanUpdate}
         canUpdateDOB={canUpdateDOB}
         avatar={avatar}
         picUpdated={picUpdated}

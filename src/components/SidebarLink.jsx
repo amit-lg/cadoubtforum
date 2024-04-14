@@ -18,8 +18,8 @@ const SidebarLink = ({ route, location }) => {
       to={route.href}
       className={`
       ${!collapsedSidebar ? "m-1" : "my-1"} 
-      text-sm group flex 
-      ${collapsedSidebar ? "p-5  w-max mx-auto" : "p-3 w-full justify-start"} 
+      text-sm group flex p-3
+      ${collapsedSidebar ? "w-max mx-auto" : "w-full justify-start"} 
       font-medium cursor-pointer hover:text-white hover:bg-white/30 rounded-lg transition 
       ${
         location.pathname === route.href ? "bg-blue-600" : ""
@@ -33,16 +33,16 @@ const SidebarLink = ({ route, location }) => {
       >
         {location.pathname === route.href ? (
           <route.selectedIcon
-            className={`${collapsedSidebar ? "w-5 h-5" : "w-5 h-5 mr-3"}`}
+            className={`w-5 h-5 ${collapsedSidebar ? "mr-0" : "mr-3"}`}
           />
         ) : (
           <route.icon
-            className={`${collapsedSidebar ? "w-5 h-5" : "w-5 h-5 mr-3"}`}
+            className={`w-5 h-5 ${collapsedSidebar ? "mr-0" : "mr-3"}`}
           />
         )}
 
         {!collapsedSidebar && <span
-          className={`font-${
+          className={`delay font-${
             location.pathname === route.href ? "semibold" : "medium"
           } text-sm text-center `}
         >

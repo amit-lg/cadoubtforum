@@ -28,6 +28,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#05ab4c]",
       icon: PiChatsFill,
       title: "All Questions",
+      className : "all-questions",
       number: allQuestions,
     },
     {
@@ -35,6 +36,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#FF9540]",
       icon: BiSolidCube,
       title: "Asked Questions",
+      className : "asked-questions",
       number: askedQuestions,
     },
     {
@@ -42,6 +44,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#0e5ec2]",
       icon: TbPinnedFilled,
       title: "Pinned Questions",
+      className : "pinned-questions",
       number: pinnedQuestions,
     },
     {
@@ -49,6 +52,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#dc1427]",
       icon: RiCloseCircleFill,
       title: "Unanswered Questions",
+      className : "unanswered-questions",
       number: unAnsweredQuestions,
     },
   ];

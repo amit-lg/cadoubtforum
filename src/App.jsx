@@ -20,6 +20,7 @@ import EmailVerification from "./pages/EmailVerification";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Calendar from "./pages/Calender";
+import PasswordLayout from "./layouts/PasswordLayout";
 // import AuthComponent from "./pages/TestLoginPage";
 
 function App() {
@@ -30,9 +31,12 @@ function App() {
           <Routes>
             <Route path="/" element={<AuthLayout />}>
               <Route path="" element={<Auth />} />
-                <Route path="verifyEmail" element={<EmailVerification />} />
-                <Route path="forgot-password" element={<ForgetPassword />} />
-                <Route path="forgotpassword" element={<ResetPassword />} />
+              <Route path="verifyEmail" element={<EmailVerification />} />
+            </Route>
+
+            <Route path="/" element={<PasswordLayout />}>
+              <Route path="forgot-password" element={<ForgetPassword />} />
+              <Route path="forgotpassword" element={<ResetPassword />} />
             </Route>
 
             <Route path="/" element={<AppLayout />}>
@@ -53,7 +57,6 @@ function App() {
                 <Route path="faq" element={<Faq />} />
                 <Route path="help" element={<Help />} />
                 <Route path="calender" element={<Calendar />} />
-
               </Route>
             </Route>
 

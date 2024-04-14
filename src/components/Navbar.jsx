@@ -31,8 +31,8 @@ const Navbar = () => {
     <div className="flex items-center py-5 px-3 md:px-8 bg-transparent">
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-5">
-          <div className="flex lg:hidden shadow-md p-2  rounded-full">
-            <MdMenu onClick={openSidebar} fontSize="1.5rem" color="#5A32EA" />
+          <div className="flex lg:hidden shadow-md p-2  rounded-full  cursor-pointer">
+            <MdMenu onClick={openSidebar}className="text-blue-500" fontSize="1.5rem" />
           </div>
 
           <a
@@ -55,10 +55,10 @@ const Navbar = () => {
         {/* <Search /> */}
 
         <div className="flex items-center gap-6">
-          <div onClick={openNotificationMenu} className="relative cursor-pointer">
+          {/* <div onClick={openNotificationMenu} className="relative cursor-pointer">
             <Badge value={10} />
             <IoMdNotifications className="text-3xl" />
-          </div>
+          </div> */}
           <div onClick={handleLogout} className="cursor-pointer">
             <MdLogout className="text-2xl text-red-500" />
           </div>

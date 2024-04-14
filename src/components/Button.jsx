@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Button = ({ type, name, onClick, children, variant , className, fullWidth , disabled}) => {
+const Button = ({ type, name, onClick, children, variant , className, fullWidth , disabled , textColor}) => {
   return (
     <button 
         disabled={disabled}
@@ -14,7 +14,7 @@ const Button = ({ type, name, onClick, children, variant , className, fullWidth 
             focus:outline-none
             text-sm
             rounded-md
-            text-white
+            ${textColor ? textColor : "text-white"}
             ${!disabled && "bg-blue-500"}
             ${variant === "outline" && "border-2 border-white"}
             ${variant === "transparent" && "border-2 border-white bg-transparent"}
@@ -39,5 +39,6 @@ Button.propTypes = {
   variant : PropTypes.string,
   className : PropTypes.string,
   fullWidth : PropTypes.bool,
-  disabled : PropTypes.bool
+  disabled : PropTypes.bool,
+  textColor : PropTypes.string
 };

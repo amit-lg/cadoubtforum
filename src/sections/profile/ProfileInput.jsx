@@ -12,7 +12,7 @@ const ProfileInput = ({
 }) => {
   return (
     <div className="mb-3 w-full">
-      <label className="block font-medium mb-[2px] text-blue-500" htmlFor={id}>
+      <label className="block font-medium mb-[2px] text-blue-500"  htmlFor={id}>
         {label}
       </label>
       <input

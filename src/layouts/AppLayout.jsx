@@ -70,7 +70,7 @@ const AppLayout = () => {
         <div
           className={`
           hidden h-full z-30 lg:flex md:flex-col md:fixed md:inset-y-0 bg-gray-900 transition-all duration-300 ease-in-out
-          ${collapsedSidebar ? "w-18" : "xl:w-72 lg:w-66"}
+          ${collapsedSidebar ? "w-16" : "xl:w-72 lg:w-66"}
         `}
         >
           <Sidebar handleSidebarState={handleSidebarState} />
@@ -87,7 +87,7 @@ const AppLayout = () => {
 
             <div
               onClick={handleAskQuestionModal}
-              className="overflow-hidden h-[50px] w-[50px] doubt-animation cursor-pointer absolute bottom-5 right-5 flex gap-3 rounded-full items-center justify-start p-2 text-white bg-blue-500"
+              className="ask-doubt-btn overflow-hidden h-[50px] w-[50px] doubt-animation cursor-pointer absolute bottom-5 right-5 flex gap-3 rounded-full items-center justify-start p-2 text-white bg-blue-500"
             >
               <div className="w-[200px] h-[50px] flex gap-5 items-center">
                 <div className="flex items-center justify-center w-[35px] h-[50px]">

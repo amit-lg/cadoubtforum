@@ -32,7 +32,7 @@ const Sidebar = ({ handleSidebarState , forMobile}) => {
               src="https://ik.imagekit.io/vt3qjswze/AB%20Logo/Picture1.png?updatedAt=1696576437741"
               alt="ASWINI BAJAJ"
             />
-            {!forMobile && !collapsedSidebar && <h1 className="text-xl font-bold">CA DoubtForum</h1>}
+            {!collapsedSidebar && <h1 className="delay text-base md:text-xl font-bold">CA DoubtForum</h1>}
           </div>
         </a>
 

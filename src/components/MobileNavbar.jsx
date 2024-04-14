@@ -19,7 +19,7 @@ const MobileSidebar = () => {
         }`}
       >
         <div className={`w-[80%] sm:w-[40%] relative h-full`}>
-          <div onClick={closeSidebar} className="absolute z-50 top-2 right-2">
+          <div onClick={closeSidebar} className="absolute z-50 top-2 right-2 cursor-pointer">
             <MdClose
               color="white"
               fontSize="1.5rem"

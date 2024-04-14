@@ -50,15 +50,15 @@ const ForgetPassword = () => {
   };
 
   return (
-    <main className="flex flex-col justify-center min-h-screen">
-      <div id="content" role="main" className="w-full   max-w-md mx-auto p-6">
-        <div className="mt-7 bg-white  rounded-xl shadow-lg">
-          <div className="p-4 sm:p-7">
+    <>
+      <div id="content" role="main" className="w-full max-w-md mx-auto md:pr-3">
+        <div className="mt-7 bg-white  rounded-xl">
+          <div className="p-4 sm:p-2">
             <div className="text-center">
               <h1 className="block text-2xl font-bold text-gray-800">
                 OOPS!!
               </h1>
-              <h3 className="mt-1 text-lg">
+              <h3 className="mt-1 md:text-lg text-base">
                 You forgot your password dont&apos;t worry.
               </h3>
             </div>
@@ -121,7 +121,7 @@ const ForgetPassword = () => {
           <VerifyEmailPopup />
         </div>
       )}
-    </main>
+    </>
   );
 };
 

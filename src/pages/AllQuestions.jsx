@@ -3,7 +3,7 @@ import Question from "../components/Question";
 import QuestionFilters from "../components/QuestionFilters";
 import Dropdowns from "../components/Dropdowns";
 import { getQuestions } from "../apiCalls/question";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "../components/Loader";
 
 const AllQuestions = () => {
@@ -13,6 +13,8 @@ const AllQuestions = () => {
   const [pointsValue, setPointsValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
+  
+  const observerTarget = useRef(null);
 
   const fetchAllQuestions = async () => {
     setLoading(true);

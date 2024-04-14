@@ -226,37 +226,16 @@ export const SubjectDropdown = ({
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}
     >
-      <div className="relative sm:hidden w-full flex items-center justify-center">
-        <select
-          className=" w-full bg-gray-200 border border-gray-100 hover:border-gray-200 px-1 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-          onChange={handleSelectChange}
-          id={id}
-          name={name}
-          value={value}
-          // defaultValue={"All"}
-        >
-          <option value="">All Subjects</option>
-          {data?.map((subject, index) => {
-            return (
-              <option key={index} value={subject?.id}>
-                {subject?.name}
-              </option>
-            );
-          })}
-          {/* Add more options as needed */}
-        </select>
-      </div>
-
       <div
         onClick={toggleMenu}
-        className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 ease-in-out cursp shadow-md select-none hidden sm:block md:relative top-0 right-0 p-1 border w-full rounded-md h-[35px] m-auto overflow-hidden"
+        className="bg-blue-500 hover:bg-blue-600 flex items-center justify-between transition-all duration-300 ease-in-out cursp shadow-md select-none md:relative top-0 right-0 p-1 border w-full rounded-md h-[35px] m-auto overflow-hidden"
       >
-        <div className="w-full absolute md:left-[92%] left-[96%] top-2 flex px-1">
-          <MdArrowDropDown className="text-white" />
-        </div>
-        <span className="text-white ml-1">
+        <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
           {display ? display : "All Subjects"}
         </span>
+        <div className="w-max">
+          <MdArrowDropDown className="text-white" />
+        </div>
       </div>
 
       {showMenu && (
@@ -307,38 +286,16 @@ export const TopicDropdown = ({
   };
   return (
     <div className=" relative h-[50px] col-span-12 md:col-span-4">
-      <div className="relative sm:hidden w-full flex items-center justify-center">
-        <select
-          className=" w-full bg-gray-200 border border-gray-100 hover:border-gray-200 px-1 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-          onChange={handleSelectChange}
-          id={id}
-          name={name}
-          value={value}
-        >
-          <option value="">All Topics</option>
-          {data?.map((point, index) => {
-            return (
-              <Fragment key={index}>
-                {point?.name !== "empty" && (
-                  <option key={index} value={point?.id}>
-                    {point?.name}
-                  </option>
-                )}
-              </Fragment>
-            );
-          })}
-          {/* Add more options as needed */}
-        </select>
-      </div>
-
       <div
         onClick={toggleMenu}
-        className="bg-blue-500 text-white hover:bg-blue-600 transition-all duration-300 ease-in-out cursor-pointer shadow-md select-none hidden sm:block md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden"
+        className="bg-blue-500 text-white text-nowrap flex items-center justify-between hover:bg-blue-600 transition-all duration-300 ease-in-out cursor-pointer shadow-md select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden"
       >
-        <div className="w-full absolute md:left-[92%] left-[96%] top-2 flex px-1">
+        <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
+          {display ? display : "All Topics"}
+        </span>
+        <div className="w-max px-1">
           <MdArrowDropDown />
         </div>
-        <span className="px-1">{display ? display : "All Topics"}</span>
       </div>
 
       {showMenu && (
@@ -383,13 +340,22 @@ export const PointDropdown = ({
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const toggleMenu = () => {
     setShowMenu((showMenu) => !showMenu);
+    setSearchText("");
   };
 
-  const handleSelectChange = (e) => {
-    setValue(e.target.value);
+  const handleSearchText = (e) => {
+    setSearchText(e.target.value);
+    if (e.target.value === "") {
+      setFilteredData(data);
+    }
+    const filteredData = data?.filter((item) =>
+      item?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())
+    );
+    setFilteredData(filteredData);
   };
 
   const handleDivClick = (value, name) => {
@@ -399,7 +365,7 @@ export const PointDropdown = ({
     setPoint(value);
   };
 
-  const handleInputChange = (e) => {
+  const handleSelectChange = (e) => {
     setShowMenu(true);
     setDisplay(e.target.value);
     //  filter the data based on the input value
@@ -418,52 +384,31 @@ export const PointDropdown = ({
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}
     >
-      <div className="relative sm:hidden w-full flex items-center justify-center">
-        <select
-          className=" w-full bg-gray-200 border border-gray-100 hover:border-gray-200 px-1 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-          onChange={handleSelectChange}
-          id={id}
-          name={name}
-          value={value}
-        >
-          <option value="">All Points</option>
-          {data?.map((topic, index) => {
-            return (
-              <option key={index} value={topic?.id}>
-                {topic?.name || "All Points"}
-              </option>
-            );
-          })}
-          {/* Add more options as needed */}
-        </select>
-      </div>
-
-      {/* <div
+      <div
         onClick={toggleMenu}
         className={`${
           pointError ? "border-2 border-red-500" : ""
-        } bg-blue-500 hover:bg-blue-600 transition-all duration-300 ease-in-out cursor-pointer shadow-md text-white select-none hidden sm:block md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden`}
+        } bg-blue-500 hover:bg-blue-600 flex items-center transition-all duration-300 ease-in-out cursor-pointer shadow-md text-white select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden`}
       >
-        <div className="w-full absolute md:left-[92%] left-[96%] top-2 flex px-1">
+        <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
+          {display ? display : "All Points"}
+        </span>
+        <div className="w-max px-1">
           <MdArrowDropDown />
         </div>
-        {display ? display : "All LOS"}
-      </div> */}
-
-      <div className="bg-blue-500 rounded flex items-center">
-        <input
-          value={display}
-          onClick={toggleMenu}
-          onChange={handleInputChange}
-          className="placeholder:text-white bg-blue-500 text-white  rounded-md w-full p-1 outline-none border-none"
-          type=""
-          placeholder="All Points"
-        />
-        <MdArrowDropDown className="text-white" />
       </div>
 
       {showMenu && (
         <div className="relative z-50 border shadow rounded bg-white w-full max-h-[300px] overflow-y-scroll">
+          <div className="w-full p-1">
+            <input
+              value={searchText}
+              onChange={handleSearchText}
+              className="placeholder:text-gray text-black  rounded-md w-full p-1 outline-none border"
+              type=""
+              placeholder="Search"
+            />
+          </div>
           <div
             onClick={() => handleDivClick("", "All Points")}
             className="p-2 hover:bg-gray-100 cursor-pointer select-none h-[70%]"

@@ -79,6 +79,10 @@ const ResetPassword = () => {
     }
   };
 
+  const goToForgetPassPage = () => {
+    navigate("/forgot-password");
+  }
+
   useEffect(() => {
     verifyResetToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +91,11 @@ const ResetPassword = () => {
   return (
     <main className="flex flex-col justify-center min-h-screen">
       <div id="content" role="main" className="w-full   max-w-md mx-auto p-6">
-        <div className="mt-7 bg-white  rounded-xl shadow-lg">
+        <div
+          className={`mt-7 bg-white  rounded-xl ${
+            verified ? "shadow-lg" : "shadow-none"
+          }`}
+          >
           {verified ? (
             <div>
               <div className="p-4 sm:p-7">
@@ -174,11 +182,16 @@ const ResetPassword = () => {
             </div>
           ) : (
             <div className="p-4">
-              <div className="text-center">
-                <h1 className="block text-2xl font-bold text-gray-800 ">
-                  Invalid Link
+              <div className="text-center flex flex-col gap-3">
+                <h1 className="block text-5xl font-bold text-gray-800 ">
+                  OOPS
                 </h1>
-                <img src={failureImgUrl} alt="" className="mx-auto w-[50%]" />
+
+                <h2 className="text-2xl">
+                  !! Seems like the link has been expired
+                </h2>
+
+                <Button onClick={goToForgetPassPage}>Forgot Password</Button>
               </div>
             </div>
           )}
