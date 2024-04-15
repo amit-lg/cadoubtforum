@@ -1,7 +1,6 @@
-import { MdDashboard, MdHelp, MdLiveHelp, MdOutlineDashboard, MdOutlineHelp } from "react-icons/md";
+import { MdDashboard, MdFeedback, MdHelp, MdOutlineDashboard, MdOutlineDynamicFeed, MdOutlineHelp } from "react-icons/md";
 import { TbPinned, TbPinnedFilled } from "react-icons/tb";
 import { BiCube, BiSolidCube } from "react-icons/bi";
-import { MdOutlineLiveHelp } from "react-icons/md";
 import { PiChats , PiChatsFill } from "react-icons/pi";
 import { RiCloseCircleFill , RiCloseCircleLine } from "react-icons/ri";
 export const routes = [
@@ -51,3 +50,13 @@ export const otherRoutes = [
     href: "/help",
   },
 ];
+
+
+export const feedbackRoutes = [
+  {
+    label: "Feedback",
+    icon: MdFeedback,
+    selectedIcon: MdOutlineDynamicFeed,
+    href: "/feedback",
+  },
+]

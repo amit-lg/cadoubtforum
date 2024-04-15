@@ -16,6 +16,7 @@ const initialState = {
   showVerifyEmail: false,
   showResetSuccess: false,
   tempToken: "",
+  feedBackPopup: false,
 };
 
 export const counterSlice = createSlice({
@@ -67,6 +68,12 @@ export const counterSlice = createSlice({
     closeResetSuccess: (state) => {
       state.showResetSuccess = false;
     },
+    openFeedbackPopup: (state) => {
+      state.feedBackPopup = true;
+    },
+    closeFeedbackPopup: (state) => {
+      state.feedBackPopup = false;
+    },
 
     setGlobalPointValue: (state, action) => {
       state.globalPointValue = action.payload;
@@ -102,6 +109,7 @@ export const counterSlice = createSlice({
         state.collapsedSidebar = true;
       }
     },
+
   },
 });
 
@@ -128,6 +136,8 @@ export const {
   setShowReportModal,
   openResetSuccess,
   closeResetSuccess,
+  openFeedbackPopup,
+  closeFeedbackPopup
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

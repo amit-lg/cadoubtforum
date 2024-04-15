@@ -18,6 +18,7 @@ import Notifications from "../components/Notifications";
 import { removeCookies } from "../utils/cookies";
 import ImagePopup from "../components/ImagePopup";
 import RaiseIssuePopup from "../components/RaiseIssuePopup";
+import FeedbackPopup from "../components/FeedbackPopup";
 
 const AppLayout = () => {
   const { isAuthenticated } = useSelector((state) => state.user);
@@ -26,7 +27,7 @@ const AppLayout = () => {
     notificationState,
     raiseIssuePopup,
   } = useSelector((state) => state.app);
-  const { imagePopupState } = useSelector((state) => state.app);
+  const { imagePopupState , feedBackPopup } = useSelector((state) => state.app);
 
   const [showAskQuestionModal, setShowAskQuestionModal] = useState(false);
 
@@ -112,6 +113,12 @@ const AppLayout = () => {
             {imagePopupState && (
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <ImagePopup handleClose={closeShowReportModal} />
+              </div>
+            )}
+
+            {feedBackPopup && (
+              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <FeedbackPopup handleClose={closeShowReportModal} />
               </div>
             )}
 
