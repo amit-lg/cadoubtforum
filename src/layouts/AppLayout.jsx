@@ -22,12 +22,10 @@ import FeedbackPopup from "../components/FeedbackPopup";
 
 const AppLayout = () => {
   const { isAuthenticated } = useSelector((state) => state.user);
-  const {
-    showReportModal,
-    notificationState,
-    raiseIssuePopup,
-  } = useSelector((state) => state.app);
-  const { imagePopupState , feedBackPopup } = useSelector((state) => state.app);
+  const { showReportModal, notificationState, raiseIssuePopup } = useSelector(
+    (state) => state.app
+  );
+  const { imagePopupState, feedBackPopup } = useSelector((state) => state.app);
 
   const [showAskQuestionModal, setShowAskQuestionModal] = useState(false);
 
@@ -64,6 +62,11 @@ const AppLayout = () => {
       fetchUser();
     }
   }, [isAuthenticated, fetchUser]);
+  
+
+  // useEffect(() => {
+  //   setFirstLoad(false);
+  // }, []);
 
   return (
     <div className="relative w-full">
@@ -90,7 +93,7 @@ const AppLayout = () => {
               onClick={handleAskQuestionModal}
               className="ask-doubt-btn overflow-hidden h-[50px] w-[50px] doubt-animation cursor-pointer absolute bottom-5 right-5 flex gap-3 rounded-full items-center justify-start p-2 text-white bg-blue-500"
             >
-              <div className="w-[200px] h-[50px] flex gap-5 items-center">
+              <div id="ask-doubt-btn" className="w-[200px] h-[50px] flex gap-5 items-center">
                 <div className="flex items-center justify-center w-[35px] h-[50px]">
                   <MdAdd className="text-xl" />
                 </div>

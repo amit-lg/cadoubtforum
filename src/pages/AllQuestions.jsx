@@ -5,6 +5,7 @@ import Dropdowns from "../components/Dropdowns";
 import { getQuestions } from "../apiCalls/question";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../components/Loader";
+import GuidedTourForAllQuestions from "../components/GuidedTourForAllQuestions";
 
 const AllQuestions = () => {
   const [questions, setQuestions] = useState([]);
@@ -13,7 +14,8 @@ const AllQuestions = () => {
   const [pointsValue, setPointsValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
-  
+
+
   const observerTarget = useRef(null);
 
   const fetchAllQuestions = async () => {
@@ -59,6 +61,8 @@ const AllQuestions = () => {
 
   return (
     <div className="fade-enter">
+      <GuidedTourForAllQuestions />
+
       <div className="flex items-center justify-between h-full">
         <SectionHeading text="Asked Questions" />
         <QuestionFilters setFilters={setFilter} />
@@ -75,7 +79,7 @@ const AllQuestions = () => {
         />
       </div>
 
-      <div className="mt-5 ">
+      <div id="all-question-list" className="mt-5 ">
         <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
           <div className="flex flex-col gap-5">
             {loading ? (

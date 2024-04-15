@@ -22,7 +22,7 @@ const AuthAnimation = ({ loginView, handleLoginView , date}) => {
       >
         <div className="flex flex-col w-full">
           {loginView ? (
-            <h1 className="2xl:text-3xl xl:text-3xl text-center lg:text-2xl mx-auto font-semibold text-white">
+            <h1 className="2xl:text-3xl xl:text-2xl text-center lg:text-2xl mx-auto font-semibold text-white">
               Welcome Back, Future CA!
             </h1>
           ) : (

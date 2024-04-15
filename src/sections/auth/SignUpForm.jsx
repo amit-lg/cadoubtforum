@@ -203,7 +203,7 @@ const SigninForm = ({
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
+    <form onSubmit={handleSubmit} className="w-full h-[70%]">
       <div className="space-y-3 flex flex-col w-full">
         <Input
           type="text"

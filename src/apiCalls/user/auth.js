@@ -5,6 +5,7 @@ import { getHeaders } from "../../utils/requestHeaders";
 import { backendUrl, dAuth } from "../../../config";
 
 export const loginUser = async (email, password) => {
+  const headers = getHeaders();
   try {
     const response = await axios.post(
       `${backendUrl}/doubtforum/login`,
@@ -13,10 +14,7 @@ export const loginUser = async (email, password) => {
         password,
       },
       {
-        headers: {
-          "Content-Type": "application/json",
-          "D-Auth": dAuth,
-        },
+        headers
       }
     );
     if (response.status === 200) {
@@ -24,20 +22,6 @@ export const loginUser = async (email, password) => {
     }
   } catch (error) {
     return errorResponse(error?.response?.status, error);
-  }
-};
-
-export const loginAdmin = async (userId, password) => {
-  try {
-    const response = await instance.post("/doubtforum/forumadminLogin", {
-      userId,
-      password,
-    });
-    if (response.status === 200) {
-      return successResponse("Login Successfull", 200, response.data);
-    }
-  } catch (error) {
-    return errorResponse(500, error);
   }
 };
 
@@ -75,7 +59,6 @@ export const verifyToken = async (token) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "D-Auth": dAuth,
           "Authorization" : "Bearer " + token,
         },
       }
@@ -96,7 +79,6 @@ export const verifyForgetToken = async (token) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "D-Auth": dAuth,
           "Authorization" : "Bearer " + token,
         },
       }
@@ -119,7 +101,6 @@ export const resendMailToUser = async (token) => {
         headers: {
           "Content-Type": "application/json",
           "Authorization" : "Bearer " + token,
-          "D-Auth": dAuth,
         },
       }
     );
@@ -140,7 +121,6 @@ export const resetPassword = async (token , data) => {
         headers: {
           "Content-Type": "application/json",
           "Authorization" : "Bearer " + token,
-          "D-Auth": dAuth,
         },
       }
     );
@@ -160,7 +140,6 @@ export const forgetPassword = async (data) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "D-Auth": dAuth,
         },
       }
     );
@@ -180,7 +159,6 @@ export const resendForgetPasswordMail = async (data) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "D-Auth": dAuth,
         },
       }
     );

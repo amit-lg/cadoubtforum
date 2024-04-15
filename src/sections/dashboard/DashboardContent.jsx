@@ -12,6 +12,7 @@ import { PiChatsFill } from "react-icons/pi";
 import { BiSolidCube } from "react-icons/bi";
 import { TbPinnedFilled } from "react-icons/tb";
 import { RiCloseCircleFill } from "react-icons/ri";
+import GuidedTour from "../../components/GuidedTourForDashboard";
 
 export const DashBoardContent = () => {
   const [allQuestions, setAllQuestions] = useState(0);
@@ -28,7 +29,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#05ab4c]",
       icon: PiChatsFill,
       title: "All Questions",
-      className : "all-questions",
+      className: "all-questions",
       number: allQuestions,
     },
     {
@@ -36,7 +37,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#FF9540]",
       icon: BiSolidCube,
       title: "Asked Questions",
-      className : "asked-questions",
+      className: "asked-questions",
       number: askedQuestions,
     },
     {
@@ -44,7 +45,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#0e5ec2]",
       icon: TbPinnedFilled,
       title: "Pinned Questions",
-      className : "pinned-questions",
+      className: "pinned-questions",
       number: pinnedQuestions,
     },
     {
@@ -52,7 +53,7 @@ export const DashBoardContent = () => {
       iconColor: "text-[#dc1427]",
       icon: RiCloseCircleFill,
       title: "Unanswered Questions",
-      className : "unanswered-questions",
+      className: "unanswered-questions",
       number: unAnsweredQuestions,
     },
   ];
@@ -87,6 +88,7 @@ export const DashBoardContent = () => {
 
   return (
     <div className="flex flex-col gap-5">
+      <GuidedTour />
       <StatsContainer>
         {stats.map((stat) => (
           <StatItem key={stat.title} stat={stat} />

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { fetchSubjectTopicPoints } from "../apiCalls/dropdowns";
 // import { dropdownData } from "../mocks/dummy";
@@ -147,7 +147,7 @@ const Dropdowns = ({
       <SubjectDropdown
         name={"Subject"}
         data={subject}
-        id={"subject"}
+        id={"subject-dropdown"}
         value={subjectValue}
         display={subjectName}
         setDisplay={setSubjectName}
@@ -159,7 +159,7 @@ const Dropdowns = ({
         <TopicDropdown
           name={"Topic"}
           data={topic}
-          id={"topic"}
+          id={"topic-dropdown"}
           value={topicValue}
           setValue={setTopicValue}
           display={topicName}
@@ -171,7 +171,7 @@ const Dropdowns = ({
         pointError={pointError}
         name={"Los"}
         data={points}
-        id={"los"}
+        id={"point-dropdown"}
         value={pointsValue}
         setValue={setPointsValue}
         display={pointsName}
@@ -222,6 +222,7 @@ export const SubjectDropdown = ({
   };
   return (
     <div
+      id={id}
       className={`relative h-[50px] col-span-12 ${
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}
@@ -285,7 +286,7 @@ export const TopicDropdown = ({
     setShowMenu(false);
   };
   return (
-    <div className=" relative h-[50px] col-span-12 md:col-span-4">
+    <div id={id} className=" relative h-[50px] col-span-12 md:col-span-4">
       <div
         onClick={toggleMenu}
         className="bg-blue-500 text-white text-nowrap flex items-center justify-between hover:bg-blue-600 transition-all duration-300 ease-in-out cursor-pointer shadow-md select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden"
@@ -380,6 +381,7 @@ export const PointDropdown = ({
 
   return (
     <div
+      id={id}
       className={`relative h-[50px] col-span-12 ${
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}

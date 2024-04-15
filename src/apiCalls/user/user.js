@@ -2,8 +2,7 @@ import { getHeaders } from "../../utils/requestHeaders";
 import { instance } from "../../utils/axiosInstance";
 import { errorResponse, successResponse } from "../../utils/errors";
 import axios from "axios";
-import { getAccessToken } from "../../utils/cookies";
-import { backendUrl, dAuth } from "../../../config";
+import { backendUrl } from "../../../config";
 
 export const getProfile = async () => {
   const headers = getHeaders();
@@ -30,14 +29,10 @@ export const updateProfile = async (data) => {
 };
 
 export const updateProfileWithImage = async (data) => {
-  const token = getAccessToken();
+  const headers = getHeaders();
   try {
     const response = await axios.post(`${backendUrl}/doubtforum/bio`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "D-Auth": dAuth,
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
     });
     if (response.status === 200) {
       return successResponse("User fetched", 200, response.data);

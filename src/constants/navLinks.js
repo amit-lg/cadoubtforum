@@ -9,30 +9,35 @@ export const routes = [
     icon : MdOutlineDashboard,
     selectedIcon: MdDashboard,
     href: "/dashboard",
+    id : "dashboard-link",
   },
   {
     label: "All Questions",
     icon : PiChats,
     selectedIcon: PiChatsFill,
     href: "/all-questions",
+    id: "all-questions-link",
   },
   {
     label: "Asked Questions",
     icon: BiCube,
     selectedIcon: BiSolidCube,
     href: "/asked-questions",
+    id: "asked-questions-link",
   },
   {
     label: "Pinned Questions",
     icon: TbPinned,
     selectedIcon: TbPinnedFilled,
     href: "/pinned-questions",
+    id: "pinned-questions-link",
   },
   {
     label: "Unanswered Questions",
     icon: RiCloseCircleLine,
     selectedIcon: RiCloseCircleFill,
     href: "/unanswered-questions",
+    id: "unanswered-questions-link",
   },
 ];
 
@@ -48,6 +53,7 @@ export const otherRoutes = [
     icon: MdHelp,
     selectedIcon: MdOutlineHelp,
     href: "/help",
+    id: "help-link",
   },
 ];
 
@@ -58,5 +64,6 @@ export const feedbackRoutes = [
     icon: MdFeedback,
     selectedIcon: MdOutlineDynamicFeed,
     href: "/feedback",
+    id: "feedback-link",
   },
 ]

@@ -12,7 +12,7 @@ const UserDetails = () => {
     dispatch(closeMobileSidebar());
   }
   return (
-    <Link onClick={closeSidebar} to="/profile" className={`${collapsedSidebar ? "flex-col gap-2 p-1" : "flex-row p-3"} rounded-md flex items-center relative ${collapsedSidebar ? "bg-transparent" : "delay bg-blue-700"}`}>
+    <Link id="profile" onClick={closeSidebar} to="/profile" className={`${collapsedSidebar ? "flex-col gap-2 p-1" : "flex-row p-3"} rounded-md flex items-center relative ${collapsedSidebar ? "bg-transparent" : "delay bg-blue-700"}`}>
       <Avatar user={user} />
 
       <div className={`${collapsedSidebar ? "ml-0" : "ml-3"} flex flex-col`}>

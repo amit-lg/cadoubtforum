@@ -78,6 +78,7 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
         <UserDetails user={user} />
 
         <Button
+          id={"feedback"}
           className={`
             ${!collapsedSidebar ? "m-1" : "my-1"} 
             text-sm group flex p-3

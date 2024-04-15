@@ -12,7 +12,6 @@ import Faq from "./pages/Faq";
 import ProtectRoute from "./components/ProtectRoute";
 import Help from "./pages/Help";
 import Profile from "./pages/Profile";
-import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import TestPage from "./pages/TestPage";
 import InfiniteScrollWithFilters from "./pages/TestPage2";
@@ -21,6 +20,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Calendar from "./pages/Calender";
 import PasswordLayout from "./layouts/PasswordLayout";
+import AuthTest from "./pages/AuthTestPage";
 
 function App() {
   return (
@@ -29,7 +29,8 @@ function App() {
         <div className="h-full transition-all ease-in-out duration-700">
           <Routes>
             <Route path="/" element={<AuthLayout />}>
-              <Route path="" element={<Auth />} />
+              {/* <Route path="" element={<Auth />} /> */}
+              <Route path="" element={<AuthTest />} />
               <Route path="verifyEmail" element={<EmailVerification />} />
             </Route>
 
@@ -58,9 +59,6 @@ function App() {
                 <Route path="calender" element={<Calendar />} />
               </Route>
             </Route>
-
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/" element={<Admin />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -14,6 +14,7 @@ const SidebarLink = ({ route, location }) => {
   return (
     <Link
       onClick={closeSidebar}
+      id={route.id}
       key={route.href}
       to={route.href}
       className={`

@@ -1,20 +1,16 @@
 import axios from "axios";
 import { errorResponse, successResponse } from "../utils/errors";
-import { backendUrl, dAuth } from "../../config";
-import { getAccessToken } from "../utils/cookies";
+import { backendUrl } from "../../config";
+import { getHeaders } from "../utils/requestHeaders";
 
 export const fetchSubjectTopicPoints = async (data) => {
-  const token = getAccessToken();
+  const headers = getHeaders();
   try {
     const response = await axios.post(
       `${backendUrl}/doubtforum/getfilter`,
       data,
       {
-        headers: {
-          "Content-Type": "application/json",
-          "D-Auth": dAuth,
-          "Authorization": `Bearer ${token}`,
-        },
+        headers,
       }
     );
     if (response.status === 200) {

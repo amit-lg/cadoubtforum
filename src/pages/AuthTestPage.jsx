@@ -7,7 +7,7 @@ import { closeVerifyEmail } from "../redux/reducers/appReducer";
 import { useSelector } from "react-redux";
 import { AuthAnimationMemo } from "../components/AuthAnimation";
 
-const Auth = () => {
+const AuthTest = () => {
   const [loginView, setLoginView] = useState(true);
   const [termsAndConditionView, setTermsAndConditionView] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -23,10 +23,6 @@ const Auth = () => {
   const [courseLevels, setCoursesLevels] = useState([]);
   const [batch, setBatch] = useState("");
   const [date, setDate] = useState(new Date());
-
-  localStorage.setItem("hasSeenDashboardTour", false);
-  localStorage.setItem("hasSeenAllQuestionTour", false);
-  localStorage.setItem("hasSeenSidebarTour", false);
 
   const onAccept = () => {
     setTermsAccepted(true);
@@ -56,35 +52,38 @@ const Auth = () => {
     setDate(new Date());
   };
 
-
   return (
-    <div className="h-full w-full flex items-center justify-center bg-blue-100">
-      <div>
+    <div className="min-h-full w-full flex items-center justify-center bg-blue-100">
+      {/* <div>
         <div className="hidden 2xl:flex">2xl</div>
         <div className="hidden xl:flex 2xl:hidden">xl</div>
         <div className="hidden md:flex lg:hidden xl:hidden 2xl:hidden">md</div>
-        <div className="hidden sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">sm</div>
+        <div className="hidden sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
+          sm
+        </div>
         <div className="flex md:hidden lg:hidden xl:hidden 2xl:hidden">xs</div>
-      </div>
+      </div> */}
       <div
         className={`relative ${
           termsAndConditionView
             ? "h-[50%] w-[80%] md:w-[45%] lg:w-[25%] rounded-md"
-            : "rounded-3xl h-[90%] lg:[95%] w-[60%]"
-        } hidden lg:flex items-center justify-center shadow-custom bg-white transition-all ease-in-out duration-500`}
+            : "rounded-3xl h-[700px] lg:[95%] 2xl:w-[55%]  md:w-[70%]"
+        } hidden lg:flex items-center justify-center shadow-custom bg-white transition-all ease-in-out duration-500 py-10`}
       >
         {termsAndConditionView ? (
-          <TermsAndConditions onAccept={onAccept} onDecline={onDecline} />
+          <div className="w-full fade-enter">
+            <TermsAndConditions onAccept={onAccept} onDecline={onDecline} />
+          </div>
         ) : (
           <>
-            <div className="fade-enter h-full flex items-center justify-center w-full">
+            <div className="fade-enter flex items-center justify-center w-full">
               <div className="h-full flex items-center justify-between w-full relative">
                 <div
                   className={`
                 w-[50%] h-full transform transition-all ease-in-out duration-700 flex items-center justify-center
               `}
                 >
-                  <div className="w-full flex items-center justify-center flex-col">
+                  <div className="w-[60%] flex items-center flex-col justify-center">
                     <img
                       src="https://ik.imagekit.io/vt3qjswze/AB%20Logo/ABLOGO41.png?updatedAt=1697009845701\"
                       alt="aswini bajaj"
@@ -93,9 +92,7 @@ const Auth = () => {
                     <h1 className="mb-5 md:text-2xl xl:text-3xl text-center font-semibold text-slate-500">
                       Sign In
                     </h1>
-                    <div className="w-[60%] flex items-center justify-center">
-                      <SigninForm />
-                    </div>
+                    <SigninForm />
                   </div>
                 </div>
 
@@ -144,7 +141,11 @@ const Auth = () => {
               </div>
             </div>
 
-           <AuthAnimationMemo date={date} loginView={loginView} handleLoginView={handleLoginView} />  
+            <AuthAnimationMemo
+              date={date}
+              loginView={loginView}
+              handleLoginView={handleLoginView}
+            />
           </>
         )}
       </div>
@@ -257,4 +258,16 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default AuthTest;
+
+/**
+  <div>
+        <div className="hidden 2xl:flex">2xl</div>
+        <div className="hidden xl:flex 2xl:hidden">xl</div>
+        <div className="hidden md:flex lg:hidden xl:hidden 2xl:hidden">md</div>
+        <div className="hidden sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
+          sm
+        </div>
+        <div className="flex md:hidden lg:hidden xl:hidden 2xl:hidden">xs</div>
+      </div>
+ */
