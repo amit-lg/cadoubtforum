@@ -21,7 +21,15 @@ import DateInput from "../../components/DateInput";
 
 // Avatar will come as prop
 
-const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdated , setCanUpdate}) => {
+const ProfileForm = ({
+  canUpdateDOB,
+  canUpdate,
+  picUpdated,
+  avatar,
+  setPicUpdated,
+  setCanUpdate,
+  setLoading,
+}) => {
   const { user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -55,6 +63,7 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     let data;
     if (picUpdated) {
@@ -71,8 +80,8 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
       data.append("bio", user?.bio);
       data.append("pictures", avatar);
 
-      if(canUpdateDOB){
-        data.append("dob" , user?.dob)
+      if (canUpdateDOB) {
+        data.append("dob", user?.dob);
       }
 
       const response = await updateProfileWithImage(data);
@@ -86,22 +95,22 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
         instagram: user?.instaUrl,
         twitter: user?.twitterUrl,
         linkedin: user?.linkedInUrl,
-      })
+      });
 
       const bio = user?.bio;
       const dob = user?.dob;
 
-      if(canUpdateDOB){
+      if (canUpdateDOB) {
         data = {
           socials,
           bio,
-          dob
-        }
-      }else{
+          dob,
+        };
+      } else {
         data = {
           socials,
-          bio
-        }
+          bio,
+        };
       }
       const response = await updateProfile(data);
       if (response?.status === 200) {
@@ -109,6 +118,7 @@ const ProfileForm = ({ canUpdateDOB, canUpdate, picUpdated, avatar , setPicUpdat
         setCanUpdate(false);
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -251,5 +261,7 @@ ProfileForm.propTypes = {
   canUpdateDOB: PropTypes.bool,
   avatar: PropTypes.string,
   picUpdated: PropTypes.bool,
-  setPicUpdated: PropTypes.func
+  setPicUpdated: PropTypes.func,
+  setCanUpdate: PropTypes.func,
+  setLoading: PropTypes.func,
 };

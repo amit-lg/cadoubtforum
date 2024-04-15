@@ -26,7 +26,7 @@ const Help = () => {
           </div>
         </div>
 
-        <div className="mx-20 mt-32 p-5 rounded-md flex items-center justify-center flex-col gap-3 bg-blue-400 text-white">
+        <div className="md:mx-20 mt-32 p-5 rounded-md flex items-center justify-center flex-col gap-3 bg-blue-400 text-white">
           <div className="flex flex-col gap-3">
             <h3 className="text-center text-2xl font-semibold">
               Still have question?

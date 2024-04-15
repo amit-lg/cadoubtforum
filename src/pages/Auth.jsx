@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Button from "../components/Button";
 import SigninForm from "../sections/auth/SignInForm";
 import SignUpForm from "../sections/auth/SignUpForm";
 import TermsAndConditions from "../pages/TermsAndCondition";
 import VerifyEmailPopup from "../components/VerifyEmailPopup";
 import { closeVerifyEmail } from "../redux/reducers/appReducer";
 import { useSelector } from "react-redux";
+import { AuthAnimationMemo } from "../components/AuthAnimation";
 
 const Auth = () => {
   const [loginView, setLoginView] = useState(true);
@@ -22,6 +22,7 @@ const Auth = () => {
   const [countryCode, setCountryCode] = useState("+91");
   const [courseLevels, setCoursesLevels] = useState([]);
   const [batch, setBatch] = useState("");
+  const [date, setDate] = useState(new Date());
 
   const onAccept = () => {
     setTermsAccepted(true);
@@ -48,7 +49,9 @@ const Auth = () => {
     setCoursesLevels([]);
     setBatch("");
     setLoginView(value);
+    setDate(new Date());
   };
+
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-blue-100">
@@ -130,86 +133,7 @@ const Auth = () => {
               </div>
             </div>
 
-            <div
-              className={`${
-                loginView ? "bg-yellow-gradient" : "bg-blue-gradient"
-              }  h-full flex items-center justify-center flex-col gap-2 absolute top-0 left-0 w-1/2 transition-all ease-in-out duration-700
-            ${loginView && "translate-x-full"}
-            ${
-              loginView
-                ? "rounded-r-xl rounded-l-[150px] lg:rounded-r-2xl lg:rounded-l-[200px] xl:rounded-r-3xl xl:rounded-l-[210px]"
-                : "rounded-l-xl rounded-r-[150px] lg:rounded-l-2xl lg:rounded-r-[200px] xl:rounded-l-3xl xl:rounded-r-[210px]"
-            }
-        `}
-            >
-              <div
-                className={
-                  "w-full h-full flex flex-col gap-3 items-center justify-center"
-                }
-              >
-                <div className="flex flex-col w-full">
-                  {loginView ? (
-                    <h1 className="2xl:text-3xl xl:text-3xl text-center lg:text-2xl mx-auto font-semibold text-white">
-                      Welcome Back, Future CA!
-                    </h1>
-                  ) : (
-                    <h1 className="text-center xl:text-3xl lg:text-2xl  mx-auto font-semibold text-white">
-                      Get Started <br /> with Our CA Doubt Forum
-                    </h1>
-                  )}
-                  {/* {loginView ? ( */}
-                  <img
-                    src={`./login.svg?${Date.now()}`}
-                    alt=""
-                    className={`${
-                      loginView ? "block mx-auto w-[50%]  fade-out" : "hidden"
-                    }`}
-                    // key={Date.now()}
-                  />
-                  {/* ) : ( */}
-                  <img
-                    src={`./signup.svg?${Date.now()}`}
-                    alt=""
-                    className={`${
-                      loginView ? "hidden" : "block  mx-auto w-[50%]"
-                    }`}
-                    // key={Date.now()}
-                  />
-                  {/* )} */}
-                  {loginView ? (
-                    <h3 className="text-white 2xl:text-lg text-base text-center w-[300px] mx-auto">
-                      Access your account to participate in discussions, share
-                      insights, and find solutions
-                    </h3>
-                  ) : (
-                    <h3 className="text-white 2xl:text-lg text-base text-center w-[300px] xl:w-[420px] mx-auto">
-                      Your journey to becoming a Chartered Accountant is easier
-                      with the right peers. Join our community to seek advice,
-                      share experiences, and grow together.
-                    </h3>
-                  )}
-                </div>
-                {loginView ? (
-                  <>
-                    <Button
-                      className="mt-2 shadow-btn bg-gray-200 bg-opacity-40 lg:px-[64px] md:px-[30px] px-[20px] text-[1rem] leading-[1.75rem]"
-                      type="button"
-                      onClick={() => handleLoginView(false)}
-                    >
-                      Sign Up
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    className="mt-2 bg-gray-200 shadow-btn bg-opacity-40 lg:px-[64px] md:px-[30px] px-[20px] text-[1rem] leading-[1.75rem]"
-                    type="button"
-                    onClick={() => handleLoginView(true)}
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </div>
-            </div>
+           <AuthAnimationMemo date={date} loginView={loginView} handleLoginView={handleLoginView} />  
           </>
         )}
       </div>
