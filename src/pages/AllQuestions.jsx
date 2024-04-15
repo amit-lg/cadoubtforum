@@ -16,7 +16,7 @@ const AllQuestions = () => {
   const [filter, setFilter] = useState("");
 
 
-  const observerTarget = useRef(null);
+  // const observerTarget = useRef(null);
 
   const fetchAllQuestions = async () => {
     setLoading(true);
@@ -31,28 +31,28 @@ const AllQuestions = () => {
     }
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchAllQuestions();
-        }
-      },
-      { threshold: 1 }
-    );
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         fetchAllQuestions();
+  //       }
+  //     },
+  //     { threshold: 1 }
+  //   );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
+  //   if (observerTarget.current) {
+  //     observer.observe(observerTarget.current);
+  //   }
 
-    return () => {
-      if (observerTarget.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(observerTarget.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observerTarget, subjectValue, topicValue, pointsValue]);
+  //   return () => {
+  //     if (observerTarget.current) {
+  //       // eslint-disable-next-line react-hooks/exhaustive-deps
+  //       observer.unobserve(observerTarget.current);
+  //     }
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [observerTarget, subjectValue, topicValue, pointsValue]);
 
   useEffect(() => {
     fetchAllQuestions();
