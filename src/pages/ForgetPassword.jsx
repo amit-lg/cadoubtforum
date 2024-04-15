@@ -86,10 +86,10 @@ const ForgetPassword = () => {
                       />
                     </div>
 
-                    <div className="h-2">
+                    <div className="h-2 flex items-center justify-center mt-2">
                       {error && (
                         <p
-                          className="text-xs text-center text-red-600 mt-2"
+                          className="text-xs text-center text-red-600"
                           id="email-error"
                         >
                           {error}
