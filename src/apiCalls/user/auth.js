@@ -2,7 +2,7 @@ import axios from "axios";
 import { instance } from "../../utils/axiosInstance";
 import { errorResponse, successResponse } from "../../utils/errors";
 import { getHeaders } from "../../utils/requestHeaders";
-import { backendUrl, dAuth } from "../../../config";
+import { backendUrl } from "../../../config";
 
 export const loginUser = async (email, password) => {
   const headers = getHeaders();
@@ -59,7 +59,7 @@ export const verifyToken = async (token) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Authorization" : "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       }
     );
@@ -79,7 +79,7 @@ export const verifyForgetToken = async (token) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Authorization" : "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       }
     );
@@ -100,7 +100,7 @@ export const resendMailToUser = async (token) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Authorization" : "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       }
     );
@@ -112,7 +112,7 @@ export const resendMailToUser = async (token) => {
   }
 }
 
-export const resetPassword = async (token , data) => {
+export const resetPassword = async (token, data) => {
   try {
     const response = await instance.post(
       "/doubtforum/addpassword",
@@ -120,7 +120,7 @@ export const resetPassword = async (token , data) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Authorization" : "Bearer " + token,
+          "Authorization": "Bearer " + token,
         },
       }
     );
@@ -169,6 +169,7 @@ export const resendForgetPasswordMail = async (data) => {
     return errorResponse(500, error);
   }
 }
+
 
 
 

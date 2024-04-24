@@ -5,7 +5,7 @@ import { PiChats , PiChatsFill } from "react-icons/pi";
 import { RiCloseCircleFill , RiCloseCircleLine } from "react-icons/ri";
 export const routes = [
   {
-    label: "Dashboard",
+    label: "My Dashboard",
     icon : MdOutlineDashboard,
     selectedIcon: MdDashboard,
     href: "/dashboard",
@@ -49,7 +49,7 @@ export const otherRoutes = [
   //   href: "/faq",
   // },
   {
-    label: "Help",
+    label: "Get help",
     icon: MdHelp,
     selectedIcon: MdOutlineHelp,
     href: "/help",
@@ -60,7 +60,7 @@ export const otherRoutes = [
 
 export const feedbackRoutes = [
   {
-    label: "Feedback",
+    label: "Your Feedback",
     icon: MdFeedback,
     selectedIcon: MdOutlineDynamicFeed,
     href: "/feedback",

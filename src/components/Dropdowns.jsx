@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { fetchSubjectTopicPoints } from "../apiCalls/dropdowns";
+import useOutsideClick from "../hooks/usClickOutside";
 // import { dropdownData } from "../mocks/dummy";
 
 const Dropdowns = ({
@@ -12,6 +13,7 @@ const Dropdowns = ({
   setTopicValue,
   setPointsValue,
   pointError,
+  type,
 }) => {
   const [topic, setTopic] = useState([]);
   const [subject, setSubject] = useState([]);
@@ -20,10 +22,6 @@ const Dropdowns = ({
   const [subjectName, setSubjectName] = useState("");
   const [topicName, setTopicName] = useState("");
   const [pointsName, setPointsName] = useState("");
-
-  // const [topicValue, setTopicValue] = useState("");
-  // const [subjectValue, setSubjectVlue] = useState("");
-  // const [pointsValue, setPointsValue] = useState("");
 
   const [isTopicEmpty, setIsTopicEmpty] = useState(false);
 
@@ -127,7 +125,7 @@ const Dropdowns = ({
         });
         setPoints(tempPoints);
         setPointsName("");
-        setPointsValue("");
+        setPointsValue(""); 
       }
     }
   };
@@ -157,6 +155,13 @@ const Dropdowns = ({
 
       {!isTopicEmpty && (
         <TopicDropdown
+          disabled={
+            type === "ask-question"
+              ? subjectValue === "" || subjectValue === "empty"
+                ? true
+                : false
+              : false
+          }
           name={"Topic"}
           data={topic}
           id={"topic-dropdown"}
@@ -168,6 +173,13 @@ const Dropdowns = ({
       )}
 
       <PointDropdown
+        disabled={
+          type === "ask-question"
+            ? topicValue === "" || topicValue === "empty"
+              ? true
+              : false
+            : false
+        }
         pointError={pointError}
         name={"Los"}
         data={points}
@@ -200,19 +212,23 @@ export const SubjectDropdown = ({
   id,
   name,
   value,
+  disbaled,
   setValue,
   display,
   setDisplay,
   isTopicEmpty,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const impactRef = useRef(null);
+
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
+
+  useOutsideClick(impactRef, closeMenu);
 
   const toggleMenu = () => {
     setShowMenu((showMenu) => !showMenu);
-  };
-
-  const handleSelectChange = (e) => {
-    setValue(e.target.value);
   };
 
   const handleDivClick = (value, name) => {
@@ -223,12 +239,13 @@ export const SubjectDropdown = ({
   return (
     <div
       id={id}
+      ref={impactRef}
       className={`relative h-[50px] col-span-12 ${
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}
     >
       <div
-        onClick={toggleMenu}
+        onClick={disbaled ? null : toggleMenu}
         className="bg-blue-500 hover:bg-blue-600 flex items-center justify-between transition-all duration-300 ease-in-out cursp shadow-md select-none md:relative top-0 right-0 p-1 border w-full rounded-md h-[35px] m-auto overflow-hidden"
       >
         <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
@@ -266,29 +283,38 @@ export const TopicDropdown = ({
   id,
   name,
   value,
+  disabled,
   setValue,
   display,
   setDisplay,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const impactRef = useRef(null);
 
   const toggleMenu = () => {
     setShowMenu((showMenu) => !showMenu);
   };
 
-  const handleSelectChange = (e) => {
-    setValue(e.target.value);
+  const closeMenu = () => {
+    setShowMenu(false);
   };
+
+  useOutsideClick(impactRef, closeMenu);
 
   const handleDivClick = (value, name) => {
     setValue(value);
     setDisplay(name);
     setShowMenu(false);
   };
+
   return (
-    <div id={id} className=" relative h-[50px] col-span-12 md:col-span-4">
+    <div
+      id={id}
+      ref={impactRef}
+      className=" relative h-[50px] col-span-12 md:col-span-4"
+    >
       <div
-        onClick={toggleMenu}
+        onClick={disabled ? null : toggleMenu}
         className="bg-blue-500 text-white text-nowrap flex items-center justify-between hover:bg-blue-600 transition-all duration-300 ease-in-out cursor-pointer shadow-md select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden"
       >
         <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
@@ -332,6 +358,7 @@ export const PointDropdown = ({
   id,
   name,
   value,
+  disabled,
   setValue,
   display,
   setDisplay,
@@ -342,6 +369,12 @@ export const PointDropdown = ({
   const [showMenu, setShowMenu] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  const targetRef = useRef(null);
+
+  useOutsideClick(targetRef, () => {
+    setShowMenu(false);
+  });
 
   const toggleMenu = () => {
     setShowMenu((showMenu) => !showMenu);
@@ -366,28 +399,16 @@ export const PointDropdown = ({
     setPoint(value);
   };
 
-  const handleSelectChange = (e) => {
-    setShowMenu(true);
-    setDisplay(e.target.value);
-    //  filter the data based on the input value
-    if (e.target.value === "") {
-      setFilteredData(data);
-    }
-    const filteredData = data?.filter((item) =>
-      item?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())
-    );
-    setFilteredData(filteredData);
-  };
-
   return (
     <div
       id={id}
+      ref={targetRef}
       className={`relative h-[50px] col-span-12 ${
         isTopicEmpty ? "md:col-span-6" : "md:col-span-4"
       }`}
     >
       <div
-        onClick={toggleMenu}
+        onClick={disabled ? null : toggleMenu}
         className={`${
           pointError ? "border-2 border-red-500" : ""
         } bg-blue-500 hover:bg-blue-600 flex items-center transition-all duration-300 ease-in-out cursor-pointer shadow-md text-white select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden`}

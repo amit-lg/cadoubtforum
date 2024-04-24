@@ -13,12 +13,12 @@ import {
 } from "../../../redux/reducers/appReducer";
 import { useDispatch , useSelector} from "react-redux";
 
-const Replies = ({ replies, loading }) => {
+const Replies = ({ replies, loading , size}) => {
   return (
     <div>
-      <div className="h-[70vh] w-full">
-        <SectionHeading text="Replies" />
-        <div className="mt-2 py-3 px-1 h-[96%] flex flex-col gap-5 overflow-y-scroll scrollbar-none">
+      <div className="h-[387px] w-full p-2">
+        <SectionHeading text="Recently Answered" />
+        <div className="mt-3 px-2 py-3 h-[calc(100%-28px)] flex flex-col gap-5 overflow-y-scroll scrollbar-none">
           {loading ? (
             <div className="h-full w-full flex items-center justify-center">
               <Loader />
@@ -29,13 +29,9 @@ const Replies = ({ replies, loading }) => {
             </div>
           ) : (
             replies?.map((reply) => (
-              <EachQuestionReplies key={reply?._id} reply={reply} />
+              <EachQuestionReplies size={size} key={reply?._id} reply={reply} />
             ))
           )}
-
-          {/* <EachQuestionReplies />
-          <EachQuestionReplies />
-          <EachQuestionReplies /> */}
         </div>
       </div>
     </div>
@@ -44,7 +40,7 @@ const Replies = ({ replies, loading }) => {
 
 export default Replies;
 
-export const EachQuestionReplies = ({ reply }) => {
+export const EachQuestionReplies = ({size , reply }) => {
   return (
     // <Link to={"/question/1"}>
     <Card className="flex bg-white flex-col cursor-pointer py-1 rounded-md">
@@ -57,7 +53,7 @@ export const EachQuestionReplies = ({ reply }) => {
           <div>
             {/* <span className="font-semibold text-sm">Replies &nbsp;</span> */}
             <div className="flex flex-col ">
-              <Reply answer={reply} />
+              <Reply size={size} answer={reply} />
             </div>
           </div>
         </div>
@@ -67,7 +63,7 @@ export const EachQuestionReplies = ({ reply }) => {
   );
 };
 
-export const Reply = ({ answer , bySelf}) => {
+export const Reply = ({ answer , bySelf , size}) => {
   const {user} = useSelector((state) => state.user);
   let replyBy = {
     name : "",
@@ -100,11 +96,8 @@ export const Reply = ({ answer , bySelf}) => {
           <span>
             {replyBy?.name}
           </span>
-          {/* <div className="flex text-gray-400 mx-3 items-center gap-2">
-            <EachActionButton Icon={MdThumbUp} value={likeCount} />
-          </div> */}
         </div>
-        <p className="bg-slate-200 p-1 rounded-md">{answer?.text}</p>
+        <p className="bg-slate-200 p-1 rounded-md">{size === "small" ? answer?.text?.slice(0, 87) : answer?.text} {size === "small" ? answer?.text?.length > 90 ? "..." : "" : ""}</p>
         <div>
           <div className="flex justify-between items-center self-end mt-2">
             {answer?.attachments?.length !== 0 && (

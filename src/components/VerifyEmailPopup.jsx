@@ -4,14 +4,17 @@ import {
   resendForgetPasswordMail,
   resendMailToUser,
 } from "../apiCalls/user/auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { MdClose } from "react-icons/md";
+import { closeVerifyEmail } from "../redux/reducers/appReducer";
 
 const url =
   "https://img.freepik.com/free-vector/character-illustration-people-with-internet-message-icons_53876-43082.jpg?t=st=1712919324~exp=1712922924~hmac=b9abe7288cb32f8c7cf9fd00f85002cc64c6b1bf7168ee8804111e4ad96e1239&w=1060";
 
 const VerifyEmailPopup = () => {
   const time = 30;
+  const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(true);
   const [count, setCount] = useState(time); // Initial countdown value (in seconds)
   const [start, setStart] = useState(false);
@@ -22,6 +25,10 @@ const VerifyEmailPopup = () => {
 
   const toggleTimer = () => {
     setStart(!start);
+  };
+
+  const handleClose = () => {
+    dispatch(closeVerifyEmail());
   };
 
   useEffect(() => {
@@ -66,15 +73,15 @@ const VerifyEmailPopup = () => {
       <div className=" h-full w-full flex flex-col">
         <div className="h-full w-full flex items-center justify-center">
           <div className="relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] z-50 rounded-md bg-white p-5">
-            {/* <div className="w-full flex items-center justify-between">
+            <div className="w-full flex items-center justify-between">
               <MdClose
                 onClick={handleClose}
                 className="text-xl cursor-pointer absolute top-2 right-2"
               />
-            </div> */}
+            </div>
             <div className="flex flex-col gap-3 my-5 items-center">
               <h2 className="text-2xl text-blue-500">
-                Please Verify your email
+                Please verify your email
               </h2>
               <h4 className="text-lg">
                 An email has been sent to your email id.
@@ -85,8 +92,8 @@ const VerifyEmailPopup = () => {
                 alt="Verify email"
               />
 
-              <div className="h-2">
-                {error && <span className="text-red-500">{error}</span>}
+              <div className="h-2 my-2">
+                {error && <span className="text-red-500 text-xs">{error}</span>}
               </div>
 
               <Button onClick={resendMail} disabled={disabled}>

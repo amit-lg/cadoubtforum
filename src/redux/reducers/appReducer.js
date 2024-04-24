@@ -17,6 +17,10 @@ const initialState = {
   showResetSuccess: false,
   tempToken: "",
   feedBackPopup: false,
+  calenderPopup: false,
+  event: {},
+  searchText : "",
+  likedQuestion: [], // array of question id , question liked - true , false  , count
 };
 
 export const counterSlice = createSlice({
@@ -50,6 +54,16 @@ export const counterSlice = createSlice({
 
     closeRaiseIssuePopup: (state) => {
       state.raiseIssuePopup = false;
+    },
+
+    openCalenderPopup: (state, action) => {
+      state.calenderPopup = true;
+      state.event = action.payload;
+    },
+
+    closeCalenderPopup: (state) => {
+      state.calenderPopup = false;
+      state.event = {};
     },
 
     openVerifyEmail: (state) => {
@@ -90,6 +104,10 @@ export const counterSlice = createSlice({
       state.globalSubjectvalue = action.payload;
     },
 
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
+    },
+
     setShowReportModal: (state, action) => {
       state.showReportModal = action.payload;
     },
@@ -109,7 +127,24 @@ export const counterSlice = createSlice({
         state.collapsedSidebar = true;
       }
     },
+    addToLikedQuestion: (state, action) => {
+      console.log({...action.payload});
+      // Action.payload is an object with question id , liked - true , false , count find if question exists in the state.likedQuestion array if it exists update its count to the passed count and its liked to the liked value to the passed liked value
+      const { liked, count, questionid } = action.payload;
 
+      // Find the index of the existing question with the same id
+      const existingIndex = state.likedQuestion.findIndex(
+        (item) => item.questionid === questionid
+      );
+
+      if (existingIndex !== -1) {
+        // Remove the existing item
+        state.likedQuestion.splice(existingIndex, 1);
+      }
+
+      // Add the new item
+      state.likedQuestion.push({ liked, count, questionid });
+    },
   },
 });
 
@@ -137,7 +172,12 @@ export const {
   openResetSuccess,
   closeResetSuccess,
   openFeedbackPopup,
-  closeFeedbackPopup
+  closeFeedbackPopup,
+  openCalenderPopup,
+  closeCalenderPopup,
+  addToLikedQuestion,
+  removeFromQuestion,
+  setSearchText
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

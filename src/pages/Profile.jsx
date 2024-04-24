@@ -6,7 +6,6 @@ import {
   FaCamera,
 } from "react-icons/fa6";
 import Card from "../components/ui/Card";
-import SectionHeading from "../components/SectionHeading";
 import ProfileForm from "../sections/profile/ProfileForm";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -22,7 +21,6 @@ import {
   setTwitterUrl,
 } from "../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
-import Button from "../components/Button";
 import Loader from "../components/Loader";
 const Profile = () => {
   const [loading, setLoading] = useState(false);
@@ -78,7 +76,7 @@ const Profile = () => {
   return (
     <div className="flex flex-col gap-6 fade-enter">
       {loading ? (
-        <div>
+        <div className="h-[70vh] w-full flex items-center justify-center">
           <Loader />
         </div>
       ) : (
@@ -116,7 +114,7 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full gap-2">
-                <div className="flex flex-col-reverse gap-1 md:flex-row items-center justify-center md:justify-between w-full">
+                <div className="flex flex-col gap-1 md:flex-row items-center justify-center md:justify-between w-full">
                   <h4 className="text-lg font-semibold text-center md:text-left text-orange-500">
                     {user?.name}
                   </h4>
@@ -140,14 +138,16 @@ const Profile = () => {
                 href={user?.twitterUrl ? user?.twitterUrl : "#"}
                 aria-label="Twitter"
                 className="p-2 rounded-md  "
+                target="_blank"
               >
                 <FaXTwitter className="w-4 h-4 fill-current" />
               </a>
               <a
                 rel="noopener noreferrer"
-                href={user?.linkedinUrl ? user?.linkedinUrl : "#"}
+                href={user?.linkedInUrl ? user?.linkedInUrl : "#"}
                 aria-label="LinkedIn"
                 className="p-2 rounded-md"
+                target="_blank"
               >
                 <FaLinkedinIn className="w-4 h-4 fill-current" />
               </a>
@@ -156,29 +156,32 @@ const Profile = () => {
                 href={user?.instaUrl ? user?.instaUrl : "#"}
                 aria-label="LinkedIn"
                 className="p-2 rounded-md "
+                target="_blank"
               >
                 <FaInstagram className="w-4 h-4 fill-current" />
               </a>
               <a
                 rel="noopener noreferrer"
-                href="#"
+                href={user?.fbUrl ? user?.fbUrl : "#"}
                 aria-label="LinkedIn"
                 className="p-2 rounded-md"
+                target="_blank"
               >
                 <FaFacebookF className="w-4 h-4 fill-current" />
               </a>
             </div>
           </Card>
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <SectionHeading text="Profile" />
             <Button onClick={toggleCanUpdate}>
               {canUpdate ? "Edit" : "Done"}
             </Button>
-          </div>
+          </div> */}
           <ProfileForm
             canUpdate={canUpdate}
             setCanUpdate={setCanUpdate}
             canUpdateDOB={canUpdateDOB}
+            toggleCanUpdate={toggleCanUpdate}
             avatar={avatar}
             picUpdated={picUpdated}
             setPicUpdated={setPicUpdated}

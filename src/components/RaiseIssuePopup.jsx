@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { closeRaiseIssuePopup } from "../redux/reducers/appReducer";
 import { useState } from "react";
-import Input from "./Input";
 import Button from "./Button";
 import { MdClose } from "react-icons/md";
 
@@ -29,9 +28,9 @@ const RaiseIssuePopup = () => {
             <form className="flex flex-col gap-3 mt-5 w-full ">
               <select
                 className="w-full bg-gray-100 p-2 rounded-md outline-none"
-                defaultValue=""
                 name="raiseIssue"
                 id="raiseIssue"
+                value={""}
               >
                 <option className="w-full" disabled value="">
                   Choose issue category

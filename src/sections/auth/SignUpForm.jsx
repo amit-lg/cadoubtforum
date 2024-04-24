@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import {
@@ -37,13 +37,6 @@ const SigninForm = ({
   batch,
   setBatch,
 }) => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [phone, setPhone] = useState();
-  // const [countryCode, setCountryCode] = useState("+91");
 
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -53,8 +46,6 @@ const SigninForm = ({
   const [passwordError, setPasswordError] = useState(false);
   const [phoneErrror, setPhoneError] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(termsChecked);
-
-  // const [course, setCourse] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -190,6 +181,7 @@ const SigninForm = ({
     const response = await getCourses();
     if (response.status === 200) {
       setCoursesLevels(response.data.Level);
+      console.log(response.data.Level);
     }
   };
 
@@ -248,21 +240,26 @@ const SigninForm = ({
           `}
         >
           <option value="" disabled className="text-gray-400">
-            Select your course
+            Select your level
           </option>
-          {courseLevels?.map((level) => (
-            <>
-              {level?.Batches?.map((batch) => (
-                <option
-                  key={batch?.id}
-                  value={batch?.id}
-                  className="text-black"
-                >
-                  {level.Name + " - " + batch.Name}
-                </option>
-              ))}
-            </>
-          ))}
+          {courseLevels?.map((level) => {
+            return (
+              <Fragment key={level?.id}>
+                {level?.Batches?.map((batch) => {
+                  console.log(level?.Name + " - " + batch?.Name);
+                  return (
+                    <option
+                      key={batch?.id}
+                      value={batch?.id}
+                      className="text-black"
+                    >
+                      {level?.Name + " - " + batch?.Name}
+                    </option>
+                  );
+                })}
+              </Fragment>
+            );
+          })}
         </select>
 
         <div className="flex flex-row gap-2 ">

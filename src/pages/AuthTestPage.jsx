@@ -54,15 +54,6 @@ const AuthTest = () => {
 
   return (
     <div className="min-h-full w-full flex items-center justify-center bg-blue-100">
-      {/* <div>
-        <div className="hidden 2xl:flex">2xl</div>
-        <div className="hidden xl:flex 2xl:hidden">xl</div>
-        <div className="hidden md:flex lg:hidden xl:hidden 2xl:hidden">md</div>
-        <div className="hidden sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
-          sm
-        </div>
-        <div className="flex md:hidden lg:hidden xl:hidden 2xl:hidden">xs</div>
-      </div> */}
       <div
         className={`relative ${
           termsAndConditionView
@@ -83,11 +74,11 @@ const AuthTest = () => {
                 w-[50%] h-full transform transition-all ease-in-out duration-700 flex items-center justify-center
               `}
                 >
-                  <div className="w-[60%] flex items-center flex-col justify-center">
+                  <div className="w-[60%] flex items-center flex-col justify-center gap-4">
                     <img
-                      src="https://ik.imagekit.io/vt3qjswze/AB%20Logo/ABLOGO41.png?updatedAt=1697009845701\"
+                      src="logo.jpg"
                       alt="aswini bajaj"
-                      className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
+                      className="h-[50px] w-[50px] xl:h-[80px] xl:w-[80px] object-contain"
                     />
                     <h1 className="mb-5 md:text-2xl xl:text-3xl text-center font-semibold text-slate-500">
                       Sign In
@@ -101,16 +92,16 @@ const AuthTest = () => {
                 w-[50%] h-full transform transition-all ease-in-out duration-700 flex items-center justify-center
               `}
                 >
-                  <div className="w-full flex items-center justify-center flex-col">
+                  <div className="w-full flex items-center justify-center flex-col gap-4">
                     <img
                       key={Date.now()}
-                      src="https://ik.imagekit.io/vt3qjswze/AB%20Logo/ABLOGO41.png?updatedAt=1697009845701\"
+                      src="/logo.jpg"
                       alt=""
-                      className="h-[50px] w-[50px] md:w-[70px] md:h-[70px] xl:w-[80px] xl:h-[80px] 2xl:h-[100px] 2xl:w-[100px] object-cover"
+                      className="h-[50px] w-[50px] md:w-[70px] md:h-[70px] xl:w-[80px] xl:h-[80px] object-contain"
                     />
 
                     <h1 className="mb-2 xl:text-2xl 2xl:text-4xl lg:text-xl text-center font-semibold text-slate-500">
-                      Create an Account
+                      Create Account
                     </h1>
                     <div className="2xl:w-[60%] w-[70%] flex items-center justify-center">
                       <SignUpForm
@@ -211,7 +202,7 @@ const AuthTest = () => {
                     alt=""
                   />
                   <h1 className="text-3xl  font-semibold text-black mb-3">
-                    Create an Account
+                    Create Account
                   </h1>
                   <div className="w-full h-[80%] flex items-center justify-center">
                     <SignUpForm

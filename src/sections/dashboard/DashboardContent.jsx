@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import FeedContainer from "./feed/FeedContainer";
 import RecentQuestions from "./feed/RecentQuestions";
 import Replies from "./feed/Replies";
 import StatsContainer from "./stats/StatContainer";
@@ -13,6 +12,8 @@ import { BiSolidCube } from "react-icons/bi";
 import { TbPinnedFilled } from "react-icons/tb";
 import { RiCloseCircleFill } from "react-icons/ri";
 import GuidedTour from "../../components/GuidedTourForDashboard";
+import Calender from "../../pages/Calender";
+import Blogs from "../../components/Blogs";
 
 export const DashBoardContent = () => {
   const [allQuestions, setAllQuestions] = useState(0);
@@ -95,10 +96,15 @@ export const DashBoardContent = () => {
         ))}
       </StatsContainer>
 
-      <FeedContainer>
+      <div className="grid mt-5 lg:mt-0 grid-cols-1 xl:grid-cols-2 lg:space-y-0 bg-transparent">
         <RecentQuestions loading={loading} questions={recentQuestions} />
-        <Replies loading={loading} replies={repliesOnMyQuestions} />
-      </FeedContainer>
+        <Calender />
+      </div>
+
+      <div className="grid mt-5 lg:mt-0 grid-cols-1 xl:grid-cols-2 lg:space-y-0 bg-transparent">
+        <Replies size="small" loading={loading} replies={repliesOnMyQuestions} />
+        <Blogs />
+      </div>
     </div>
   );
 };

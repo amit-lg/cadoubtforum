@@ -1,8 +1,6 @@
-import { getHeaders } from "../../utils/requestHeaders";
+import { getHeaders, getHeadersWithFormData } from "../../utils/requestHeaders";
 import { instance } from "../../utils/axiosInstance";
 import { errorResponse, successResponse } from "../../utils/errors";
-import axios from "axios";
-import { backendUrl } from "../../../config";
 
 export const getProfile = async () => {
   const headers = getHeaders();
@@ -17,7 +15,7 @@ export const getProfile = async () => {
 };
 
 export const updateProfile = async (data) => {
-  const headers = getHeaders();
+  const headers = getHeadersWithFormData();
   try {
     const response = await instance.post("/doubtforum/bio", data, { headers });
     if (response.status === 200) {
@@ -29,9 +27,10 @@ export const updateProfile = async (data) => {
 };
 
 export const updateProfileWithImage = async (data) => {
-  const headers = getHeaders();
+  console.log(data);
+  const headers = getHeadersWithFormData();
   try {
-    const response = await axios.post(`${backendUrl}/doubtforum/bio`, data, {
+    const response = await instance.post(`/doubtforum/bio`, data, {
       headers,
     });
     if (response.status === 200) {

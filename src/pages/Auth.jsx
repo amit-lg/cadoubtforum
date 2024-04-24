@@ -24,9 +24,9 @@ const Auth = () => {
   const [batch, setBatch] = useState("");
   const [date, setDate] = useState(new Date());
 
-  localStorage.setItem("hasSeenDashboardTour", false);
-  localStorage.setItem("hasSeenAllQuestionTour", false);
-  localStorage.setItem("hasSeenSidebarTour", false);
+  // localStorage.setItem("hasSeenDashboardTour", false);
+  // localStorage.setItem("hasSeenAllQuestionTour", false);
+  // localStorage.setItem("hasSeenSidebarTour", false);
 
   const onAccept = () => {
     setTermsAccepted(true);

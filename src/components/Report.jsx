@@ -55,10 +55,9 @@ const Report = ({ handleClose }) => {
 
               <div className="flex flex-col gap-3">
                 <p className="text-sm md:text-sm p-2 text-center">
-                  Thanks you for helping us maintain a positive comunity
-                  experince. Your feedback is important. Please provide a breif
-                  reason for reporting this content. We take report seriously
-                  and will review them propmtly
+                  Thank you for your contribution to maintaining a positive community experience. Your
+                  feedback is invaluable to us. Please provide a brief reason for reporting this content.
+                  We take reports seriously and will review them promptly.
                 </p>
                 <div className="px-2 rounded-md">
                   <textarea

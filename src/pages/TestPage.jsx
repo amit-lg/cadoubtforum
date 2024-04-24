@@ -1,152 +1,178 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import SectionHeading from "../components/SectionHeading";
+import Question from "../components/Question";
+import QuestionFilters from "../components/QuestionFilters";
+import Dropdowns from "../components/Dropdowns";
+// import { getQuestions } from "../apiCalls/question";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Loader from "../components/Loader";
+import GuidedTourForAllQuestions from "../components/GuidedTourForAllQuestions";
 import { getQuestions } from "../apiCalls/question";
-import Card from "../components/ui/Card";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  clearQuestions,
+  incrementPage,
+  initPage,
   setHasMore,
   setQuestionId,
   setQuestions,
-} from "../redux/reducers/testReducer";
-import { Link } from "react-router-dom";
-import Dropdowns from "../components/Dropdowns";
+} from "../redux/reducers/allQuestionsReducer";
+import useDidMountEffect from "../hooks/useUpdateEffect";
 
-const TestPage = () => {
-  const observerTarget = useRef(null);
-  const dispatch = useDispatch();
-  const { questions, questionId } = useSelector((state) => state.test);
-
-  // const [questions, setQuestions] = useState([]);
-
-  const [loading, setLoading] = useState(false);
+const AllQuestions = () => {
+  const { questions, questionId, page, hasMore } = useSelector((state) => state.all);
   const [topicValue, setTopicValue] = useState("");
   const [subjectValue, setSubjectVlue] = useState("");
   const [pointsValue, setPointsValue] = useState("");
+  const [loading, setLoading] = useState("");
+
   const [filter, setFilter] = useState("");
+  // const [hasMore, setHasMore] = useState(false);
 
-  const [hasMore, setHasMore] = useState(true);
-  let page = 0;
+  const observerTarget = useRef(null);
 
-  const fetchAllQuestions = async () => {
-    setLoading(true);
+  const dispatch = useDispatch();
+
+  const handleQuestionId = (id) => {
+    dispatch(setQuestionId(id));
+  };
+
+  const fetchAllQuestions = useCallback(async (page) => {
+    console.log("fetching");
     const response = await getQuestions({
-      subject: "",
-      topic: "",
-      points: "",
-      filter: "",
+      subject: subjectValue,
+      topic: topicValue,
+      points: pointsValue,
       cursor: page,
+      filter: filter,
     });
-    if (response.status === 200) {
-      if (response?.data?.length === 0 || response?.data?.length < 8) {
-        // dispatch(setHasMore(false));
-        setHasMore(false);
+
+    if (response?.status === 200) {
+      dispatch(incrementPage());
+      // setQuestions((prev) => {
+      const newData = [...response.data];
+      dispatch(setQuestions(newData));
+      if (response.data.length < 10) {
+        console.log("no more");
+        dispatch(setHasMore(false));
+      } else {
+        console.log("more");
+        dispatch(setHasMore(true));
       }
-      dispatch(setQuestions(response.data));
-      setLoading(false);
+      // });
     }
-    page++;
-  };
-
-  const handleTopicValue = (value) => {
-    // dispatch(setHasMore(true));
-    setHasMore(true);
-    page = 0;
-    setTopicValue(value);
-
-    dispatch(setQuestions([]));
-  };
-
-  const handleSubjectValue = (value) => {
-    // dispatch(setHasMore(true));
-    setHasMore(true);
-    page = 0;
-    setSubjectVlue(value);
-
-    dispatch(setQuestions([]));
-  };
-
-  const handlePointsValue = (value) => {
-    // dispatch(setHasMore(true));
-    setHasMore(true);
-    page = 0;
-    setPointsValue(value);
-
-    dispatch(setQuestions([]));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pointsValue, subjectValue, topicValue, filter, dispatch]);
 
   useEffect(() => {
+    const ref = observerTarget.current;
+    const currentPage = page;
+
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          fetchAllQuestions();
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          fetchAllQuestions(currentPage);
         }
       },
-      { threshold: 1 }
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 1,
+      }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+    if (ref) {
+      observer.observe(ref);
     }
 
     return () => {
-      if (observerTarget.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(observerTarget.current);
+      if (ref) {
+        observer.unobserve(ref);
       }
     };
+  });
+
+  useDidMountEffect(() => {
+    // if(subjectValue || topicValue || pointsValue){
+    dispatch(initPage());
+    dispatch(clearQuestions());
+    dispatch(setHasMore(true))
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observerTarget, subjectValue, topicValue, pointsValue]);
+  }, [subjectValue, topicValue, pointsValue , filter]);
 
   useEffect(() => {
-    if (questionId === "") {
-      return;
+    if (page === 0 && questions?.length === 0) {
+      setLoading(true);
+      fetchAllQuestions();
+      setLoading(false);
     }
-    const target = document.getElementById(questionId);
-    target.scrollIntoView(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (questionId) {
+      // Scroll to the question with the given id
+      const questionElement = document.getElementById(questionId);
+      if (questionElement) {
+        questionElement.scrollIntoView({ behavior: "instant" });
+      }
+    }
   }, [questionId]);
 
   return (
-    <div>
+    <div className="fade-enter">
+      <GuidedTourForAllQuestions />
+
+      <div className="flex items-center justify-between h-full">
+        <SectionHeading text="All Questions" />
+        <QuestionFilters setFilters={setFilter} />
+      </div>
+
       <div className="mt-4 w-full">
         <Dropdowns
           topicValue={topicValue}
           subjectValue={subjectValue}
           pointsValue={pointsValue}
-          setTopicValue={handleTopicValue}
-          setSubjectVlue={handleSubjectValue}
-          setPointsValue={handlePointsValue}
+          setTopicValue={setTopicValue}
+          setSubjectVlue={setSubjectVlue}
+          setPointsValue={setPointsValue}
         />
       </div>
-      <div className="h-auto w-full flex items-center justify-center  flex-col gap-10">
-        {questions.map((question, idx) => {
-          return (
-            <Link
-              onClick={() =>
-                dispatch(setQuestionId(`question-${question?.id}`))
-              }
-              id={`question-${question?.id}`}
-              to={`/question/${idx}`}
-              className="w-full flex flex-col"
-              key={idx}
-            >
-              <Card>
-                <Card className="h-[100px] shadow-none flex items-center justify-center agp-3">
-                  <div>Question {idx}</div>
-                </Card>
-              </Card>
-            </Link>
-          );
-        })}
-        {loading && <p>Loading...</p>}
-        {hasMore && (
-          <div className="bg-red-500 h-[10px]" ref={observerTarget}>
-            lOAD DATA
+
+      <div id="all-question-list" className="mt-5 ">
+        <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
+          <div className="flex flex-col gap-5">
+            {loading ? <Loader /> : null}
+            <>
+              {questions?.length === 0 ? (
+                <div
+                  className={`${hasMore ? "hidden" : "flex"
+                    } text-center h-full m-auto`}
+                >
+                  No questions
+                </div>
+              ) : (
+                questions?.map((question, idx) => (
+                  <div
+                    id={"question" + question.id}
+                    onClick={() => handleQuestionId("question" + question.id)}
+                    key={idx}
+                  >
+                    <Question key={question._id} question={question} />
+                  </div>
+                ))
+              )}
+            </>
           </div>
-        )}
+          {hasMore ? (
+            <div ref={observerTarget}>
+              <Loader />
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
 };
 
-export default TestPage;
+export default AllQuestions;

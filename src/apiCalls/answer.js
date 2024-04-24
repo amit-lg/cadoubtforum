@@ -1,12 +1,13 @@
 import axios from "axios";
 import { backendUrl } from "../../config";
 import { errorResponse, successResponse } from "../utils/errors";
-import { getHeaders } from "../utils/requestHeaders";
+import { getHeaders, getHeadersWithFormData } from "../utils/requestHeaders";
+import { instance } from "../utils/axiosInstance";
 
 export const addAnswer = async (data) => {
-  const headers = getHeaders();
+  const headers = getHeadersWithFormData();
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${backendUrl}/doubtforum/addanswers`,
       data,
       {
@@ -24,7 +25,7 @@ export const addAnswer = async (data) => {
 export const likeAAnswer = async (data) => {
   const headers = getHeaders();
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${backendUrl}/doubtforum/addanswerlike`,
       data,
       {

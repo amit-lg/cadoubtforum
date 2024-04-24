@@ -2,13 +2,14 @@ import Loader from "../../../components/Loader";
 import Question from "../../../components/Question";
 import SectionHeading from "../../../components/SectionHeading";
 import PropTypes from "prop-types";
+// import Card from "../../../components/ui/Card";
 
 const RecentQuestions = ({ questions, loading }) => {
   return (
     <div>
-      <div className="h-[65vh]">
-        <SectionHeading text="Recent Questions" />
-        <div className="mt-5 py-3 h-full flex flex-col gap-5 overflow-y-scroll scrollbar-none">
+      <div className="h-[400px] w-full rounded-md p-2 ">
+        <SectionHeading text="Recently Asked" />
+        <div className="mt-3 px-1 py-3 h-[calc(100%-28px)] flex flex-col gap-5 overflow-y-scroll scrollbar-none">
           {loading ? (
             <div className="h-full w-full flex items-center justify-center">
               <Loader />

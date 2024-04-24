@@ -6,7 +6,7 @@ import SidebarLinks from "./SidebarLink";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Button from "./Button";
-import { MdFeedback } from "react-icons/md";
+import { MdArrowBack, MdFeedback } from "react-icons/md";
 import { openFeedbackPopup } from "../redux/reducers/appReducer";
 
 const Sidebar = ({ handleSidebarState, forMobile }) => {
@@ -28,9 +28,12 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
         }`}
       >
         {/* Logo */}
+        {!forMobile && <div onClick={() => handleSidebarState()} className={`cursor-pointer absolute top-0 ${collapsedSidebar ? "left-1/2 -translate-x-1/2" : "right-2"} p-1 border rounded-full z-50 `}>
+          <MdArrowBack className={`transition-all duration-300 ease-in-out ${collapsedSidebar ? "rotate-180" : "rotate-0"}`}/>
+        </div>}
         <a
           href="https://aswinibajaj.com/"
-          className={`relative flex items-center mb-10 z-50 ${
+          className={`relative flex items-center mt-10 mb-10 z-50 ${
             !forMobile && collapsedSidebar ? "justify-center" : "justify-start"
           }`}
           target="_blank"
@@ -70,13 +73,11 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
 
       {/* Help links */}
       <div className={`mt-3 relative ${collapsedSidebar ? "px-1" : "px-5"}`}>
-        <div className="py-3">
+        <div>
           {otherRoutes?.map((route) => (
             <SidebarLinks key={route.label} route={route} location={location} />
           ))}
         </div>
-        <UserDetails user={user} />
-
         <Button
           id={"feedback"}
           className={`
@@ -98,10 +99,11 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
             />
 
             {!collapsedSidebar && (
-              <span className={`delay  text-sm text-center `}>Feedback</span>
+              <span className={`delay  text-sm text-center `}>Your Feedback</span>
             )}
           </div>
         </Button>
+        <UserDetails user={user} />
       </div>
     </div>
   );

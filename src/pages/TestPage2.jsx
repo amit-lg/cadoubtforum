@@ -1,127 +1,205 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import Dropdowns from "../components/Dropdowns";
-import { Link } from "react-router-dom";
-import Card from "../components/ui/Card";
-import { getQuestions } from "../apiCalls/question";
+import SectionHeading from "../components/SectionHeading";
 import Question from "../components/Question";
+import QuestionFilters from "../components/QuestionFilters";
+// import { getQuestions } from "../apiCalls/question";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Loader from "../components/Loader";
+import GuidedTourForAllQuestions from "../components/GuidedTourForAllQuestions";
+import { getQuestions } from "../apiCalls/question";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearQuestions,
+  incrementPage,
+  initPage,
+  setHasMore,
+  setQuestionId,
+  setQuestions,
+} from "../redux/reducers/allQuestionsReducer";
+import useDidMountEffect from "../hooks/useUpdateEffect";
+import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
+import { debounce } from "../utils/debounce";
+import { setSearchText } from "../redux/reducers/appReducer";
 
-const InfiniteScrollWithFilters = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [topicValue, setTopicValue] = useState("");
-  const [subjectValue, setSubjectVlue] = useState("");
-  const [pointsValue, setPointsValue] = useState("");
-  const [hasMore, setHasMore] = useState(true);
+const delay = 500;
 
-  const observer = useRef();
+const TestPage2 = () => {
+  const {
+    questions,
+    questionId,
+    page,
+    hasMore,
+    topicValue,
+    subjectValue,
+    pointsValue,
+  } = useSelector((state) => state.all);
+  const { searchText } = useSelector((state) => state.app);
+  const [loading, setLoading] = useState("");
+  // const [searchTextLocal, setSearchTextLocal] = useState("");
 
-  useEffect(() => {
-    // Fetch data when component mounts
-    hasMore && fetchData();
+  const [filter, setFilter] = useState("");
 
-    // Initialize Intersection Observer
-    observer.current = new IntersectionObserver(handleObserver, {
-      threshold: 1,
-    });
+  const observerTarget = useRef(null);
 
-    // Observe the bottom of the page
-    if (hasMore) {
-      observer.current.observe(document.querySelector(".bottom"));
-    }
+  const dispatch = useDispatch();
 
-    return () => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-    };
-  }, [subjectValue, topicValue, pointsValue]); // Refetch data when filters change
+  // const handleSearchText = (e) => {
+  //   setSearchTextLocal(e.target.value);
+  //   const interval = setInterval(() => {
+  //     dispatch(setSearchText(e.target.value));
+  //   }, delay);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
+  //   return () => clearInterval(interval);
+  // };
+
+  const handleQuestionId = (id) => {
+    dispatch(setQuestionId(id));
+  };
+
+  const fetchAllQuestions = useCallback(
+    async (page) => {
       const response = await getQuestions({
         subject: subjectValue,
         topic: topicValue,
         points: pointsValue,
-        cursor: page,
+        cursor: page ? page : 0,
+        filter: filter,
+        searchText,
       });
-      if(response.data.length < 10){
-        setHasMore(false);
+
+      if (response?.status === 200) {
+        dispatch(incrementPage());
+        // setQuestions((prev) => {
+        const newData = [...response.data];
+        console.log(newData);
+        dispatch(setQuestions(newData));
+        if (response.data.length < 10) {
+          console.log("no more");
+          dispatch(setHasMore(false));
+        } else {
+          console.log("more");
+          dispatch(setHasMore(true));
+        }
+        // });
       }
-      setData((prevData) => [...prevData, ...response.data]);
-      setPage((prevPage) => prevPage + 1);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [pointsValue, subjectValue, topicValue, filter, searchText, dispatch]
+  );
+
+  useEffect(() => {
+    const ref = observerTarget.current;
+    const currentPage = page;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          fetchAllQuestions(currentPage);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 1,
+      }
+    );
+
+    if (ref) {
+      observer.observe(ref);
+    }
+
+    return () => {
+      if (ref) {
+        observer.unobserve(ref);
+      }
+    };
+  }, [
+    page,
+    subjectValue,
+    topicValue,
+    pointsValue,
+    filter,
+    searchText,
+    fetchAllQuestions,
+  ]);
+
+  useDidMountEffect(() => {
+    dispatch(initPage());
+    dispatch(clearQuestions());
+    dispatch(setHasMore(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectValue, topicValue, pointsValue, filter, searchText]);
+
+  useEffect(() => {
+    if (page === 0 && questions?.length === 0) {
+      setLoading(true);
+      fetchAllQuestions();
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleObserver = (entries) => {
-    if (entries[0].isIntersecting && !loading) {
-      fetchData();
+  useEffect(() => {
+    if (questionId) {
+      // Scroll to the question with the given id
+      const questionElement = document.getElementById(questionId);
+      if (questionElement) {
+        questionElement.scrollIntoView({ behavior: "instant" });
+      }
     }
-  };
-
-  const handleSubjectValue = (value) => {
-    setSubjectVlue(value);
-    setPage(0); // dispatch(clearQuestions());
-    // setQuestions([]);
-    setData([]);
-  };
-
-  const handleTopicValue = (value) => {
-    setTopicValue(value);
-    setData([]);
-    setPage(0);
-
-    // setQuestions([]);
-    // dispatch(clearQuestions());
-  };
-
-  const handlePointsValue = (value) => {
-    setData([]);
-    setPage(0);
-    setPointsValue(value);
-    // setQuestions([]);
-    // dispatch(clearQuestions());
-    // setQuestions([]);
-  };
+  }, [questionId]);
 
   return (
-    <div>
-      {/* Filter component */}
-      <Dropdowns
-        topicValue={topicValue}
-        subjectValue={subjectValue}
-        pointsValue={pointsValue}
-        setTopicValue={handleTopicValue}
-        setSubjectVlue={handleSubjectValue}
-        setPointsValue={handlePointsValue}
-      />
+    <div className="fade-enter">
+      <GuidedTourForAllQuestions />
 
-      {/* Render your data */}
-      <div className="flex flex-col gap-20">
-        {data.map((question, idx) => (
-          <div
-            // onClick={() => dispatch(setQuestionId(question?.id))}
-            id={`question-${question?.id}`}
-            key={question?.id}
-          >
-            <Question key={question?.id} question={question} />
-          </div>
-        ))}
+      <div className="flex items-center justify-between h-full">
+        <SectionHeading text="All Questions" />
+        <QuestionFilters setFilters={setFilter} />
       </div>
 
-      {/* Loading indicator */}
-      {loading && <div>Loading...</div>}
+      <div className="mt-4 w-full">
+        <AllQuestionDropdowns
+          topicValue={topicValue}
+          subjectValue={subjectValue}
+          pointsValue={pointsValue}
+        />
+      </div>
 
-      {/* Intersection Observer target */}
-      {hasMore && <div className="bottom">bottom</div>}
+      <div id="all-question-list" className="mt-5 ">
+        <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
+          <div className="flex flex-col gap-5">
+            {loading ? <Loader /> : null}
+            <>
+              {questions?.length === 0 ? (
+                <div
+                  className={`${
+                    hasMore ? "hidden" : "flex"
+                  } text-center h-full m-auto`}
+                >
+                  No questions
+                </div>
+              ) : (
+                questions?.map((question, idx) => (
+                  <div
+                    id={"question" + question.id}
+                    onClick={() => handleQuestionId("question" + question.id)}
+                    key={idx}
+                  >
+                    <Question key={question._id} question={question} />
+                  </div>
+                ))
+              )}
+            </>
+          </div>
+          {hasMore ? (
+            <div ref={observerTarget}>
+              <Loader />
+            </div>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default InfiniteScrollWithFilters;
+export default TestPage2;

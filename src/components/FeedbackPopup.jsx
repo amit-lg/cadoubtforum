@@ -1,9 +1,7 @@
 import { closeFeedbackPopup } from "../redux/reducers/appReducer";
 import { useDispatch } from "react-redux";
-import Input from "./Input";
 import { useState } from "react";
 import Button from "./Button";
-import SectionHeading from "./SectionHeading";
 import { MdClose } from "react-icons/md";
 
 const FeedbackPopup = () => {
@@ -44,14 +42,19 @@ const FeedbackPopup = () => {
       <div className="h-full w-full flex flex-col">
         <div className="h-full w-full">
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="bg-white relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[40%] rounded-md space-y-3">
+            <div className="bg-white relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] rounded-md space-y-3">
               <div className="absolute top-0 right-0 p-2 cursor-pointer">
                 <MdClose />
               </div>
               <div className="p-4 space-y-3">
                 <h3 className="text-xl font-semibold">Provide your feedback</h3>
-                <form onSubmit={handleSubmit} className="space-y-3 flex flex-col" action="">
-                  <Input
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-3 flex flex-col"
+                  action=""
+                >
+                  <input
+                    className="w-full bg-gray-100 p-2 rounded-md outline-none"
                     label="Feature"
                     type="text"
                     value={featureTitle}
@@ -68,11 +71,15 @@ const FeedbackPopup = () => {
                     rows="10"
                     cols="50"
                     placeholder="Enter the feature description"
-                    className="shadow-lg  w-full p-2.5 text-sm text-gray-900 bg-gray-100 border-none rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    className="p-2 rounded-md outline-none bg-gray-100"
                     required
                   ></textarea>
 
-                  <Button className="w-max self-end" type="submit">Submit</Button>
+                  <div className="h-2 flex items-center justify">{error}</div>
+
+                  <Button className="w-max self-end" type="submit">
+                    Submit
+                  </Button>
                 </form>
               </div>
             </div>

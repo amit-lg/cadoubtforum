@@ -1,20 +1,18 @@
 import { useState } from "react";
 import Button from "../components/Button";
 import PropTypes from "prop-types";
-import Dropdowns from "./Dropdowns";
 import { FaCamera } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
-import { addQuestion, viewAQuestion } from "../apiCalls/question";
+import { addQuestion, getQuestions, viewAQuestion } from "../apiCalls/question";
 import { useNavigate } from "react-router-dom";
+import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
+import { useSelector } from "react-redux";
 
 const AskQuestion = ({ handleClose }) => {
   const navigate = useNavigate();
+  const { pointsValue } = useSelector((state) => state.all);
 
   const [question, setQuestion] = useState("");
-
-  const [topicValue, setTopicValue] = useState("");
-  const [subjectValue, setSubjectVlue] = useState("");
-  const [pointsValue, setPointsValue] = useState("");
 
   const [sizeError, setSizeError] = useState("");
   const [lengthError, setLengthError] = useState([]);
@@ -26,6 +24,14 @@ const AskQuestion = ({ handleClose }) => {
   const handleQuestion = (e) => {
     setQuestion(e.target.value);
   };
+
+  const viewAllQuetions = () => {
+    navigate("/all-questions");
+    setAlreadyAsked(false);
+    handleClose();
+  };
+
+
 
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
@@ -49,14 +55,6 @@ const AskQuestion = ({ handleClose }) => {
       setImages([...images, element]);
       setImagesPreview([...imagesPreview, URL.createObjectURL(element)]);
     }
-
-    // if (files) {
-    //   const newImages = Array.from(files).map((file) =>
-    //     URL.createObjectURL(file)
-    //   );
-    //   setImagesPreview([...imagesPreview, ...newImages]);
-    //   setImages([...images, ...files]);
-    // }
   };
 
   const removeImg = (index) => {
@@ -71,18 +69,28 @@ const AskQuestion = ({ handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // return;
     if (pointsValue === "") {
       setPointError(true);
       return;
     }
 
+    const responseForQuestion = await getQuestions({ points: pointsValue, });
+    if (responseForQuestion?.status === 200) {
+      if (responseForQuestion?.data?.length > 0) {
+        setAlreadyAsked(true);
+        return;
+      }
+    }
+
     const data = new FormData();
+
     data.append("questionText", question);
     data.append("pointerid", pointsValue);
     for (let i = 0; i < images.length; i++) {
       data.append("pictures", images[i]);
     }
+
+    console.log(data);
 
     const response = await addQuestion(data);
     if (response.status === 200) {
@@ -94,7 +102,7 @@ const AskQuestion = ({ handleClose }) => {
   const goToQuestion = async (id) => {
     const response = await viewAQuestion({ questionid: id });
     if (response.status === 200) {
-      navigate(`/question/${id}`);
+      navigate(`/question/${id}` , {state : {from : "/ask-question"}});
     }
   };
 
@@ -104,17 +112,15 @@ const AskQuestion = ({ handleClose }) => {
         <div className="h-full w-full flex flex-col">
           <div className="h-full w-full flex items-center justify-center">
             <div
-              className={`rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${
-                alreadyAsked
-                  ? "w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[30%]"
-                  : "w-[90%] sm:w-[70%] md:w-[80%] lg:w-[70%] xl:w-[50%]"
-              } `}
+              className={`rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${alreadyAsked
+                ? "w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[30%]"
+                : "w-[90%] sm:w-[70%] md:w-[80%] lg:w-[70%] xl:w-[50%]"
+                } `}
             >
               {/*content*/}
               <div
-                className={`${
-                  alreadyAsked ? "hidden" : "flex"
-                } fade-enter border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
+                className={`${alreadyAsked ? "hidden" : "flex"
+                  } fade-enter border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
               >
                 {/*header*/}
                 <div className="bg-blue-500 flex items-start justify-between p-3 border-b border-solid border-blueGray-200 rounded-t-md">
@@ -134,14 +140,9 @@ const AskQuestion = ({ handleClose }) => {
                 {/*body*/}
                 <form onSubmit={handleSubmit}>
                   <div className="relative p-4 flex-auto flex flex-col">
-                    <Dropdowns
-                      topicValue={topicValue}
-                      setTopicValue={setTopicValue}
-                      subjectValue={subjectValue}
-                      setSubjectVlue={setSubjectVlue}
-                      pointsValue={pointsValue}
-                      setPointsValue={setPointsValue}
+                    <AllQuestionDropdowns
                       pointError={pointError}
+                      type={"ask-question"}
                     />
 
                     <div className="p-1 border flex flex-col gap-5 bg-slate-50 shadow rounded-sm">
@@ -158,7 +159,7 @@ const AskQuestion = ({ handleClose }) => {
                           <input
                             onChange={onFileChange}
                             type="file"
-                            id="avatar"
+                            id="question-image"
                             className="hidden"
                             multiple
                             accept="image/*"
@@ -187,7 +188,7 @@ const AskQuestion = ({ handleClose }) => {
                           </div>
 
                           <label
-                            htmlFor="avatar"
+                            htmlFor="question-image"
                             className="shadow bg-white p-2  rounded-full text-blue-500 absolute bottom-1 right-1"
                           >
                             <FaCamera />
@@ -235,9 +236,8 @@ const AskQuestion = ({ handleClose }) => {
               </div>
 
               <div
-                className={`${
-                  alreadyAsked ? "flex" : "hidden"
-                } fade-enter p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
+                className={`${alreadyAsked ? "flex" : "hidden"
+                  } fade-enter p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
               >
                 <img
                   src="https://img.freepik.com/free-vector/flat-people-asking-questions-illustration_23-2148910850.jpg?t=st=1712728997~exp=1712732597~hmac=1e304cae27f97a4c938f93bf09d49812c6c0f669b8e9d87be18462abf21b1fde&w=740"
@@ -250,7 +250,7 @@ const AskQuestion = ({ handleClose }) => {
                 <p className="text-lg text-center">
                   If you want to see the answers click the below button
                 </p>
-                <Button onClick={() => setAlreadyAsked(false)}>
+                <Button onClick={viewAllQuetions}>
                   See Answers
                 </Button>
               </div>

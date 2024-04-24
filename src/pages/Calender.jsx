@@ -1,20 +1,33 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { openCalenderPopup } from "../redux/reducers/appReducer";
+import SectionHeading from "../components/SectionHeading";
+import Card from "../components/ui/Card";
+import Button from "../components/Button";
+import { calenderTabs } from "../constants/tabs";
 
 const MyCalendar = () => {
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+
+  console.log(user);
+
+  const [tabValue, setTabValue] = useState("dates");
+
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [thisMonthEvent, setThisMonthEvent] = useState([]);
+  const [curMonthYear, setCurMonthYear] = useState("");
+
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const [events, setEvents] = useState([
-    { date: "2024-04-05", title: "Giving speech on CFA FRM" },
-    { date: "2024-04-10", title: "Giving speech on CFA FRM" },
-    { date: "2024-04-15", title: "Giving speech on CFA FRM" },
-  ]);
+  // const [events, setEvents] = useState(user?.events);
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
-      const eventExists = events.some((event) => {
+      const eventExists = user?.dates?.some((event) => {
         const eventDate = new Date(event.date);
         return (
           eventDate.getDate() === date.getDate() &&
@@ -23,13 +36,59 @@ const MyCalendar = () => {
         );
       });
       return (
-        eventExists && <div className="bg-red-500 w-2 h-2 rounded-full"></div>
+        eventExists && (
+          <div className="bg-orange-400 w-2 h-2 mx-auto rounded-full"></div>
+        )
       );
     }
   };
 
+  const handleTableValue = (value) => {
+    setTabValue(value);
+  };
+
+  const handleMonthChange = ({ activeStartDate }) => {
+    console.log(
+      "Month changed to:",
+      activeStartDate.toLocaleString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    );
+    setCurMonthYear(
+      activeStartDate.toLocaleString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    );
+    setSelectedDate(activeStartDate);
+    getEventsForCurrentMonth();
+  };
+
+  const getEventsForCurrentMonth = () => {
+    const currentMonth = selectedDate.getMonth();
+    const currentYear = selectedDate.getFullYear();
+    const filteredEvents = user?.dates?.filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getMonth() === currentMonth &&
+        eventDate.getFullYear() === currentYear
+      );
+    });
+    setThisMonthEvent(filteredEvents);
+    setCurMonthYear(
+      `${selectedDate.toLocaleString("en-US", {
+        day: "numeric",
+        month: "long",
+      })}`
+    );
+  };
+
   const handleDateChange = (date) => {
+    console.log(`Selected date: ${date}`);
     setSelectedDate(date);
+    getEventsForCurrentMonth();
+    console.log(`Selected date: ${date.getDate()}`);
   };
 
   const handleEventClick = (date, event) => {
@@ -38,7 +97,7 @@ const MyCalendar = () => {
     console.log(`Selected date: ${date.getFullYear()}`);
 
     // Implement logic to display event details popup here
-    const selectedEvent = events.find((event) => {
+    const selectedEvent = user?.dates?.find((event) => {
       const eventDate = new Date(event.date);
       return (
         eventDate.getDate() === date.getDate() &&
@@ -46,50 +105,93 @@ const MyCalendar = () => {
         eventDate.getFullYear() === date.getFullYear()
       );
     });
-    setSelectedEvent(selectedEvent);
+
     // Implement logic to display event details popup here
+    if (selectedEvent) {
+      dispatch(openCalenderPopup(selectedEvent));
+      setSelectedEvent(selectedEvent);
+    }
   };
 
+  useEffect(() => {
+    getEventsForCurrentMonth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
+
   return (
-    <div className="text-black flex justify-between relative">
-      {" "}
-      {/* Ensuring text color is black */}
-      <div className="flex justify-between w-full gap-3">
-        <Calendar
-          onChange={handleDateChange}
-          value={selectedDate}
-          tileContent={tileContent}
-          onClickDay={(date, event) => handleEventClick(date)}
-        />
-        <div>
-          {events.map((event, index) => (
-            <div className="flex gap-3" key={index}>
-              <p>{event.date}</p>
-              <p>{event.title}</p>
-            </div>
-          ))}
-        </div>
+    <div className="h-auto md:h-[400px] rounded-md p-2 mt-5 md:mt-0">
+      <div className="flex items-center justify-between">
+        <SectionHeading text="Calender" />
+        {/* <span className="cursor-pointer text-blue-500 font-semibold underline decoration-2">Set Goals</span> */}
+        <Button className="py-1 px-1">Set Goals</Button>
       </div>
-      {/* will show popup */}
-      <div
-        className={` ${
-          selectedEvent ? "block" : "hidden"
-        } absolute inset-0 h-[30%] w-[30%] z-50`}
-      >
-        <h3>Event</h3>
-        <div>
-          {selectedEvent && (
-            <div>
-              <img
-                src="https://images.hiverhq.com/blog/wp-content/uploads/2023/09/tr:h-360,w-362,pr-true,cm-pad_resize,bg-FFF4F6/Account-verification-email-templates.png"
-                alt=""
-              />
-              <p>{selectedEvent.date}</p>
-              <p>{selectedEvent.title}</p>
-            </div>
-          )}
+      <Card className="mt-3 bg-white rounded-md flex flex-col md:flex-row w-full gap-3  h-[calc(100%-28px)]">
+        <div className="w-full lg:w-1/2 border rounded-md">
+          <Calendar
+            onActiveStartDateChange={(date) => handleMonthChange(date)}
+            onChange={handleDateChange}
+            value={selectedDate}
+            tileContent={tileContent}
+            onClickDay={(date, event) => handleEventClick(date)}
+          />
         </div>
-      </div>
+
+        <div className="w-full lg:w-1/2 h-full">
+          <div className="flex flex-col gap-5 ">
+            <div className="w-[100%] overflow-x-scroll space-x-3 h-fit whitespace-nowrap  flex justify-end">
+              <div className="flex gap-1">
+                {calenderTabs?.map((tab) => (
+                  <button
+                    onClick={() => handleTableValue(tab.value)}
+                    className={`p-1 rounded-full px-4 text-sm ${
+                      tab.value === tabValue
+                        ? "text-white bg-blue-500"
+                        : "text-gray-400 bg-white border border-gray-400"
+                    }`}
+                    key={tab.value}
+                  >
+                    {tab.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* <SectionHeading
+              text={tabValue === "dates" ? "Important Dates" : "Goals"}
+            /> */}
+
+            <>
+              {tabValue === "dates" ? (
+                <div className="flex flex-col gap-3 h-[320px] overflow-y-scroll ">
+                  {thisMonthEvent?.length === 0 ? (
+                    <p className="text-center">No events</p>
+                  ) : (
+                    thisMonthEvent?.map((event, index) => (
+                      <div
+                        onClick={() => dispatch(openCalenderPopup(event))}
+                        className="cursor-pointer flex gap-5 items-center"
+                        key={index}
+                      >
+                        <div className="flex items-center flex-col border-r-2 border-r-blue-500 px-2">
+                          <span className="text-xs">
+                            {event.date?.split("-")[2]}
+                          </span>
+                          <span className="text-xs">
+                            {curMonthYear?.split(" ")[0]}
+                          </span>
+                        </div>
+                        <p className="text-sm">{event.title}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              ) : (
+                <div className="text-center">No Goals</div>
+              )}
+            </>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };

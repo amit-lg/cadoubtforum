@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setAccessToken } from "../../utils/cookies";
+import {
+  eventsForFinal,
+  eventsForFoundation,
+  eventsForIntermediate,
+} from "../../mocks/dates";
 
 const initialState = {
   user: {
@@ -8,13 +13,14 @@ const initialState = {
     name: "",
     batch: {},
     dob: "",
-    phone : "",
+    phone: "",
     image: "",
     bio: "",
     linkedInUrl: "",
     twitterUrl: "",
     instaUrl: "",
     fbUrl: "",
+    dates: [],
   },
   isAuthenticated: false,
   token: "",
@@ -33,6 +39,14 @@ export const counterSlice = createSlice({
       state.token = token;
       state.user.batch = action.payload.profile.batch;
       state.user.image = action.payload.profile.profile;
+      console.log(action.payload.profile.batch.Level.Name);
+      if (action.payload.profile.batch.Level.Name === "Foundation") {
+        state.user.dates = eventsForFoundation;
+      } else if (action.payload.profile.batch.Level.Name === "Intermediate") {
+        state.user.dates = eventsForIntermediate;
+      } else if (action.payload.profile.batch.Level.Name === "Final") {
+        state.user.dates = eventsForFinal;
+      }
       setAccessToken(token);
     },
 
@@ -40,15 +54,15 @@ export const counterSlice = createSlice({
       state.user.name = action.payload;
     },
 
-    setImage : (state, action) => {
-      state.user.image = action.payload
+    setImage: (state, action) => {
+      state.user.image = action.payload;
     },
 
     setBio: (state, action) => {
       state.user.bio = action.payload;
     },
-    setPhone: (state ,  action) => {
-      state.user.phone = action.payload
+    setPhone: (state, action) => {
+      state.user.phone = action.payload;
     },
     setDOB: (state, action) => {
       state.user.dob = action.payload;
@@ -79,6 +93,16 @@ export const counterSlice = createSlice({
       state.user.email = action.payload.email;
       state.user.userId = action.payload.id;
       state.user.batch = action.payload?.batch;
+      state.user.image = action.payload.profile;
+      console.log(action.payload);
+      console.log(action.payload);
+      if (action.payload?.batch?.Level?.Name === "Foundation") {
+        state.user.dates = eventsForFoundation;
+      } else if (action.payload?.batch?.Level?.Name === "Intermediate") {
+        state.user.dates = eventsForIntermediate;
+      } else if (action.payload?.batch?.Level?.Name === "Final") {
+        state.user.dates = eventsForFinal;
+      }
     },
   },
 });
@@ -96,7 +120,7 @@ export const {
   setInstaUrl,
   setFbUrl,
   setPhone,
-  setImage
+  setImage,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

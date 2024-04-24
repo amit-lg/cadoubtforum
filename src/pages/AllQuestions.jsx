@@ -3,7 +3,7 @@ import Question from "../components/Question";
 import QuestionFilters from "../components/QuestionFilters";
 import Dropdowns from "../components/Dropdowns";
 import { getQuestions } from "../apiCalls/question";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import GuidedTourForAllQuestions from "../components/GuidedTourForAllQuestions";
 
@@ -14,9 +14,6 @@ const AllQuestions = () => {
   const [pointsValue, setPointsValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
-
-
-  // const observerTarget = useRef(null);
 
   const fetchAllQuestions = async () => {
     setLoading(true);
@@ -30,29 +27,6 @@ const AllQuestions = () => {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         fetchAllQuestions();
-  //       }
-  //     },
-  //     { threshold: 1 }
-  //   );
-
-  //   if (observerTarget.current) {
-  //     observer.observe(observerTarget.current);
-  //   }
-
-  //   return () => {
-  //     if (observerTarget.current) {
-  //       // eslint-disable-next-line react-hooks/exhaustive-deps
-  //       observer.unobserve(observerTarget.current);
-  //     }
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [observerTarget, subjectValue, topicValue, pointsValue]);
 
   useEffect(() => {
     fetchAllQuestions();
@@ -76,6 +50,7 @@ const AllQuestions = () => {
           setTopicValue={setTopicValue}
           setSubjectVlue={setSubjectVlue}
           setPointsValue={setPointsValue}
+          type={"all-questions"}
         />
       </div>
 
