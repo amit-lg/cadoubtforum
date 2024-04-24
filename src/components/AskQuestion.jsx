@@ -90,8 +90,6 @@ const AskQuestion = ({ handleClose }) => {
       data.append("pictures", images[i]);
     }
 
-    console.log(data);
-
     const response = await addQuestion(data);
     if (response.status === 200) {
       handleClose();

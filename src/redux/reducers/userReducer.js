@@ -39,7 +39,6 @@ export const counterSlice = createSlice({
       state.token = token;
       state.user.batch = action.payload.profile.batch;
       state.user.image = action.payload.profile.profile;
-      console.log(action.payload.profile.batch.Level.Name);
       if (action.payload.profile.batch.Level.Name === "Foundation") {
         state.user.dates = eventsForFoundation;
       } else if (action.payload.profile.batch.Level.Name === "Intermediate") {
@@ -94,8 +93,6 @@ export const counterSlice = createSlice({
       state.user.userId = action.payload.id;
       state.user.batch = action.payload?.batch;
       state.user.image = action.payload.profile;
-      console.log(action.payload);
-      console.log(action.payload);
       if (action.payload?.batch?.Level?.Name === "Foundation") {
         state.user.dates = eventsForFoundation;
       } else if (action.payload?.batch?.Level?.Name === "Intermediate") {

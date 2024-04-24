@@ -45,7 +45,6 @@ const TestPage2 = () => {
 
   const fetchAllQuestions = useCallback(
     async (page) => {
-      console.log("fetching");
       const response = await getAskedQuestions({
         subject: subjectValue,
         topic: topicValue,
@@ -86,7 +85,6 @@ const TestPage2 = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          console.log("intersecting");
           fetchAllQuestions(currentPage);
         }
       },

@@ -181,7 +181,6 @@ const SigninForm = ({
     const response = await getCourses();
     if (response.status === 200) {
       setCoursesLevels(response.data.Level);
-      console.log(response.data.Level);
     }
   };
 
@@ -246,7 +245,6 @@ const SigninForm = ({
             return (
               <Fragment key={level?.id}>
                 {level?.Batches?.map((batch) => {
-                  console.log(level?.Name + " - " + batch?.Name);
                   return (
                     <option
                       key={batch?.id}

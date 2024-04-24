@@ -37,7 +37,6 @@ const AllQuestions = () => {
   };
 
   const fetchAllQuestions = useCallback(async (page) => {
-    console.log("fetching");
     const response = await getQuestions({
       subject: subjectValue,
       topic: topicValue,
@@ -52,10 +51,8 @@ const AllQuestions = () => {
       const newData = [...response.data];
       dispatch(setQuestions(newData));
       if (response.data.length < 10) {
-        console.log("no more");
         dispatch(setHasMore(false));
       } else {
-        console.log("more");
         dispatch(setHasMore(true));
       }
       // });

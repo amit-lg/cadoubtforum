@@ -27,7 +27,6 @@ export const updateProfile = async (data) => {
 };
 
 export const updateProfileWithImage = async (data) => {
-  console.log(data);
   const headers = getHeadersWithFormData();
   try {
     const response = await instance.post(`/doubtforum/bio`, data, {

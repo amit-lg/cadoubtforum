@@ -128,7 +128,6 @@ export const counterSlice = createSlice({
       }
     },
     addToLikedQuestion: (state, action) => {
-      console.log({...action.payload});
       // Action.payload is an object with question id , liked - true , false , count find if question exists in the state.likedQuestion array if it exists update its count to the passed count and its liked to the liked value to the passed liked value
       const { liked, count, questionid } = action.payload;
 

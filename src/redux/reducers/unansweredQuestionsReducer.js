@@ -22,14 +22,12 @@ export const unansweredQuestionsSlice = createSlice({
   initialState,
   reducers: {
     setQuestions: (state, action) => {
-      console.log(action.payload);
       state.questions = [...state.questions, ...action.payload];
     },
     clearQuestions: (state) => {
       state.questions = [];
     },
     setHasMore: (state, action) => {
-      console.log(action.payload);
       state.hasMore = action.payload;
     },
     setQuestionId: (state, action) => {
@@ -48,14 +46,12 @@ export const unansweredQuestionsSlice = createSlice({
       state.subjectName = action.payload;
     },
     setTopicName: (state, action) => {
-      console.log(action.payload);
       state.topicName = action.payload;
     },
     setPointName: (state, action) => {
       state.pointsName = action.payload;
     },
     setTopicValue: (state, action) => {
-      console.log(action.payload);
       state.topicValue = action.payload;
     },
     setSubjectVlue: (state, action) => {
@@ -66,7 +62,6 @@ export const unansweredQuestionsSlice = createSlice({
     },
     incrementPage: (state) => {
       state.page = state.page + 1;
-      console.log(state.page);
     },
     initPage: (state) => {
       state.page = 0;

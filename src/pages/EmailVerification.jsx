@@ -28,7 +28,6 @@ const EmailVerification = () => {
 
   const verifyEmail = async () => {
     const response = await verifyToken(token);
-    console.log(response);
     if (response.status === 200) {
       userIsVerified();
       setAccessToken(token);

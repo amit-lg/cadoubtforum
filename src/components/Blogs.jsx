@@ -30,7 +30,7 @@ const Blogs = () => {
         </a>
       </div>
 
-      <div className="mt-3 py-3 px-3 h-[calc(100%-28px)] flex flex-col gap-5 overflow-y-scroll scrollbar-none">
+      <div className="mt-3 py-3 h-[calc(100%-28px)] flex flex-col gap-5 overflow-y-scroll scrollbar-none">
         {blogs?.map((blog) => (
           <a key={blog?.url} href={blog?.url} target="_blank">
             <Card className="flex flex-col md:flex-row items-start md:items-center gap-6">

@@ -27,7 +27,6 @@ const QuestionFilters = ({ setFilters }) => {
   const handleFilters = (value) => {
     setFilters(value);
     toggleFilterList();
-    console.log(value);
   };
   return (
     <div className="relative" ref={impactRef}>

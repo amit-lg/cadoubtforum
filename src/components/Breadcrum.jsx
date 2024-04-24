@@ -45,8 +45,6 @@ const Breadcrum = ({ question }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  console.log(location);
-
   const handleNavigate = () => {
     if (location.state.from === "/ask-question") {
       navigate("/all-questions");

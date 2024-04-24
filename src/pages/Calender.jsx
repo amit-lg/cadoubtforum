@@ -13,8 +13,6 @@ const MyCalendar = () => {
 
   const { user } = useSelector((state) => state.user);
 
-  console.log(user);
-
   const [tabValue, setTabValue] = useState("dates");
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -48,13 +46,13 @@ const MyCalendar = () => {
   };
 
   const handleMonthChange = ({ activeStartDate }) => {
-    console.log(
-      "Month changed to:",
-      activeStartDate.toLocaleString("en-US", {
-        month: "long",
-        year: "numeric",
-      })
-    );
+    // console.log(
+    //   "Month changed to:",
+    //   activeStartDate.toLocaleString("en-US", {
+    //     month: "long",
+    //     year: "numeric",
+    //   })
+    // );
     setCurMonthYear(
       activeStartDate.toLocaleString("en-US", {
         month: "long",
@@ -85,16 +83,11 @@ const MyCalendar = () => {
   };
 
   const handleDateChange = (date) => {
-    console.log(`Selected date: ${date}`);
     setSelectedDate(date);
     getEventsForCurrentMonth();
-    console.log(`Selected date: ${date.getDate()}`);
   };
 
   const handleEventClick = (date, event) => {
-    console.log(`Selected date: ${date.getDate()}`);
-    console.log(`Selected date: ${date.getMonth()}`);
-    console.log(`Selected date: ${date.getFullYear()}`);
 
     // Implement logic to display event details popup here
     const selectedEvent = user?.dates?.find((event) => {

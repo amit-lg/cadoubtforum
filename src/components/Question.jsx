@@ -55,8 +55,6 @@ const Question = ({
     question?.likes ? question?.likes?.length !== 0 : false
   );
   const [likeValue, setLikeValue] = useState();
-  const [fullSize, setFullSize] = useState(false);
-
   const [viewed, setViewed] = useState(question?.views?.length !== 0);
   const [viewValue, setViewValue] = useState(question?._count?.views);
 
@@ -208,26 +206,14 @@ const Question = ({
     const exists = likedQuestion.findIndex(
       (item) => item.questionid === question.id
     );
-
     setViewed(question?.views?.length !== 0);
-
     if (exists >= 0) {
-      console.log("--------------------------------");
-      console.log(likedQuestion[exists]);
-      console.log("--------------------------------");
       setLikeValue(likedQuestion[exists]?.count);
       setLiked(likedQuestion[exists]?.liked);
     } else {
       setLikeValue(question?._count?.likes);
       setLiked(question?.likes?.length !== 0);
     }
-    // setLikeValue(
-    //   likedQuestion[exists]?.count
-    //     ? likedQuestion[exists]?.count
-    //     : question?._count?.likes
-    // );
-
-    // setLiked(likedQuestion[exists]?.liked ? likedQuestion[exists]?.liked : question?.likes?.length !== 0);
     setPinned(question?.pins?.length !== 0);
   }, [question]);
 

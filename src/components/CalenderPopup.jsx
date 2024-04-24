@@ -1,6 +1,5 @@
 import { closeCalenderPopup } from "../redux/reducers/appReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { MdClose } from "react-icons/md";
 import SectionHeading from "./SectionHeading";
 import Button from "../components/Button";
 import { FaRegClock } from "react-icons/fa";
@@ -18,7 +17,6 @@ const CalenderPopup = () => {
     day: "numeric",
     year: "numeric",
   });
-  console.log(newDate);
 
   return (
     <div className="h-screen w-full">

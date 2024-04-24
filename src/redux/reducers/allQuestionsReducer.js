@@ -23,18 +23,13 @@ export const allQuestionsSlice = createSlice({
   reducers: {
     setQuestions: (state, action) => {
       const questions = [...state.questions, ...action.payload];
-      console.log("--------------------------------------------");
-      console.log(questions);
       const set = new Set(questions);
-      console.log(set);
-      console.log("--------------------------------------------");
       state.questions = Array.from(set);
     },
     clearQuestions: (state) => {
       state.questions = new Array();
     },
     setHasMore: (state, action) => {
-      console.log(action.payload);
       state.hasMore = action.payload;
     },
     setQuestionId: (state, action) => {
@@ -69,7 +64,6 @@ export const allQuestionsSlice = createSlice({
     },
     incrementPage: (state) => {
       state.page = state.page + 1;
-      console.log(state.page);
     },
     initPage: (state) => {
       state.page = 0;

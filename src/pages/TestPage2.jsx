@@ -17,11 +17,6 @@ import {
 } from "../redux/reducers/allQuestionsReducer";
 import useDidMountEffect from "../hooks/useUpdateEffect";
 import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
-import { debounce } from "../utils/debounce";
-import { setSearchText } from "../redux/reducers/appReducer";
-
-const delay = 500;
-
 const TestPage2 = () => {
   const {
     questions,
@@ -70,13 +65,10 @@ const TestPage2 = () => {
         dispatch(incrementPage());
         // setQuestions((prev) => {
         const newData = [...response.data];
-        console.log(newData);
         dispatch(setQuestions(newData));
         if (response.data.length < 10) {
-          console.log("no more");
           dispatch(setHasMore(false));
         } else {
-          console.log("more");
           dispatch(setHasMore(true));
         }
         // });

@@ -21,7 +21,6 @@ const AllQuestionDropdowns = ({
 
         if (response.status === 200) {
             // check If respose.data is giiving array or object
-            console.log(response.data);
             if (Array.isArray(response.data)) {
                 let tempTopic = [];
                 let tempPoint = [];

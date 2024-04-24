@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 
 export const errorResponse = (status, error) => {
-  console.log(error);
   let msg = "";
   if (error) {
     if (error instanceof AxiosError) {

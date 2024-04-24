@@ -46,7 +46,6 @@ const TestPage2 = () => {
 
   const fetchAllQuestions = useCallback(
     async (page) => {
-      console.log("fetching");
       const response = await getUnansweredQuestions({
         subject: subjectValue,
         topic: topicValue,
@@ -60,13 +59,10 @@ const TestPage2 = () => {
         dispatch(incrementPage());
         // setQuestions((prev) => {
         const newData = [...response.data];
-        console.log(newData);
         dispatch(setQuestions(newData));
         if (response.data.length < 10) {
-          console.log("no more");
           dispatch(setHasMore(false));
         } else {
-          console.log("more");
           dispatch(setHasMore(true));
         }
         // });
