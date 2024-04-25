@@ -11,14 +11,14 @@ import Progress from "./Progress";
 import { addIssue } from "../apiCalls/contact";
 
 const RaiseIssuePopup = () => {
-  const [text, setText] = useState("");
+  const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
   const { submitSuccessPopop } = useSelector((state) => state.app);
 
-  const handleText = (e) => {
-    setText(e.target.value);
+  const handleDescription = (e) => {
+    setDescription(e.target.value);
   };
 
   const dispatch = useDispatch();
@@ -31,15 +31,15 @@ const RaiseIssuePopup = () => {
     if (!category) {
       setError("Please enter a feature title");
       return;
-    } else if (!text) {
+    } else if (!description) {
       setError("Please enter a feature description");
     }
 
     dispatch(closeRaiseIssuePopup());
 
     const data = {
-      title: category,
-      description: text,
+      category,
+      description,
     };
 
     const response = await addIssue(data);
@@ -114,8 +114,8 @@ const RaiseIssuePopup = () => {
               <textarea
                 placeholder={"Write about your issue"}
                 className="p-2 rounded-md outline-none bg-gray-100"
-                value={text}
-                onChange={handleText}
+                value={description}
+                onChange={handleDescription}
                 rows={10}
                 type="text"
               />
