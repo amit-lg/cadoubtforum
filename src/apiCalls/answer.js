@@ -1,4 +1,3 @@
-import axios from "axios";
 import { backendUrl } from "../../config";
 import { errorResponse, successResponse } from "../utils/errors";
 import { getHeaders, getHeadersWithFormData } from "../utils/requestHeaders";

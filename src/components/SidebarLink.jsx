@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   closeMobileSidebar,
@@ -13,13 +13,27 @@ import { clearFilters as clearUnansweredQuestionFilters } from "../redux/reducer
 const SidebarLink = ({ route, location }) => {
   const { collapsedSidebar } = useSelector((state) => state.app);
 
+  const routeLocation = useLocation();
+
   const dispatch = useDispatch();
   const closeSidebar = () => {
     dispatch(closeMobileSidebar());
-    dispatch(clearAllQuestionFilters());
-    dispatch(clearAskedQuestionFilters());
-    dispatch(clearPinnedQuestionFilters());
-    dispatch(clearUnansweredQuestionFilters());
+    if (routeLocation.pathname !== "/all-questions") {
+      dispatch(clearAllQuestionFilters());
+    }
+
+    if (routeLocation.pathname !== "/asked-questions") {
+      dispatch(clearAskedQuestionFilters());
+    }
+
+    if (routeLocation.pathname !== "/pinned-questions") {
+      dispatch(clearPinnedQuestionFilters());
+    }
+
+    if (routeLocation.pathname !== "/unanswered-questions") {
+      dispatch(clearUnansweredQuestionFilters());
+    }
+
     dispatch(setSearchText(""));
   };
 

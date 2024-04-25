@@ -1,7 +1,7 @@
 import {
   closeFeedbackPopup,
-  closeSubmitSuccessPopop,
-  openSubmitSuccessPopop,
+  closeSubmitSuccessPopopForFeedback,
+  openSubmitSuccessPopopForFeedback,
 } from "../redux/reducers/appReducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -41,10 +41,10 @@ const FeedbackPopup = () => {
 
     const response = await addFeedback(data);
     if (response.status === 200) {
-      dispatch(openSubmitSuccessPopop());
+      dispatch(openSubmitSuccessPopopForFeedback());
 
       setTimeout(() => {
-        dispatch(closeSubmitSuccessPopop());
+        dispatch(closeSubmitSuccessPopopForFeedback());
       }, [3000]);
     }
   };

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeRaiseIssuePopup,
-  closeSubmitSuccessPopop,
-  openSubmitSuccessPopop,
+  closeSubmitSuccessPopopIssue,
+  openSubmitSuccessPopopIssue,
 } from "../redux/reducers/appReducer";
 import { useState } from "react";
 import Button from "./Button";
@@ -44,10 +44,10 @@ const RaiseIssuePopup = () => {
 
     const response = await addIssue(data);
     if (response.status === 200) {
-      dispatch(openSubmitSuccessPopop());
+      dispatch(openSubmitSuccessPopopIssue());
 
       setTimeout(() => {
-        dispatch(closeSubmitSuccessPopop());
+        dispatch(closeSubmitSuccessPopopIssue());
       }, [3000]);
     }
   };

@@ -5,24 +5,32 @@ import { FaCamera } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
 import { addQuestion, getQuestions, viewAQuestion } from "../apiCalls/question";
 import { useNavigate } from "react-router-dom";
-import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import AskQuestionDropdowns from "./dropdowns/AskQuestionDropdown";
+import {
+  clearFilters,
+  initState,
+  setImages,
+  setImagesPreview,
+  setIsAsked,
+  setQuestionText,
+} from "../redux/reducers/askQuestionReducer";
 
 const AskQuestion = ({ handleClose }) => {
   const navigate = useNavigate();
-  const { pointsValue } = useSelector((state) => state.all);
-
-  const [question, setQuestion] = useState("");
-
+  const { pointsValue, questionText, images, imagesPreview, isAsked } =
+    useSelector((state) => state.ask);
   const [sizeError, setSizeError] = useState("");
   const [lengthError, setLengthError] = useState([]);
+
+  const dispatch = useDispatch();
 
   const [pointError, setPointError] = useState(false);
 
   const [alreadyAsked, setAlreadyAsked] = useState(false);
 
   const handleQuestion = (e) => {
-    setQuestion(e.target.value);
+    dispatch(setQuestionText(e.target.value));
   };
 
   const viewAllQuetions = () => {
@@ -31,10 +39,8 @@ const AskQuestion = ({ handleClose }) => {
     handleClose();
   };
 
-
-
-  const [images, setImages] = useState([]);
-  const [imagesPreview, setImagesPreview] = useState([]);
+  // const [images, setImages] = useState([]);
+  // const [imagesPreview, setImagesPreview] = useState([]);
 
   const onFileChange = (event) => {
     if (!event.target.files) return;
@@ -52,19 +58,21 @@ const AskQuestion = ({ handleClose }) => {
         setSizeError("File size should not be greater than 2MB");
         continue;
       }
-      setImages([...images, element]);
-      setImagesPreview([...imagesPreview, URL.createObjectURL(element)]);
+      dispatch(setImages([...images, element]));
+      dispatch(
+        setImagesPreview([...imagesPreview, URL.createObjectURL(element)])
+      );
     }
   };
 
   const removeImg = (index) => {
     const newImages = [...images];
     newImages.splice(index, 1);
-    setImages(newImages);
+    dispatch(setImages(newImages));
 
     const newImagesPreview = [...imagesPreview];
     newImagesPreview.splice(index, 1);
-    setImagesPreview(newImagesPreview);
+    dispatch(setImagesPreview(newImagesPreview));
   };
 
   const handleSubmit = async (e) => {
@@ -74,17 +82,20 @@ const AskQuestion = ({ handleClose }) => {
       return;
     }
 
-    const responseForQuestion = await getQuestions({ points: pointsValue, });
-    if (responseForQuestion?.status === 200) {
-      if (responseForQuestion?.data?.length > 0) {
-        setAlreadyAsked(true);
-        return;
+    if (!isAsked) {
+      const responseForQuestion = await getQuestions({ points: pointsValue });
+      if (responseForQuestion?.status === 200) {
+        if (responseForQuestion?.data?.length > 0) {
+          setAlreadyAsked(true);
+          dispatch(setIsAsked(true));
+          return;
+        }
       }
     }
 
     const data = new FormData();
 
-    data.append("questionText", question);
+    data.append("questionText", questionText);
     data.append("pointerid", pointsValue);
     for (let i = 0; i < images.length; i++) {
       data.append("pictures", images[i]);
@@ -94,13 +105,16 @@ const AskQuestion = ({ handleClose }) => {
     if (response.status === 200) {
       handleClose();
       goToQuestion(response.data.id);
+      dispatch(setIsAsked(false));
+      dispatch(initState());
+      dispatch(clearFilters());
     }
   };
 
   const goToQuestion = async (id) => {
     const response = await viewAQuestion({ questionid: id });
     if (response.status === 200) {
-      navigate(`/question/${id}` , {state : {from : "/ask-question"}});
+      navigate(`/question/${id}`, { state: { from: "/ask-question" } });
     }
   };
 
@@ -110,15 +124,17 @@ const AskQuestion = ({ handleClose }) => {
         <div className="h-full w-full flex flex-col">
           <div className="h-full w-full flex items-center justify-center">
             <div
-              className={`rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${alreadyAsked
-                ? "w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[30%]"
-                : "w-[90%] sm:w-[70%] md:w-[80%] lg:w-[70%] xl:w-[50%]"
-                } `}
+              className={`rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${
+                alreadyAsked
+                  ? "w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[30%]"
+                  : "w-[90%] sm:w-[70%] md:w-[80%] lg:w-[70%] xl:w-[50%]"
+              } `}
             >
               {/*content*/}
               <div
-                className={`${alreadyAsked ? "hidden" : "flex"
-                  } fade-enter border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
+                className={`${
+                  alreadyAsked ? "hidden" : "flex"
+                } fade-enter border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
               >
                 {/*header*/}
                 <div className="bg-blue-500 flex items-start justify-between p-3 border-b border-solid border-blueGray-200 rounded-t-md">
@@ -138,7 +154,7 @@ const AskQuestion = ({ handleClose }) => {
                 {/*body*/}
                 <form onSubmit={handleSubmit}>
                   <div className="relative p-4 flex-auto flex flex-col">
-                    <AllQuestionDropdowns
+                    <AskQuestionDropdowns
                       pointError={pointError}
                       type={"ask-question"}
                     />
@@ -148,7 +164,7 @@ const AskQuestion = ({ handleClose }) => {
                         required
                         className="w-full border-none outline-none rouded-md p-2 resize-none"
                         rows={6}
-                        value={question}
+                        value={questionText}
                         onChange={handleQuestion}
                         placeholder="Enter your doubt here"
                       />
@@ -234,8 +250,9 @@ const AskQuestion = ({ handleClose }) => {
               </div>
 
               <div
-                className={`${alreadyAsked ? "flex" : "hidden"
-                  } fade-enter p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
+                className={`${
+                  alreadyAsked ? "flex" : "hidden"
+                } fade-enter p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
               >
                 <img
                   src="https://img.freepik.com/free-vector/flat-people-asking-questions-illustration_23-2148910850.jpg?t=st=1712728997~exp=1712732597~hmac=1e304cae27f97a4c938f93bf09d49812c6c0f669b8e9d87be18462abf21b1fde&w=740"
@@ -248,9 +265,7 @@ const AskQuestion = ({ handleClose }) => {
                 <p className="text-lg text-center">
                   If you want to see the answers click the below button
                 </p>
-                <Button onClick={viewAllQuetions}>
-                  See Answers
-                </Button>
+                <Button onClick={viewAllQuetions}>See Answers</Button>
               </div>
             </div>
             <div

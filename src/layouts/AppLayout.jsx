@@ -4,8 +4,10 @@ import Sidebar from "../components/Sidebar";
 import MobileSidebar from "../components/MobileNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  closeAskQuestion,
   emptyReportData,
   handleCollapseSidebar,
+  openAskQuestion,
   setShowReportModal,
 } from "../redux/reducers/appReducer";
 import { MdAdd } from "react-icons/md";
@@ -24,13 +26,15 @@ import FormSuccessPopup from "../components/FormSuccessPopup";
 
 const AppLayout = () => {
   const { isAuthenticated } = useSelector((state) => state.user);
-  const { showReportModal, notificationState, raiseIssuePopup } = useSelector(
-    (state) => state.app
-  );
-  const { imagePopupState, feedBackPopup, calenderPopup, submitSuccessPopop } =
+  const { showReportModal, notificationState, raiseIssuePopup, askQuestion } =
     useSelector((state) => state.app);
-
-  const [showAskQuestionModal, setShowAskQuestionModal] = useState(false);
+  const {
+    imagePopupState,
+    feedBackPopup,
+    calenderPopup,
+    submitSuccessPopopForFeedback,
+    submitSuccessPopopForIssue,
+  } = useSelector((state) => state.app);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,7 +51,11 @@ const AppLayout = () => {
   };
 
   const handleAskQuestionModal = () => {
-    setShowAskQuestionModal((showAskQuestionModal) => !showAskQuestionModal);
+    if (askQuestion === true) {
+      dispatch(closeAskQuestion());
+    } else {
+      dispatch(openAskQuestion());
+    }
   };
 
   const fetchUser = useCallback(async () => {
@@ -118,7 +126,7 @@ const AppLayout = () => {
               </div>
             </div>
 
-            {showAskQuestionModal && (
+            {askQuestion && (
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <AskQuestion handleClose={handleAskQuestionModal} />
               </div>
@@ -160,9 +168,15 @@ const AppLayout = () => {
               </div>
             )}
 
-            {submitSuccessPopop && (
+            {submitSuccessPopopForFeedback && (
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                <FormSuccessPopup />
+                <FormSuccessPopup type="feedback" />
+              </div>
+            )}
+
+            {submitSuccessPopopForIssue && (
+              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <FormSuccessPopup type="issue" />
               </div>
             )}
           </div>

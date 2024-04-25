@@ -17,6 +17,7 @@ import {
 } from "../redux/reducers/allQuestionsReducer";
 import useDidMountEffect from "../hooks/useUpdateEffect";
 import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
+import { openAskQuestion } from "../redux/reducers/appReducer";
 const TestPage2 = () => {
   const {
     questions,
@@ -28,6 +29,7 @@ const TestPage2 = () => {
     pointsValue,
   } = useSelector((state) => state.all);
   const { searchText } = useSelector((state) => state.app);
+  const { isAsked } = useSelector((state) => state.ask);
   const [loading, setLoading] = useState("");
   // const [searchTextLocal, setSearchTextLocal] = useState("");
 
@@ -36,6 +38,10 @@ const TestPage2 = () => {
   const observerTarget = useRef(null);
 
   const dispatch = useDispatch();
+
+  const openAskedQuestionPopup = () => {
+    dispatch(openAskQuestion());
+  };
 
   // const handleSearchText = (e) => {
   //   setSearchTextLocal(e.target.value);
@@ -157,9 +163,20 @@ const TestPage2 = () => {
         />
       </div>
 
+      {isAsked && (
+        <div
+          onClick={openAskedQuestionPopup}
+          className="w-full flex items-center justify-end px-3 mt-2 tracking-wide text-blue-500"
+        >
+          <span className="text-right text-sm">
+            Didn&apos;t find the answer?
+          </span>
+        </div>
+      )}
+
       <div id="all-question-list" className="mt-3">
         <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col">
             {loading ? <Loader /> : null}
             <>
               {questions?.length === 0 ? (

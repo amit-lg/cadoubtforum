@@ -23,7 +23,7 @@ const CalenderPopup = () => {
       <div className="h-full w-full flex flex-col items-center justify-center">
         <div className="bg-white relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] z-50 rounded-md space-y-3">
           <div className="space-y-5 flex flex-col p-4">
-            <div className="flex items-center justify-between text-orange-400">
+            <div className="flex items-center justify-between text-orange-300">
               <SectionHeading text={event.title} />
 
               <div className="flex items-center gap-2">
@@ -38,16 +38,16 @@ const CalenderPopup = () => {
               <p className="text-base">{event?.description}</p>
             </div>}
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-end">
               <Button
                 onClick={handleClose}
                 className="bg-red-400 w-max self-end"
               >
                 Close
               </Button>
-              <Button onClick={handleClose} className="w-max self-end">
+              {/* <Button onClick={handleClose} className="w-max self-end">
                 Visit now
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>{" "}

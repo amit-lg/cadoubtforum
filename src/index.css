@@ -15,6 +15,10 @@
   overflow-x: hidden;
 }
 
+body{
+  background-color: rgb(243 244 246);
+}
+
 .shadow-custom {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }

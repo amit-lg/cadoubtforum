@@ -4,15 +4,15 @@ import { MdArrowDropDown } from "react-icons/md";
 import { fetchSubjectTopicPoints } from "../../apiCalls/dropdowns";
 import useOutsideClick from "../../hooks/usClickOutside";
 import { useDispatch, useSelector } from "react-redux";
-import { setSubjects, setTopics, setPoints, setTopicValue, setTopicName, setPointsValue, setPointName, setSubjectName, setSubjectVlue } from "../../redux/reducers/allQuestionsReducer";
+import { setSubjects, setTopics, setPoints, setTopicValue, setTopicName, setPointsValue, setPointName, setSubjectName, setSubjectVlue } from "../../redux/reducers/askQuestionReducer";
 import useDidMountEffect from "../../hooks/useUpdateEffect";
 // import { dropdownData } from "../mocks/dummy";
 
-const AllQuestionDropdowns = ({
+const AskQuestionDropdowns = ({
     pointError,
     type,
 }) => {
-    const { subjects, topics, points, subjectName, topicName, pointsName, subjectValue, topicValue, pointsValue } = useSelector((state) => state.all);
+    const { subjects, topics, points, subjectName, topicName, pointsName, subjectValue, topicValue, pointsValue } = useSelector((state) => state.ask);
     const [isTopicEmpty, setIsTopicEmpty] = useState(false);
     const dispatch = useDispatch();
 
@@ -189,9 +189,9 @@ const AllQuestionDropdowns = ({
     );
 };
 
-export default AllQuestionDropdowns;
+export default AskQuestionDropdowns;
 
-AllQuestionDropdowns.propTypes = {
+AskQuestionDropdowns.propTypes = {
     type: PropTypes.string,
     subjectValue: PropTypes.string,
     setSubjectVlue: PropTypes.func,

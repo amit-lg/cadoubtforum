@@ -154,9 +154,9 @@ const TestPage2 = () => {
         />
       </div>
 
-      <div id="all-question-list" className="mt-3">
+      <div id="all-question-list" className="mt-5">
         <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col">
             {loading ? <Loader /> : null}
             <>
               {questions?.length === 0 ? (

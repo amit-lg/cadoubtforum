@@ -237,17 +237,24 @@ const Question = ({
   }, [question]);
 
   return (
-    <div>
+    <div
+      className={`
+      px-0
+      mb-7
+      rounded-md
+        ${size === "large" ? "min-h-24 md:min-h-32" : "min-h-24 md:min-h-32"} 
+        ${size === "large" ? "w-[95%]" : "w-full"} 
+      `}
+      onClick={goToQuestion}
+    >
       <div
-        className={`${
-          size === "large" ? "min-h-24 md:min-h-32" : "h-24 md:h-32"
-        } px-1 flex items-center flex-col md:flex-row gap-3 ${
-          size === "large" ? "w-[95%]" : "w-full"
-        } `}
+        className={`
+          flex items-center flex-col md:flex-row gap-3 rounded-md
+        `}
       >
-        <div onClick={goToQuestion} className="w-full">
-          <Card
-            className={` relative flex bg-white flex-col my-3 cursor-pointer rounded-md px-1 py-1 gap-2`}
+        <Card className="w-full mx-1">
+          <div
+            className={`relative flex flex-col cursor-pointer rounded-md px-1 gap-2 w-full p-1 h-max `}
           >
             <div
               className={`${
@@ -285,6 +292,7 @@ const Question = ({
                 />
               </div>
             </div>
+
             <div
               className={`flex ${
                 size === "large" ? "min-h-[80px]" : "h-auto"
@@ -301,20 +309,23 @@ const Question = ({
                 </p>
               )}
             </div>
-            <div className="flex justify-end lg:justify-between items-center pt-2 px-1">
-              <div className="hidden gap-3 lg:flex text-sm font-semibold text-gray-400 overflow-hidden h-5 w-2/3 whitespace-nowrap mx-3">
-                <div className="flex">
-                  {question?.fallnumber?.Points[0]?.topics?.Subjects?.name}
+
+            <div className={`flex ${size !== "large" ? "justify-end lg:justify-between" : "justify-end"} items-center pt-2 px-1`}>
+              {size !== "large" && (
+                <div className="hidden gap-3 lg:flex text-sm font-semibold text-gray-400 overflow-hidden h-5 w-2/3 whitespace-nowrap mx-3">
+                  <div className="flex">
+                    {question?.fallnumber?.Points[0]?.topics?.Subjects?.name}
+                  </div>
+                  <div className="flex">
+                    {question?.fallnumber?.Points[0]?.topics?.name === "empty"
+                      ? ""
+                      : question?.fallnumber?.Points[0]?.topics?.name}
+                  </div>
+                  <div className="flex">
+                    {question?.fallnumber?.Points[0]?.name}
+                  </div>
                 </div>
-                <div className="flex">
-                  {question?.fallnumber?.Points[0]?.topics?.name === "empty"
-                    ? ""
-                    : question?.fallnumber?.Points[0]?.topics?.name}
-                </div>
-                <div className="flex">
-                  {question?.fallnumber?.Points[0]?.name}
-                </div>
-              </div>
+              )}
               <div className="flex items-center justify-between self-end pr-2">
                 {location.pathname === "/pinned-questions" && (
                   <div
@@ -335,25 +346,27 @@ const Question = ({
                 )}
               </div>
             </div>
-            <div className="px-3 flex gap-2">
-              {size === "large" &&
-                question?.attachments?.length !== 0 &&
-                question?.attachments?.map((attachment) => (
-                  <div
-                    onClick={() => openPopUp(attachment?.ImagePath)}
-                    key={attachment?.id}
-                    className="h-12 w-12 rounded-md"
-                  >
-                    <img
-                      className="h-12 rounded-md object-contain w-12"
-                      src={attachment?.ImagePath}
-                      alt={`attachment-${attachment?.id}`}
-                    />
-                  </div>
-                ))}
-            </div>
-          </Card>
-        </div>
+
+            {size === "large" && (
+              <div className="px-3 flex gap-2">
+                {question?.attachments?.length !== 0 &&
+                  question?.attachments?.map((attachment) => (
+                    <div
+                      onClick={() => openPopUp(attachment?.ImagePath)}
+                      key={attachment?.id}
+                      className="h-12 w-12 rounded-md"
+                    >
+                      <img
+                        className="h-12 rounded-md object-contain w-12"
+                        src={attachment?.ImagePath}
+                        alt={`attachment-${attachment?.id}`}
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </Card>
 
         {size === "large" && (
           <div className="flex md:flex-col flex-row gap-3 content-between justify-center self-end md:self-center">
@@ -430,7 +443,11 @@ const Question = ({
                       imagesPreview?.map((image, index) => (
                         <div key={index} onClick={() => removeImg(index)}>
                           <div className="h-10 w-10 rounded-md relative flex items-center justify-center">
-                            <img className="rounded-md h-full w-full object-contain" src={image} alt="" />
+                            <img
+                              className="rounded-md h-full w-full object-contain"
+                              src={image}
+                              alt=""
+                            />
                             <div className="absolute cursor-pointer -right-2 -top-2 bg-white rounded-full flex items-center justify-center leading-3">
                               <div className="h-4 w-4 flex items-center justify-center">
                                 <MdClose className="h-3 w-3" />

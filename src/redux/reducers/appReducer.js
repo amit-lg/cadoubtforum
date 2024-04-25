@@ -18,9 +18,11 @@ const initialState = {
   tempToken: "",
   feedBackPopup: false,
   calenderPopup: false,
+  askQuestion : false,
   event: {},
   searchText: "",
-  submitSuccessPopop: false, // submit successPopop
+  submitSuccessPopopForFeedback: false, // submit successPopop
+  submitSuccessPopopForIssue: false, // submit successPopop
   likedQuestion: [], // array of question id , question liked - true , false  , count
 };
 
@@ -54,6 +56,14 @@ export const counterSlice = createSlice({
 
     closeRaiseIssuePopup: (state) => {
       state.raiseIssuePopup = false;
+    },
+
+    openAskQuestion: (state) => {
+      state.askQuestion = true;
+    },
+
+    closeAskQuestion: (state) => {
+      state.askQuestion = false;
     },
 
     openCalenderPopup: (state, action) => {
@@ -119,11 +129,17 @@ export const counterSlice = createSlice({
     setReportData: (state, action) => {
       state.reportData = action.payload;
     },
-    openSubmitSuccessPopop: (state) => {
-      state.submitSuccessPopop = true;
+    openSubmitSuccessPopopForFeedback: (state) => {
+      state.submitSuccessPopopForFeedback = true;
     },
-    closeSubmitSuccessPopop: (state) => {
-      state.submitSuccessPopop = false;
+    closeSubmitSuccessPopopForFeedback: (state) => {
+      state.submitSuccessPopopForFeedback = false;
+    },
+    openSubmitSuccessPopopIssue: (state) => {
+      state.submitSuccessPopopForIssue = true;
+    },
+    closeSubmitSuccessPopopIssue: (state) => {
+      state.submitSuccessPopopForIssue = false;
     },
     handleCollapseSidebar: (state) => {
       if (state.collapsedSidebar) {
@@ -182,8 +198,12 @@ export const {
   addToLikedQuestion,
   removeFromQuestion,
   setSearchText,
-  openSubmitSuccessPopop,
-  closeSubmitSuccessPopop,
+  openSubmitSuccessPopopForFeedback,
+  closeSubmitSuccessPopopForFeedback,
+  openSubmitSuccessPopopIssue,
+  closeSubmitSuccessPopopIssue,
+  openAskQuestion,
+  closeAskQuestion,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

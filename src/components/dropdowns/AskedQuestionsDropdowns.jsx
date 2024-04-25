@@ -322,7 +322,7 @@ export const TopicDropdown = ({
                         onClick={() => handleDivClick("", "All Topics")}
                         className="p-2 hover:bg-gray-100 cursor-pointer select-none h-[70%]"
                     >
-                        <span className="px-1">All Points</span>
+                        <span className="px-1">All Topics</span>
                     </div>
                     {data?.map((point, index) => {
                         return (
@@ -398,7 +398,7 @@ export const PointDropdown = ({
                     } bg-blue-500 hover:bg-blue-600 flex items-center transition-all duration-300 ease-in-out cursor-pointer shadow-md text-white select-none md:relative top-0 right-0 p-1 border w-full rounded h-[35px] m-auto overflow-hidden`}
             >
                 <span className="text-white ml-1 w-full overflow-hidden text-nowrap">
-                    {display ? display : "All Points"}
+                    {display ? display : "All LOS"}
                 </span>
                 <div className="w-max px-1">
                     <MdArrowDropDown />
@@ -417,10 +417,10 @@ export const PointDropdown = ({
                         />
                     </div>
                     <div
-                        onClick={() => handleDivClick("", "All Points")}
+                        onClick={() => handleDivClick("", "All LOS")}
                         className="p-2 hover:bg-gray-100 cursor-pointer select-none h-[70%]"
                     >
-                        <span className="px-1">All Points</span>
+                        <span className="px-1">All LOS</span>
                     </div>
                     {filteredData?.length > 0
                         ? filteredData?.map((topic, index) => (
