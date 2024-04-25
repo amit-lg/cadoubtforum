@@ -33,6 +33,7 @@ option:first {
 
 /* create a class which I can use to view element afetr a delay of 3 s */
 
+
 .bg-blue-gradient {
   background: rgb(2, 0, 36);
   background: linear-gradient(
@@ -118,8 +119,27 @@ option:first {
   animation: fadeIn 0.3s ease-out;
 }
 
+.fade-out-test {
+  opacity: 1;
+  transition: opacity 0.5s ease-out; /* Adjust the duration and easing function as needed */
+}
+
 .fade-enter-active {
   opacity: 1;
+}
+
+@keyframes wait {
+  0% {
+    display: flex;
+  }
+
+  100% {
+   display: none;
+  }
+}
+
+.wait-300 {
+  animation: wait 0.7s ease-out;
 }
 
 input[type="date"] {

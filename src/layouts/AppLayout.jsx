@@ -20,15 +20,15 @@ import ImagePopup from "../components/ImagePopup";
 import RaiseIssuePopup from "../components/RaiseIssuePopup";
 import FeedbackPopup from "../components/FeedbackPopup";
 import CalenderPopup from "../components/CalenderPopup";
+import FormSuccessPopup from "../components/FormSuccessPopup";
 
 const AppLayout = () => {
   const { isAuthenticated } = useSelector((state) => state.user);
   const { showReportModal, notificationState, raiseIssuePopup } = useSelector(
     (state) => state.app
   );
-  const { imagePopupState, feedBackPopup, calenderPopup } = useSelector(
-    (state) => state.app
-  );
+  const { imagePopupState, feedBackPopup, calenderPopup, submitSuccessPopop } =
+    useSelector((state) => state.app);
 
   const [showAskQuestionModal, setShowAskQuestionModal] = useState(false);
 
@@ -157,6 +157,12 @@ const AppLayout = () => {
             {calenderPopup && (
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <CalenderPopup />
+              </div>
+            )}
+
+            {submitSuccessPopop && (
+              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <FormSuccessPopup />
               </div>
             )}
           </div>

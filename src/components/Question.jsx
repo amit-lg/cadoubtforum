@@ -10,7 +10,7 @@ import {
   MdThumbUp,
   MdVisibility,
 } from "react-icons/md";
-import { TbPinned } from "react-icons/tb";
+import { TbPinned, TbPinnedFilled } from "react-icons/tb";
 import PropTypes from "prop-types";
 import EachActionButton from "./EachActionButton";
 import {
@@ -31,6 +31,7 @@ import {
   setShowReportModal,
 } from "../redux/reducers/appReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { removeQuestion } from "../redux/reducers/pinnedQuestionsReducer";
 
 const Question = ({
   size,
@@ -62,6 +63,8 @@ const Question = ({
 
   const [reply, setReply] = useState("");
   const [replyError, setReplyError] = useState("");
+
+  const [removed, setRemoved] = useState(false);
 
   // const [showReplyBox, setShowReplyBox] = useState(false);
 
@@ -202,6 +205,22 @@ const Question = ({
     }
   };
 
+  const pinQuestionAndChangeState = async (e) => {
+    e.stopPropagation();
+    setRemoved(true);
+    const data = {
+      questionid: question.id,
+    };
+
+    const response = await pinAQuestion(data);
+    if (response.status === 200) {
+      // setTimeout(() => {
+      dispatch(removeQuestion(question.id));
+      // setRemoved(false);
+      // }, 900);
+    }
+  };
+
   useEffect(() => {
     const exists = likedQuestion.findIndex(
       (item) => item.questionid === question.id
@@ -220,12 +239,16 @@ const Question = ({
   return (
     <div>
       <div
-        className={`px-1 flex items-center flex-col md:flex-row gap-3 ${
+        className={`${
+          size === "large" ? "min-h-24 md:min-h-32" : "h-24 md:h-32"
+        } px-1 flex items-center flex-col md:flex-row gap-3 ${
           size === "large" ? "w-[95%]" : "w-full"
         } `}
       >
         <div onClick={goToQuestion} className="w-full">
-          <Card className="relative flex bg-white flex-col my-3 cursor-pointer min-h-24 md:min-h-32 rounded-md px-1 py-1 gap-2">
+          <Card
+            className={` relative flex bg-white flex-col my-3 cursor-pointer rounded-md px-1 py-1 gap-2`}
+          >
             <div
               className={`${
                 size === "large" ? "flex" : "flex"
@@ -272,8 +295,8 @@ const Question = ({
                 <p>{question?.text}</p>
               ) : (
                 <p>
-                  {question?.text?.length > 60
-                    ? question?.text?.slice(0, 60) + "..."
+                  {question?.text?.length > 120
+                    ? question?.text?.slice(0, 120) + "..."
                     : question?.text}
                 </p>
               )}
@@ -293,6 +316,15 @@ const Question = ({
                 </div>
               </div>
               <div className="flex items-center justify-between self-end pr-2">
+                {location.pathname === "/pinned-questions" && (
+                  <div
+                    id="pin"
+                    onClick={pinQuestionAndChangeState}
+                    className="text-blue-500 transform rotate-[25deg] rounded-full shadow-lg text-xl"
+                  >
+                    <TbPinnedFilled />
+                  </div>
+                )}
                 <span className="text-xs text-gray-500 mx-3">
                   {moment(question?.createdAt).fromNow()}
                 </span>
@@ -313,7 +345,7 @@ const Question = ({
                     className="h-12 w-12 rounded-md"
                   >
                     <img
-                      className="h-12 rounded-md object-cover w-12"
+                      className="h-12 rounded-md object-contain w-12"
                       src={attachment?.ImagePath}
                       alt={`attachment-${attachment?.id}`}
                     />
@@ -398,7 +430,7 @@ const Question = ({
                       imagesPreview?.map((image, index) => (
                         <div key={index} onClick={() => removeImg(index)}>
                           <div className="h-10 w-10 rounded-md relative flex items-center justify-center">
-                            <img className="rounded-md" src={image} alt="" />
+                            <img className="rounded-md h-full w-full object-contain" src={image} alt="" />
                             <div className="absolute cursor-pointer -right-2 -top-2 bg-white rounded-full flex items-center justify-center leading-3">
                               <div className="h-4 w-4 flex items-center justify-center">
                                 <MdClose className="h-3 w-3" />

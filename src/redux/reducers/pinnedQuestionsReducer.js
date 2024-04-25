@@ -71,6 +71,11 @@ export const pinnedQuestionsSlice = createSlice({
     initPage: (state) => {
       state.page = 0;
     },
+    removeQuestion: (state, action) => {
+      state.questions = state.questions.filter(
+        (question) => question.id !== action.payload
+      );
+    },
     clearFilters: (state) => {
       state.pointsValue = "";
       state.subjectValue = "";
@@ -105,6 +110,7 @@ export const {
   clearQuestions,
   incrementPage,
   initPage,
+  removeQuestion
 } = pinnedQuestionsSlice.actions;
 
 export default pinnedQuestionsSlice.reducer;

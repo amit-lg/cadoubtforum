@@ -111,7 +111,7 @@ export const Reply = ({ answer , bySelf , size}) => {
                       src={item?.ImagePath}
                       onClick={() => dispatch(openPopUp(item?.ImagePath))}
                       alt=""
-                      className="h-12 w-12 rounded-md object-cover cursor-pointer"
+                      className="h-12 w-12 rounded-md object-contain cursor-pointer"
                     />
                   </div>
                 ))}

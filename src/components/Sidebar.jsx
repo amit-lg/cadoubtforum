@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 import SidebarLinks from "./SidebarLink";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import Button from "./Button";
 import { MdArrowBack, MdFeedback } from "react-icons/md";
 import { openFeedbackPopup } from "../redux/reducers/appReducer";
 
@@ -78,7 +77,7 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
             <SidebarLinks key={route.label} route={route} location={location} />
           ))}
         </div>
-        <Button
+        <div
           id={"feedback"}
           className={`
             ${!collapsedSidebar ? "m-1" : "my-1"} 
@@ -102,7 +101,7 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
               <span className={`delay  text-sm text-center `}>Your Feedback</span>
             )}
           </div>
-        </Button>
+        </div>
         <UserDetails user={user} />
       </div>
     </div>

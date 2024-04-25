@@ -48,7 +48,6 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // alert(location.pathname)
     setSearchTextLocal("");
     if (
       location.pathname === "/all-questions" ||

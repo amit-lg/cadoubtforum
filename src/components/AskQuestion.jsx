@@ -171,7 +171,7 @@ const AskQuestion = ({ handleClose }) => {
                                 >
                                   <div className="h-10 w-10 rounded-md relative flex items-center justify-center">
                                     <img
-                                      className="rounded-md"
+                                      className="h-full w-full rounded-md object-contain"
                                       src={image}
                                       alt=""
                                     />

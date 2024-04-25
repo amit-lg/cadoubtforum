@@ -19,7 +19,8 @@ const initialState = {
   feedBackPopup: false,
   calenderPopup: false,
   event: {},
-  searchText : "",
+  searchText: "",
+  submitSuccessPopop: false, // submit successPopop
   likedQuestion: [], // array of question id , question liked - true , false  , count
 };
 
@@ -33,7 +34,6 @@ export const counterSlice = createSlice({
     closeMobileSidebar: (state) => {
       state.mobileSidebarState = false;
     },
-
     openNotification: (state) => {
       state.notificationState = true;
     },
@@ -119,7 +119,12 @@ export const counterSlice = createSlice({
     setReportData: (state, action) => {
       state.reportData = action.payload;
     },
-
+    openSubmitSuccessPopop: (state) => {
+      state.submitSuccessPopop = true;
+    },
+    closeSubmitSuccessPopop: (state) => {
+      state.submitSuccessPopop = false;
+    },
     handleCollapseSidebar: (state) => {
       if (state.collapsedSidebar) {
         state.collapsedSidebar = false;
@@ -176,7 +181,9 @@ export const {
   closeCalenderPopup,
   addToLikedQuestion,
   removeFromQuestion,
-  setSearchText
+  setSearchText,
+  openSubmitSuccessPopop,
+  closeSubmitSuccessPopop,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

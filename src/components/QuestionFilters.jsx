@@ -32,7 +32,7 @@ const QuestionFilters = ({ setFilters }) => {
     <div className="relative" ref={impactRef}>
       <div
         onClick={toggleFilterList}
-        className="p-1 rounded-full hover:shadow-lg transition-all duration-200 ease-in-out cursor-pointer bg-transparent"
+        className="p-1 rounded-full hover:shadow-lg hover:bg-white transition-all duration-300 ease-in-out cursor-pointer bg-transparent"
       >
         <MdFilterList className="text-2xl font-bold" />
       </div>
