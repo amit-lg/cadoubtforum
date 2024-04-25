@@ -15,7 +15,7 @@ export const addAnswer = async (data) => {
       }
     );
     if (response?.status === 201) {
-      return successResponse("Question added successfully", 201, response.data);
+      return successResponse("Answers added successfully", 201, response.data);
     }
   } catch (error) {
     return errorResponse(error.response.data.msg, error);
@@ -33,7 +33,7 @@ export const likeAAnswer = async (data) => {
       }
     );
     if (response.status === 201) {
-      return successResponse("Question added successfully", 201, response.data);
+      return successResponse("Answer liked successfully", 201, response.data);
     }
   } catch (error) {
     return errorResponse(error.response.data.msg, error);

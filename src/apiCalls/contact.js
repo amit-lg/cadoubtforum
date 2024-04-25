@@ -32,7 +32,7 @@ export const addIssue = async (data) => {
       }
     );
     if (response?.status === 200) {
-      return successResponse("Feedback added successfully", 200, response.data);
+      return successResponse("Issue raised successfully", 200, response.data);
     }
   } catch (error) {
     return errorResponse(error.response.data.msg, error);
