@@ -12,13 +12,15 @@ import {
   initState,
   setImages,
   setImagesPreview,
+  // setImages,
+  // setImagesPreview,
   setIsAsked,
   setQuestionText,
 } from "../redux/reducers/askQuestionReducer";
 
 const AskQuestion = ({ handleClose }) => {
   const navigate = useNavigate();
-  const { pointsValue, questionText, images, imagesPreview, isAsked } =
+  const { pointsValue, questionText, isAsked, images, imagesPreview } =
     useSelector((state) => state.ask);
   const [sizeError, setSizeError] = useState("");
   const [lengthError, setLengthError] = useState([]);
@@ -28,6 +30,9 @@ const AskQuestion = ({ handleClose }) => {
   const [pointError, setPointError] = useState(false);
 
   const [alreadyAsked, setAlreadyAsked] = useState(false);
+
+  // const [images, setImages] = useState([]);
+  // const [imagesPreview, setImagesPreview] = useState([]);
 
   const handleQuestion = (e) => {
     dispatch(setQuestionText(e.target.value));
@@ -43,24 +48,37 @@ const AskQuestion = ({ handleClose }) => {
   // const [imagesPreview, setImagesPreview] = useState([]);
 
   const onFileChange = (event) => {
-    if (!event.target.files) return;
+    // let files = [];
     let files = event?.target?.files;
 
-    if (files.length > 5 - images.length) {
-      files = files.slice(0, 5 - images.length);
-      setLengthError("You can only upload a maximum of 5 images");
-      return;
+    const selectedFiles = files;
+    const newFiles = Array.from(selectedFiles);
+
+    let remainingSlots = 0;
+    if (images.length > 0) {
+      remainingSlots = 5 - images.length;
+    } else {
+      remainingSlots = 5;
     }
 
-    for (let i = 0; i < files.length; i++) {
-      const element = files[i];
-      if (element.size > 2097152) {
-        setSizeError("File size should not be greater than 2MB");
-        continue;
-      }
-      dispatch(setImages([...images, element]));
+    if (files.length >= remainingSlots) {
+      setLengthError("You can only upload a maximum of 5 images");
+      dispatch(setImages([...images, ...newFiles.slice(0, remainingSlots)]));
       dispatch(
-        setImagesPreview([...imagesPreview, URL.createObjectURL(element)])
+        setImagesPreview([
+          ...imagesPreview,
+          ...newFiles
+            .slice(0, remainingSlots)
+            .map((file) => URL.createObjectURL(file)),
+        ])
+      );
+    } else {
+      dispatch(setImages([...images, ...newFiles]));
+      dispatch(
+        setImagesPreview([
+          ...imagesPreview,
+          ...newFiles.map((file) => URL.createObjectURL(file)),
+        ])
       );
     }
   };
@@ -214,7 +232,7 @@ const AskQuestion = ({ handleClose }) => {
 
                   {/*footer*/}
                   <div className="flex items-center justify-between px-6 py-2 border-t border-solid border-blueGray-200 rounded-b">
-                    <div>
+                    <div className="text-xs">
                       {pointError ? (
                         <div className="text-red-500">
                           Please select a point

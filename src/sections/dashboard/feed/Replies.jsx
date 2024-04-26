@@ -11,9 +11,9 @@ import {
   openImagePopup,
   setImagePopupImg,
 } from "../../../redux/reducers/appReducer";
-import { useDispatch , useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const Replies = ({ replies, loading , size}) => {
+const Replies = ({ replies, loading, size }) => {
   return (
     <div>
       <div className="h-[387px] w-full p-2">
@@ -40,7 +40,7 @@ const Replies = ({ replies, loading , size}) => {
 
 export default Replies;
 
-export const EachQuestionReplies = ({size , reply }) => {
+export const EachQuestionReplies = ({ size, reply }) => {
   return (
     // <Link to={"/question/1"}>
     <Card className="flex bg-white flex-col cursor-pointer py-1 rounded-md">
@@ -63,19 +63,19 @@ export const EachQuestionReplies = ({size , reply }) => {
   );
 };
 
-export const Reply = ({ answer , bySelf , size}) => {
-  const {user} = useSelector((state) => state.user);
+export const Reply = ({ answer, bySelf, size }) => {
+  const { user } = useSelector((state) => state.user);
   let replyBy = {
-    name : "",
-    image : "",
+    name: "",
+    image: "",
   };
 
-  if(bySelf){
+  if (bySelf) {
     replyBy = {
       name: user?.name,
       image: user?.image,
     };
-  }else{
+  } else {
     replyBy = {
       name: answer?.User?.fname + " " + answer?.User?.lname,
       image: answer?.User?.profile,
@@ -93,11 +93,12 @@ export const Reply = ({ answer , bySelf , size}) => {
       <Avatar user={replyBy} size="small" />
       <div className=" w-full flex flex-col rounded-md">
         <div className="flex text-orange-300 font-semibold items-center gap-1 justify-between">
-          <span>
-            {replyBy?.name}
-          </span>
+          <span>{replyBy?.name}</span>
         </div>
-        <p className="bg-slate-200 p-1 rounded-md">{size === "small" ? answer?.text?.slice(0, 87) : answer?.text} {size === "small" ? answer?.text?.length > 90 ? "..." : "" : ""}</p>
+        <p className="bg-slate-200 p-1 rounded-md">
+          {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
+          {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+        </p>
         <div>
           <div className="flex justify-between items-center self-end mt-2">
             {answer?.attachments?.length !== 0 && (
@@ -135,7 +136,7 @@ Reply.propTypes = {
   answer: PropTypes.object,
   name: PropTypes.string,
   image: PropTypes.string,
-  bySelf: PropTypes.bool
+  bySelf: PropTypes.bool,
 };
 
 Replies.propTypes = {

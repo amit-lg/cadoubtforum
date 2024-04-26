@@ -93,7 +93,7 @@ const AppLayout = () => {
         >
           <Navbar />
 
-          <div className="py-3 px-1 md:px-4 md:pl-10 md:pr-8 bg-transparent h-[92vh] overflow-auto">
+          <div className="py-3 px-2 md:px-4 md:pl-10 md:pr-8 bg-transparent h-[92vh] overflow-auto">
             <Outlet />
 
             <div

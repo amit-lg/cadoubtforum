@@ -7,9 +7,23 @@ import { useState } from "react";
 
 const Report = ({ handleClose }) => {
   const { reportData } = useSelector((state) => state.app);
+  const [error, setError] = useState("");
 
   const [reportText, setReportText] = useState("");
+
+  const handleRepotTextChange = (e) => {
+    setReportText(e.target.value);
+    if (e.target.value) {
+      setError("");
+    }
+  };
+
   const handleSubmit = async () => {
+    if (reportText === "") {
+      setError("Please tell us a breif about the issue");
+      return;
+    }
+
     const data = {
       ...reportData,
       reportText,
@@ -55,37 +69,46 @@ const Report = ({ handleClose }) => {
 
               <div className="flex flex-col gap-3">
                 <p className="text-sm md:text-sm p-2 text-center">
-                  Thank you for your contribution to maintaining a positive community experience. Your
-                  feedback is invaluable to us. Please provide a brief reason for reporting this content.
-                  We take reports seriously and will review them promptly.
+                  Thank you for your contribution to maintaining a positive
+                  community experience. Your feedback is invaluable to us.
+                  Please provide a brief reason for reporting this content. We
+                  take reports seriously and will review them promptly.
                 </p>
                 <div className="px-2 rounded-md">
                   <textarea
+                    required
                     placeholder="Enter your reason"
                     className="px-2 bg-gray-100 p-2 border-none outline-none w-full rounded-md"
                     cols="30"
                     rows="3"
                     value={reportText}
-                    onChange={(e) => setReportText(e.target.value)}
+                    onChange={handleRepotTextChange}
                   ></textarea>
                 </div>
               </div>
               {/*footer*/}
-              <div className="flex items-center justify-end px-6 py-4 border-t border-solid border-blueGray-200 rounded-b">
-                <Button
-                  className="text-white bg-red-500 font-bold uppercase p-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={handleClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className=" text-white active:bg-emerald-600 font-bold uppercase text-sm p-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="submit"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
+              <div className="flex items-center justify-between px-6 py-4 border-t border-solid border-blueGray-200 rounded-b">
+                <div>
+                  <span className="text-red-500 text-xs text-left">
+                    {error}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <Button
+                    className="text-white bg-red-500 font-bold uppercase p-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className=" text-white active:bg-emerald-600 font-bold uppercase text-sm p-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="submit"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

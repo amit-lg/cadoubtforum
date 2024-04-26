@@ -166,9 +166,9 @@ const Breadcrum = ({ question }) => {
   };
 
   return (
-    <nav className="flex overflow-x-scroll" aria-label="Breadcrumb">
-      <ol className="pl-3 inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse text-sm md:text-base">
-        <li
+    <nav className="flex " aria-label="Breadcrumb">
+      {/* <p className="pl-3 flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-wrap h-fit w-fit">
+        <span
           onClick={() =>
             subjectClicked({
               subject: {
@@ -177,11 +177,11 @@ const Breadcrum = ({ question }) => {
               },
             })
           }
-          className="hover:text-blue-500 inline-flex items-center text-nowrap cursor-pointer"
+          className="hover:text-blue-500 items-center cursor-pointer text-wrap w-fit h-fit"
         >
           {question?.fallnumber?.Points[0]?.topics?.Subjects?.name}
-        </li>
-        <li
+        </span>
+        <span
           onClick={() =>
             topicClicked({
               subject: {
@@ -194,7 +194,7 @@ const Breadcrum = ({ question }) => {
               },
             })
           }
-          className="hover:text-blue-500 flex items-center gap-2 text-nowrap cursor-pointer"
+          className="hover:text-blue-500 flex items-center gap-2  cursor-pointer text-wrap w-fit h-fit"
         >
           {question?.fallnumber?.Points[0]?.topics?.name !== "empty" && (
             <MdArrowRight />
@@ -202,9 +202,9 @@ const Breadcrum = ({ question }) => {
           {question?.fallnumber?.Points[0]?.topics?.name === "empty"
             ? ""
             : question?.fallnumber?.Points[0]?.topics?.name}
-        </li>
+        </span>
 
-        <li
+        <span
           onClick={() =>
             pointClicked({
               subject: {
@@ -221,12 +221,92 @@ const Breadcrum = ({ question }) => {
               },
             })
           }
-          className="hover:text-blue-500 flex items-center gap-2 text-nowrap cursor-pointer"
+          className="hover:text-blue-500 flex items-center gap-2 text-wrap cursor-pointer w-fit h-fit"
         >
           <MdArrowRight />
           {question?.fallnumber?.Points[0]?.name}
-        </li>
-      </ol>
+        </span>
+      </p> */}
+
+      {/* <p className="flex bg-red-500">
+        {question?.fallnumber?.Points[0]?.topics?.Subjects?.name}
+
+        <span>
+          {question?.fallnumber?.Points[0]?.topics?.name !== "empty" && (
+            <MdArrowRight />
+          )}
+        </span>
+
+        <span>
+          {question?.fallnumber?.Points[0]?.topics?.name === "empty"
+            ? ""
+            : question?.fallnumber?.Points[0]?.topics?.name}
+
+          {question?.fallnumber?.Points[0]?.name}
+        </span>
+      </p> */}
+
+      <p>
+        <span
+          onClick={() =>
+            subjectClicked({
+              subject: {
+                name: question?.fallnumber?.Points[0]?.topics?.Subjects?.name,
+                id: question?.fallnumber?.Points[0]?.topics?.Subjects?.id,
+              },
+            })
+          }
+          className="hover:text-blue-500 cursor-pointer"
+        >
+          {question?.fallnumber?.Points[0]?.topics?.Subjects?.name}
+        </span>
+
+        <span className="mx-3">&gt;</span>
+
+        <span
+          onClick={() =>
+            topicClicked({
+              subject: {
+                name: question?.fallnumber?.Points[0]?.topics?.Subjects?.name,
+                id: question?.fallnumber?.Points[0]?.topics?.Subjects?.id,
+              },
+              topic: {
+                name: question?.fallnumber?.Points[0]?.topics?.name,
+                id: question?.fallnumber?.Points[0]?.topics?.id,
+              },
+            })
+          }
+          className="hover:text-blue-500 cursor-pointer"
+        >
+          {question?.fallnumber?.Points[0]?.topics?.name === "empty"
+            ? ""
+            : question?.fallnumber?.Points[0]?.topics?.name}
+        </span>
+
+        <span className="mx-3">&gt;</span>
+
+        <span
+          onClick={() =>
+            pointClicked({
+              subject: {
+                name: question?.fallnumber?.Points[0]?.topics?.Subjects?.name,
+                id: question?.fallnumber?.Points[0]?.topics?.Subjects?.id,
+              },
+              topic: {
+                name: question?.fallnumber?.Points[0]?.topics?.name,
+                id: question?.fallnumber?.Points[0]?.topics?.id,
+              },
+              point: {
+                name: question?.fallnumber?.Points[0]?.name,
+                id: question?.fallnumber?.Points[0]?.id,
+              },
+            })
+          }
+          className="hover:text-blue-500 cursor-pointer"
+        >
+          {question?.fallnumber?.Points[0]?.name}
+        </span>
+      </p>
     </nav>
   );
 };

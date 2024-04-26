@@ -65,6 +65,7 @@ const Question = ({
   const [replyError, setReplyError] = useState("");
 
   const [removed, setRemoved] = useState(false);
+  const [lengthError, setLengthError] = useState("");
 
   // const [showReplyBox, setShowReplyBox] = useState(false);
 
@@ -101,15 +102,35 @@ const Question = ({
   const [imagesPreview, setImagesPreview] = useState([]);
 
   const onFileChange = (event) => {
-    if (!event.target.files) return;
-    const files = event?.target?.files;
+    // let files = [];
+    let files = event?.target?.files;
 
-    if (files) {
-      const newImages = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setImagesPreview([...imagesPreview, ...newImages]);
-      setImages([...images, ...files]);
+    const selectedFiles = files;
+    const newFiles = Array.from(selectedFiles);
+
+    let remainingSlots = 0;
+    if (images.length > 0) {
+      remainingSlots = 5 - images.length;
+    } else {
+      remainingSlots = 5;
+    }
+
+    if (files.length >= remainingSlots) {
+      console.log("more than 5 files");
+      setLengthError("You can only upload a maximum of 5 images");
+      setImages([...images, ...newFiles.slice(0, remainingSlots)]);
+      setImagesPreview([
+        ...imagesPreview,
+        ...newFiles
+          .slice(0, remainingSlots)
+          .map((file) => URL.createObjectURL(file)),
+      ]);
+    } else {
+      setImages([...images, ...newFiles]);
+      setImagesPreview([
+        ...imagesPreview,
+        ...newFiles.map((file) => URL.createObjectURL(file)),
+      ]);
     }
   };
 
@@ -310,7 +331,13 @@ const Question = ({
               )}
             </div>
 
-            <div className={`flex ${size !== "large" ? "justify-end lg:justify-between" : "justify-end"} items-center pt-2 px-1`}>
+            <div
+              className={`flex ${
+                size !== "large"
+                  ? "justify-end lg:justify-between"
+                  : "justify-end"
+              } items-center pt-2 px-1`}
+            >
               {size !== "large" && (
                 <div className="hidden gap-3 lg:flex text-sm font-semibold text-gray-400 overflow-hidden h-5 w-2/3 whitespace-nowrap mx-3">
                   <div className="flex">
@@ -411,10 +438,7 @@ const Question = ({
           }`}
         >
           {showReplyBox && (
-            <form
-              onSubmit={addReply}
-              className="p-1 flex flex-col gap-5 w-full"
-            >
+            <form onSubmit={addReply} className="p-1 flex flex-col w-full">
               <textarea
                 className={`w-full border-none outline-none rouded-md p-2 resize-none ${
                   replyError ? "border-red-500" : ""
@@ -425,9 +449,7 @@ const Question = ({
                 placeholder="Enter your answer here"
                 required
               />
-              <div className="h-4">
-                <p>{replyError}</p>
-              </div>
+
               <div className="relative w-full">
                 <div className="flex items-center gap-3">
                   <input
@@ -458,15 +480,28 @@ const Question = ({
                       ))}
                   </div>
 
-                  <div className="flex items-center gap-3 self-end">
-                    <label
-                      htmlFor="avatar"
-                      className="shadow bg-white p-2  rounded-full text-blue-500  bottom-1 right-1"
-                    >
-                      <FaCamera />
-                    </label>
-                    <Button type="submit">Submit</Button>
+                  <div className="flex items-center gap-3 justify-betweenw-full">
+                    <div className="flex gap-5 items-center">
+                      <label
+                        htmlFor="avatar"
+                        className="p-3 bg-white h-0 w-0 rounded-full text-blue-500 shadow-md relative"
+                      >
+                        <FaCamera className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                      </label>
+                      <Button type="submit">Submit</Button>
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="h-fit">
+                <div className="text-red-500 text-xs">
+                  {replyError ? (
+                    <p className="">{replyError}</p>
+                  ) : (
+                    lengthError && <p className="">{lengthError}</p>
+                  )}
+                  <p>{replyError}</p>
                 </div>
               </div>
             </form>

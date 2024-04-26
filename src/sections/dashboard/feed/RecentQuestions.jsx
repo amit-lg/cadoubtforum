@@ -9,7 +9,8 @@ const RecentQuestions = ({ questions, loading }) => {
     <div>
       <div className="h-[400px] w-full rounded-md p-2 ">
         <SectionHeading text="Recently Asked" />
-        <div className="mt-3 gap-8 px-1 py-3 h-[calc(100%-28px)] flex flex-col overflow-y-scroll scrollbar-none">
+
+        <div className="mt-3 gap-8 pr-2 pb-3 h-[calc(100%-28px)] flex flex-col overflow-y-scroll scrollbar-none">
           {loading ? (
             <div className="h-full w-full flex items-center justify-center">
               <Loader />

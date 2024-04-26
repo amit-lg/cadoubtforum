@@ -4,19 +4,18 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { likeAAnswer } from "../apiCalls/answer";
 
-const Answer = ({ item, openReportModal , bySelf}) => {
+const Answer = ({ item, openReportModal, bySelf }) => {
   const [liked, setLiked] = useState(item?.likes?.length !== 0);
   const [likeValue, setLikeValue] = useState(item?._count?.likes);
-
 
   useEffect(() => {
     setLiked(bySelf ? false : item?.likes?.length !== 0);
     setLikeValue(bySelf ? 0 : item?._count?.likes);
-  }, [item , bySelf]);
+  }, [item, bySelf]);
 
   const likeReply = async () => {
     const data = {
-        answerid: item?.id,
+      answerid: item?.id,
     };
     const response = await likeAAnswer(data);
     if (response?.status === 201) {
@@ -27,15 +26,17 @@ const Answer = ({ item, openReportModal , bySelf}) => {
         setLikeValue((likeValue) => likeValue + 1);
         setLiked(true);
       }
-    } 
+    }
   };
 
   return (
     <div key={item?.id} className="flex gap-5 items-center">
       <div className="flex gap-5 mt-5 items-center">
-        <div className="p-2 shadow-lg bg-white rounded-full flex gap-2">
+        <div
+          onClick={likeReply}
+          className="cursor-pointer w-[60px] p-2 shadow-lg bg-white rounded-full flex gap-2 justify-between"
+        >
           <MdOutlineThumbUp
-            onClick={likeReply}
             className={`h-5 w-5 ${
               liked ? "text-blue-500" : "text-gray-400"
             } cursor-pointer`}
@@ -50,7 +51,7 @@ const Answer = ({ item, openReportModal , bySelf}) => {
           <MdOutlineReportProblem className="h-5 w-5 text-blue-500 cursor-pointer" />
         </div>
       </div>
-      <Reply bySelf={bySelf} answer={item}/>
+      <Reply bySelf={bySelf} answer={item} />
     </div>
   );
 };
@@ -62,6 +63,6 @@ Answer.propTypes = {
   likeReply: PropTypes.func,
   openReportModal: PropTypes.func,
   question: PropTypes.object,
-  user : PropTypes.object,
-  bySelf : PropTypes.bool
+  user: PropTypes.object,
+  bySelf: PropTypes.bool,
 };
