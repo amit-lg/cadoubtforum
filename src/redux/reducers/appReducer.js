@@ -19,6 +19,7 @@ const initialState = {
   feedBackPopup: false,
   calenderPopup: false,
   askQuestion : false,
+  chooseCoursePopupState : false,
   event: {},
   searchText: "",
   submitSuccessPopopForFeedback: false, // submit successPopop
@@ -69,6 +70,13 @@ export const counterSlice = createSlice({
     openCalenderPopup: (state, action) => {
       state.calenderPopup = true;
       state.event = action.payload;
+    },
+
+    openChooseCoursePopup : (state) => {
+      state.chooseCoursePopupState = true;
+    },
+    closeChhoseCoursePopup : (state) =>{
+      state.chooseCoursePopupState = false;
     },
 
     closeCalenderPopup: (state) => {
@@ -203,6 +211,8 @@ export const {
   openSubmitSuccessPopopIssue,
   closeSubmitSuccessPopopIssue,
   openAskQuestion,
+  closeChhoseCoursePopup,
+  openChooseCoursePopup,
   closeAskQuestion,
 } = counterSlice.actions;
 

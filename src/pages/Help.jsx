@@ -10,22 +10,22 @@ const Help = () => {
       <div className="flex flex-col gap-5  justify-between h-full">
         <div className="flex flex-col w-full items-center h-[80%] justify-center">
           <div className="flex items-center justify-between h-[30%] w-[90%]">
-            <h1 className="text-3xl text-blue-500 font-semibold">
+            <h1 className="text-lg sm:text-xl md:text-3xl text-blue-500 font-semibold">
               Frequently asked Questions
             </h1>
-            <img className="h-52 w-52 object-contain" src="/faq.svg" alt="Faq" />
+            <img className="h-24 w-24  md:h-52 md:w-52 object-contain" src="/faq.svg" alt="Faq" />
           </div>
 
           {/* <Faq/> */}
 
-          <div className="w-[90%] h-[70%] overflow-y-scroll self-center">
+          <div className="w-full md:w-[90%] h-[70%] overflow-y-scroll self-center">
             <Faq />
           </div>
         </div>
 
-        <div className="h-[20%] md:mx-20 p-5 rounded-md flex items-center justify-center flex-col gap-3 bg-blue-400 text-white">
+        <div className="h-[20%] md:mx-20 md:p-5 p-2 rounded-md flex items-center justify-center flex-col gap-3 bg-blue-400 text-white">
           <div className="flex flex-col gap-3">
-            <h3 className="text-center text-2xl font-semibold">
+            <h3 className="text-center md:text-2xl text-lg font-semibold">
               Still have a question?
             </h3>
             {/* <p className="text-center text-base">Mail us at {contact.email}</p> */}

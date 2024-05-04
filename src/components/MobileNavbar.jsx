@@ -18,7 +18,7 @@ const MobileSidebar = () => {
           mobileSidebarState === true ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className={`w-[80%] sm:w-[40%] relative h-full`}>
+        <div className={`w-[85%] sm:w-[40%] relative h-full`}>
           <div onClick={closeSidebar} className="absolute z-50 top-2 right-2 cursor-pointer">
             <MdClose
               color="white"

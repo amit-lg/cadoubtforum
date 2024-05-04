@@ -18,7 +18,7 @@ export const loginUser = async (email, password) => {
       }
     );
     if (response.status === 200) {
-      return successResponse("Login Successfull", 200, response.data);
+      return successResponse(response?.data?.message, 200, response.data);
     }
   } catch (error) {
     return errorResponse(error?.response?.status, error);

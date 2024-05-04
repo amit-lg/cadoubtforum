@@ -14,7 +14,7 @@ const FormSuccessPopup = ({ type }) => {
   return (
     <div className="h-full w-full flex items-center justify-center">
         <div className="z-60 absolute w-full mx-auto flex items-center justify-center h-full">
-          <div className="bg-white shadow-lg rounded-b-md w-fit h-fit z-50 relative p-5 flex items-center justify-center flex-col gap-3">
+          <div className="bg-white shadow-lg rounded-b-md w-[90%] sm:w-fit h-fit z-50 relative p-5 flex items-center justify-center flex-col gap-3">
             <div className="absolute top-0 left-0 w-full">
               <Progress />
             </div>

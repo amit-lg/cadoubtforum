@@ -4,15 +4,15 @@ import { errorResponse, successResponse } from "../utils/errors";
 import { getHeaders, getHeadersWithFormData } from "../utils/requestHeaders";
 
 export const getQuestions = async (data) => {
+  const canCelToken = data.cancelToken;
   const headers = getHeaders();
-  const source = axios.CancelToken.source();
   try {
     const response = await axios.post(
       `${backendUrl}/doubtforum/getquestions`,
       data,
       {
         headers,
-        cancelToken: source.token,
+        cancelToken: canCelToken,
       }
     );
     if (response.status === 200) {
@@ -21,12 +21,8 @@ export const getQuestions = async (data) => {
   } catch (error) {
     return errorResponse(error.response.data.msg, error);
   }
-
-  return () => {
-    // Cancel the request on component unmount or when a new request is made
-    source.cancel("Request canceled by user or replaced by new request");
-  };
 };
+
 export const getQuestionsTest = async (data) => {
   const headers = getHeaders();
   try {
@@ -46,6 +42,7 @@ export const getQuestionsTest = async (data) => {
 };
 
 export const getPinnedQuestions = async (data) => {
+  const canCelToken = data.cancelToken;
   const headers = getHeaders();
   try {
     const response = await axios.post(
@@ -53,7 +50,8 @@ export const getPinnedQuestions = async (data) => {
       data,
       {
         headers,
-      }
+        cancelToken: canCelToken,
+      },
     );
     if (response.status === 200) {
       return successResponse("Data fetched successfully", 200, response.data);
@@ -65,12 +63,14 @@ export const getPinnedQuestions = async (data) => {
 
 export const getAskedQuestions = async (data) => {
   const headers = getHeaders();
+  const cancelToken = data.cancelToken;
   try {
     const response = await axios.post(
       `${backendUrl}/doubtforum/askedquestion`,
       data,
       {
         headers,
+        cancelToken: cancelToken,
       }
     );
     if (response.status === 200) {
@@ -83,12 +83,14 @@ export const getAskedQuestions = async (data) => {
 
 export const getUnansweredQuestions = async (data) => {
   const headers = getHeaders();
+  const cancelToken = data.cancelToken;
   try {
     const response = await axios.post(
       `${backendUrl}/doubtforum/unansweredquestion`,
       data,
       {
         headers,
+        cancelToken : cancelToken
       }
     );
     if (response.status === 200) {

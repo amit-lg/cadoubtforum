@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import useOutsideClick from "../hooks/usClickOutside";
 import { IoMdEye } from "react-icons/io";
 
-const QuestionFilters = ({ setFilters }) => {
+const QuestionFilters = ({ filter , setFilters }) => {
   const [openFilterList, setOpenFilterList] = useState(false);
 
   const impactRef = useRef();
@@ -28,6 +28,7 @@ const QuestionFilters = ({ setFilters }) => {
     setFilters(value);
     toggleFilterList();
   };
+
   return (
     <div className="relative" ref={impactRef}>
       <div
@@ -41,29 +42,29 @@ const QuestionFilters = ({ setFilters }) => {
           <ul className="flex flex-col gap-1 text-center w-full">
             <li
               onClick={() => handleFilters("likes")}
-              className="cursor-pointer px-2 rounded w-full text-base text-gray-500 bg-white hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center"
+              className={`${filter === "likes" ? "bg-gray-200" : "bg-white"} cursor-pointer px-2 rounded w-full text-base text-gray-500  hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center`}
             >
               <MdOutlineThumbUp className="text-base text-gray-500" /> Most
               Liked
             </li>
             <li
               onClick={() => handleFilters("datedown")}
-              className="cursor-pointer px-2 rounded w-full text-base text-gray-500 bg-white hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center"
+              className={`${filter === "datedown" ? "bg-gray-200" : "bg-white"} cursor-pointer px-2 rounded w-full text-base text-gray-500  hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center`}
             >
               <MdArrowDownward className="text-base text-gray-500" /> By Oldest
             </li>
             <li
               onClick={() => handleFilters("views")}
-              className="cursor-pointer px-2 rounded w-full text-base text-gray-500 bg-white hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center"
+              className={`${filter === "views" ? "bg-gray-200" : "bg-white"} cursor-pointer px-2 rounded w-full text-base text-gray-500  hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center`}
             >
               <IoMdEye className="text-base text-gray-500" /> Most viewed
             </li>
-            <li
+            {filter !== "" && <li
               onClick={() => handleFilters("")}
               className="cursor-pointer px-2 rounded w-full bg-white text-base text-gray-500 hover:bg-gray-200 transition-all duration-300 ease-in-out flex gap-3 items-center"
             >
               <RxReset className="text-base text-gray-500" /> Reset
-            </li>
+            </li>}
           </ul>
         </div>
       )}
@@ -75,4 +76,5 @@ export default QuestionFilters;
 
 QuestionFilters.propTypes = {
   setFilters: PropTypes.func,
+  filter: PropTypes.string,
 };

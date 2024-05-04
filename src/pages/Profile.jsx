@@ -32,14 +32,46 @@ const Profile = () => {
   const [canUpdate, setCanUpdate] = useState(true);
   const [picUpdated, setPicUpdated] = useState(false);
 
+  let userDetails = {
+    fbUrl: "",
+    instaUrl: "",
+    twitterUrl: "",
+    linkedInUrl: "",
+    bio: "",
+  };
+
   const onFileChange = (e) => {
     setPicUpdated(true);
     const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      alert("Selected file is not an image");
+      return;
+    }
+
+    // Check if its size is less than 2mb
+    if (file.size > 2000000) {
+      alert("Image size should be less than 2mb");
+      return;
+    }
+
     setAvatar(file);
     setAvatarPreview(URL.createObjectURL(file));
   };
 
+  const captureData = () => {
+    userDetails = {
+      fbUrl: user?.fbUrl,
+      instaUrl: user?.instaUrl,
+      twitterUrl: user?.twitterUrl,
+      linkedInUrl: user?.linkedInUrl,
+      bio: user?.bio,
+    };
+  };
+
   const toggleCanUpdate = () => {
+    if (canUpdate) {
+      captureData();
+    }
     setCanUpdate(!canUpdate);
   };
 
@@ -103,6 +135,7 @@ const Profile = () => {
                     onChange={onFileChange}
                     type="file"
                     id="avatar"
+                    accept="image/*"
                     className="hidden"
                   />
                   <label
@@ -178,6 +211,7 @@ const Profile = () => {
             </Button>
           </div> */}
           <ProfileForm
+            userDetails={userDetails}
             canUpdate={canUpdate}
             setCanUpdate={setCanUpdate}
             canUpdateDOB={canUpdateDOB}

@@ -30,8 +30,8 @@ const Answer = ({ item, openReportModal, bySelf }) => {
   };
 
   return (
-    <div key={item?.id} className="flex gap-5 items-center">
-      <div className="flex gap-5 mt-5 items-center">
+    <div key={item?.id} className="flex sm:gap-5 sm:items-center flex-col-reverse sm:flex-row">
+      <div className="flex gap-5 mt-3 mb-3 sm:mt-5 sm:mb-5 items-center">
         <div
           onClick={likeReply}
           className="cursor-pointer w-[60px] p-2 shadow-lg bg-white rounded-full flex gap-2 justify-between"

@@ -57,3 +57,47 @@ export const validateLink = (link) => {
   }
   return true;
 };
+
+export const validateFacebookUrl = (url) => {
+  if (!url) {
+    return true;
+  }
+  const re = /^(?:https?:\/\/)?(?:www\.)?(?:facebook\.com)/;
+  if (!re.test(url)) {
+    return false;
+  }
+  return true;
+};
+
+export const validateInstagramUrl = (url) => {
+  if (!url) {
+    return true;
+  }
+  const re = /^(?:https?:\/\/)?(?:www\.)?(?:instagram\.com)/;
+  if (!re.test(url)) {
+    return false;
+  }
+  return true;
+};
+
+export const validateTwitterUrl = (url) => {
+  if (!url) {
+    return true;
+  }
+  const re = /^(?:https?:\/\/)?(?:www\.)?(?:twitter\.com)/;
+  if (!re.test(url)) {
+    return false;
+  }
+  return true;
+};
+
+export const validatelinkedInUrl = (url) => {
+  if (!url) {
+    return true;
+  }
+  const re = /^(?:https?:\/\/)?(?:www\.)?(?:www.linkedin\.com)/;
+  if (!re.test(url)) {
+    return false;
+  }
+  return true;
+};

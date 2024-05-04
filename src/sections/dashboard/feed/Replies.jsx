@@ -2,9 +2,6 @@ import SectionHeading from "../../../components/SectionHeading";
 import Card from "../../../components/ui/Card";
 import Avatar from "../../../components/ui/Avatar";
 import PropTypes from "prop-types";
-// import EachActionButton from "../../../components/EachActionButton";
-// import { MdThumbUp } from "react-icons/md";
-// import { useState } from "react";
 import moment from "moment";
 import Loader from "../../../components/Loader";
 import {
@@ -12,6 +9,7 @@ import {
   setImagePopupImg,
 } from "../../../redux/reducers/appReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Replies = ({ replies, loading, size }) => {
   return (
@@ -42,24 +40,24 @@ export default Replies;
 
 export const EachQuestionReplies = ({ size, reply }) => {
   return (
-    // <Link to={"/question/1"}>
-    <Card className="flex bg-white flex-col cursor-pointer py-1 rounded-md">
-      <div className="flex overflow-hidden items-center mx-1 rounded-md">
-        <div className="flex flex-col gap-2 relative w-full">
-          <div className="rounded-md">
-            <span className="font-semibold text-sm">Question &nbsp;</span>
-            <span> - {reply?.question?.text}</span>
-          </div>
-          <div>
-            {/* <span className="font-semibold text-sm">Replies &nbsp;</span> */}
-            <div className="flex flex-col ">
-              <Reply size={size} answer={reply} />
+    <Link to={`/question/${reply?.question?.id}`}>
+      <Card className="flex bg-white flex-col cursor-pointer py-1 rounded-md">
+        <div className="flex overflow-hidden items-center mx-1 rounded-md">
+          <div className="flex flex-col gap-2 relative w-full">
+            <div className="rounded-md">
+              <span className="font-semibold text-sm">Question &nbsp;</span>
+              <span> - {reply?.question?.text?.slice(0, 100)} {reply?.question?.text?.length > 100 ? "..." : ""}</span>
+            </div>
+            <div>
+              {/* <span className="font-semibold text-sm">Replies &nbsp;</span> */}
+              <div className="flex flex-col ">
+                <Reply size={size} answer={reply} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Card>
-    // </Link>
+      </Card>
+    </Link>
   );
 };
 
@@ -83,7 +81,6 @@ export const Reply = ({ answer, bySelf, size }) => {
   }
 
   const dispatch = useDispatch();
-  // const [likeCount, setLikeCount] = useState(answer?.likes?.length || 0);
   const openPopUp = (url) => {
     dispatch(openImagePopup());
     dispatch(setImagePopupImg(url));
@@ -100,9 +97,9 @@ export const Reply = ({ answer, bySelf, size }) => {
           {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
         </p>
         <div>
-          <div className="flex justify-between items-center self-end mt-2">
+          <div className={`flex ${answer?.attachments?.length === 0 ? "justify-end" : "justify-between"} items-center self-end mt-2`}>
             {answer?.attachments?.length !== 0 && (
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center w-[100px] sm:w-fit overflow-x-scroll">
                 {answer?.attachments?.map((item) => (
                   <div
                     key={item?.id}
@@ -110,9 +107,9 @@ export const Reply = ({ answer, bySelf, size }) => {
                   >
                     <img
                       src={item?.ImagePath}
-                      onClick={() => dispatch(openPopUp(item?.ImagePath))}
+                      onClick={() => dispatch(openPopUp(answer?.attachments))}
                       alt=""
-                      className="h-12 w-12 rounded-md object-contain cursor-pointer"
+                      className="w-[50px] min-w-[50px] h-[50px] rounded-md object-contain cursor-pointer"
                     />
                   </div>
                 ))}
@@ -130,6 +127,7 @@ export const Reply = ({ answer, bySelf, size }) => {
 
 EachQuestionReplies.propTypes = {
   reply: PropTypes.object,
+  size: PropTypes.string,
 };
 
 Reply.propTypes = {
@@ -137,9 +135,11 @@ Reply.propTypes = {
   name: PropTypes.string,
   image: PropTypes.string,
   bySelf: PropTypes.bool,
+  size: PropTypes.string,
 };
 
 Replies.propTypes = {
   replies: PropTypes.array,
   loading: PropTypes.bool,
+  size: PropTypes.string,
 };

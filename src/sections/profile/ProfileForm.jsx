@@ -22,6 +22,12 @@ import SectionHeading from "../../components/SectionHeading";
 import { MdLogout } from "react-icons/md";
 import { removeCookies } from "../../utils/cookies";
 import { useNavigate } from "react-router-dom";
+import {
+  validateFacebookUrl,
+  validateInstagramUrl,
+  validateTwitterUrl,
+  validatelinkedInUrl,
+} from "../../utils/validators";
 // import { validateLink } from "../../utils/validators";
 
 // Avatar will come as prop
@@ -34,6 +40,7 @@ const ProfileForm = ({
   setPicUpdated,
   setCanUpdate,
   setLoading,
+  userDetails,
   toggleCanUpdate,
 }) => {
   const { user } = useSelector((state) => state.user);
@@ -72,15 +79,41 @@ const ProfileForm = ({
   const handleLogout = () => {
     removeCookies();
     dispatch(logoutSuccess());
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (validateFacebookUrl(user?.fbUrl) === false) {
+      setLoading(false);
+      alert("Enter valid facebook url");
+      return;
+    }
+
+    if (validateInstagramUrl(user?.instaUrl) === false) {
+      setLoading(false);
+      alert("Enter valid url");
+      return;
+    }
+
+    if (validateTwitterUrl(user?.twitterUrl) === false) {
+      setLoading(false);
+      alert("Enter valid twitter url");
+      return;
+    }
+
+    if (validatelinkedInUrl(user?.linkedInUrl) === false) {
+      setLoading(false);
+      alert("Enter valid linkedin url");
+      return;
+    }
+
     let data;
     if (picUpdated) {
       data = new FormData();
+
       data.append(
         "socials",
         JSON.stringify({
@@ -90,7 +123,7 @@ const ProfileForm = ({
           linkedin: user?.linkedInUrl,
         })
       );
-      if (user?.bio) {
+      if (user?.bio || userDetails?.bio !== user?.bio) {
         data.append("bio", user?.bio);
       }
       data.append("pictures", avatar);
@@ -117,27 +150,15 @@ const ProfileForm = ({
 
       if (canUpdateDOB) {
         if (bio) {
-          data = {
-            socials,
-            bio,
-            dob,
-          };
+          data = { socials, bio, dob };
         } else {
-          data = {
-            socials,
-            dob,
-          };
+          data = { socials, dob };
         }
       } else {
         if (bio) {
-          data = {
-            socials,
-            bio,
-          };
+          data = { socials, bio };
         } else {
-          data = {
-            socials,
-          };
+          data = { socials };
         }
       }
       const response = await updateProfile(data);
@@ -149,19 +170,104 @@ const ProfileForm = ({
     setLoading(false);
   };
 
+  const handleSubmitTest = async (e) => {
+    e.preventDefault();
+    if(!canUpdate){
+      return;
+    }
+    setLoading(true);
+    const data = new FormData();
+    if (picUpdated) {
+      data.append("pictures", avatar);
+    }
+
+    if (userDetails?.bio !== user?.bio) {
+      data.append("bio", user?.bio);
+    }
+
+    if (canUpdateDOB) {
+      data.append("dob", user?.dob);
+    }
+
+    if (validateFacebookUrl(user?.fbUrl) === false) {
+      setLoading(false);
+      alert("Enter valid facebook url");
+      return;
+    }
+
+    if (validateInstagramUrl(user?.instaUrl) === false) {
+      setLoading(false);
+      alert("Enter valid url");
+      return;
+    }
+
+    if (validateTwitterUrl(user?.twitterUrl) === false) {
+      setLoading(false);
+      alert("Enter valid twitter url");
+      return;
+    }
+
+    if (validatelinkedInUrl(user?.linkedInUrl) === false) {
+      setLoading(false);
+      alert("Enter valid linkedin url");
+      return;
+    }
+
+    const socials = {
+      fbUrl: "",
+      instaUrl: "",
+      twitterUrl: "",
+      linkedInUrl: "",
+    };
+
+    if (user?.fbUrl !== userDetails?.fbUrl) {
+      socials.fbUrl = user?.fbUrl;
+    }
+
+    if (user?.instaUrl !== userDetails?.instaUrl) {
+      socials.instaUrl = user?.instaUrl;
+    }
+
+    if (user?.twitterUrl !== userDetails?.twitterUrl) {
+      socials.twitterUrl = user?.twitterUrl;
+    }
+
+    if (user?.linkedInUrl !== userDetails?.linkedInUrl) {
+      socials.linkedInUrl = user?.linkedInUrl;
+    }
+
+    data.append("socials", JSON.stringify(socials));
+    let response;
+    if (picUpdated) {
+      response = await updateProfileWithImage(data);
+    } else {
+      response = await updateProfile(data);
+    }
+
+    if (response?.status === 200) {
+      setPicUpdated(false);
+      setCanUpdate(true);
+    }
+    setLoading(false);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex items-center justify-between">
         <SectionHeading text="Profile" />
         <div className="flex gap-3">
-          <Button type="button" className="hover:bg-blue-600" onClick={toggleCanUpdate}>
+          <Button
+            type="button"
+            className="hover:bg-blue-600"
+            onClick={toggleCanUpdate}
+          >
             {canUpdate ? "Edit" : "Done"}
           </Button>
 
           <Button
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white rounded sm:w-max w-full self-start"
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
             disabled={false}
           >
             Save
@@ -225,7 +331,7 @@ const ProfileForm = ({
 
           <div className="flex gap-3 flex-col w-ful">
             <div className="flex flex-col gap-3">
-              <h3 className="font-semibold">Socail Media Links</h3>
+              <h3 className="font-semibold">Social Media Links</h3>
               <ProfileInput
                 required={true}
                 name="linkedInUrl"
@@ -290,7 +396,7 @@ const ProfileForm = ({
 
         <Button
           type="button"
-          className="bg-red-500 hover:bg-red-600 text-white font-bold rounded sm:w-max w-full self-start"
+          className="bg-red-500 hover:bg-red-600 text-white font-bold rounded w-max self-start"
           onClick={handleLogout}
           disabled={false}
         >
@@ -316,4 +422,5 @@ ProfileForm.propTypes = {
   setCanUpdate: PropTypes.func,
   setLoading: PropTypes.func,
   toggleCanUpdate: PropTypes.func,
+  userDetails: PropTypes.object,
 };

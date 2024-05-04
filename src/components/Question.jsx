@@ -66,6 +66,7 @@ const Question = ({
 
   const [removed, setRemoved] = useState(false);
   const [lengthError, setLengthError] = useState("");
+  const [sizeError, setSizeError] = useState("");
 
   // const [showReplyBox, setShowReplyBox] = useState(false);
 
@@ -77,12 +78,21 @@ const Question = ({
     const response = await likeAQuestion(data);
     if (response.status === 200) {
       if (liked) {
-        setLikeValue((likeValue) => likeValue - 1);
+        setLikeValue((likeValue) => {
+          if (likeValue > 0) {
+            return likeValue - 1;
+          } else {
+            return 0;
+          }
+        });
         setLiked(false);
         const data = {
           questionid: question.id,
           liked: false,
-          count: question?._count?.likes - 1,
+          count:
+            likeValue > question?._count?.likes
+              ? likeValue - 1
+              : question?._count?.likes - 1,
         };
         dispatch(addToLikedQuestion(data));
       } else {
@@ -102,36 +112,32 @@ const Question = ({
   const [imagesPreview, setImagesPreview] = useState([]);
 
   const onFileChange = (event) => {
-    // let files = [];
     let files = event?.target?.files;
 
     const selectedFiles = files;
     const newFiles = Array.from(selectedFiles);
+    const tempImages = [...images];
+    const tempImagesPreview = [...imagesPreview];
 
-    let remainingSlots = 0;
-    if (images.length > 0) {
-      remainingSlots = 5 - images.length;
-    } else {
-      remainingSlots = 5;
-    }
+    newFiles.forEach((file) => {
+      if (file.type.startsWith("image/") && file.size <= 2000000) {
+        if (tempImages.length < 5) {
+          tempImages.push(file);
+          tempImagesPreview.push(URL.createObjectURL(file));
+        } else {
+          setLengthError("You can only upload a maximum of 5 images");
+        }
+      } else {
+        if (!file.type.startsWith("image/")) {
+          setSizeError("Selected file is not an image");
+        } else if (file.size > 2000000) {
+          setSizeError("Image size should be less than 2MB");
+        }
+      }
+    });
 
-    if (files.length >= remainingSlots) {
-      console.log("more than 5 files");
-      setLengthError("You can only upload a maximum of 5 images");
-      setImages([...images, ...newFiles.slice(0, remainingSlots)]);
-      setImagesPreview([
-        ...imagesPreview,
-        ...newFiles
-          .slice(0, remainingSlots)
-          .map((file) => URL.createObjectURL(file)),
-      ]);
-    } else {
-      setImages([...images, ...newFiles]);
-      setImagesPreview([
-        ...imagesPreview,
-        ...newFiles.map((file) => URL.createObjectURL(file)),
-      ]);
-    }
+    setImages(tempImages);
+    setImagesPreview(tempImagesPreview);
   };
 
   const removeImg = (index) => {
@@ -197,9 +203,9 @@ const Question = ({
     dispatch(setReportData({ questionId: id }));
   };
 
-  const openPopUp = (url) => {
+  const openPopUp = (images) => {
     dispatch(openImagePopup());
-    dispatch(setImagePopupImg(url));
+    dispatch(setImagePopupImg(images));
   };
 
   const goToQuestion = async () => {
@@ -264,18 +270,18 @@ const Question = ({
       mb-7
       rounded-md
         ${size === "large" ? "min-h-24 md:min-h-32" : "min-h-24 md:min-h-32"} 
-        ${size === "large" ? "w-[95%]" : "w-full"} 
+        ${size === "large" ? "md:w-[95%] w-full" : "w-full"} 
       `}
       onClick={goToQuestion}
     >
       <div
         className={`
-          flex items-center flex-col md:flex-row gap-3 rounded-md
+          flex items-center flex-col md:flex-row gap-3 rounded-md w-full
         `}
       >
-        <Card className="w-full mx-1">
+        <Card className="w-full mx-1 p-0 sm:p-1">
           <div
-            className={`relative flex flex-col cursor-pointer rounded-md px-1 gap-2 w-full p-1 h-max `}
+            className={`relative flex flex-col cursor-pointer rounded-md px-1 gap-1 sm:gap-2  w-full p-1 h-max `}
           >
             <div
               className={`${
@@ -292,7 +298,7 @@ const Question = ({
               <div
                 className={`${
                   size === "large" ? "invisible" : "flex"
-                } text-gray-400 mx-3 items-center gap-2`}
+                } hidden sm:flex text-gray-400 mx-3 items-center gap-2`}
               >
                 <EachActionButton
                   selected={viewed}
@@ -317,13 +323,13 @@ const Question = ({
             <div
               className={`flex ${
                 size === "large" ? "min-h-[80px]" : "h-auto"
-              } mx-3 bg-slate-200 p-2 rounded-md`}
+              } mx-1 sm:mx-3 bg-slate-200 p-2 rounded-md`}
             >
               {/* Truncate the text if it's length is greater than 60 */}
               {size === "large" ? (
-                <p>{question?.text}</p>
+                <p className="whitespace-pre-line">{question?.text}</p>
               ) : (
-                <p>
+                <p className="">
                   {question?.text?.length > 120
                     ? question?.text?.slice(0, 120) + "..."
                     : question?.text}
@@ -353,45 +359,50 @@ const Question = ({
                   </div>
                 </div>
               )}
-              <div className="flex items-center justify-between self-end pr-2">
-                {location.pathname === "/pinned-questions" && (
-                  <div
-                    id="pin"
-                    onClick={pinQuestionAndChangeState}
-                    className="text-blue-500 transform rotate-[25deg] rounded-full shadow-lg text-xl"
-                  >
-                    <TbPinnedFilled />
+              <div
+                className={`flex items-center ${
+                  size === "large" ? "justify-between" : "justify-end"
+                } self-end sm:pr-2 pr-0 w-full`}
+              >
+                {size === "large" && (
+                  <div className="px-3 flex gap-2 w-[100px]  items-center overflow-x-scroll sm:w-fit">
+                    {question?.attachments?.length !== 0 &&
+                      question?.attachments?.map((attachment) => (
+                        <div
+                          onClick={() => openPopUp(question?.attachments)}
+                          key={attachment?.id}
+                          className="h-[50px] min-w-[50px] rounded-md"
+                        >
+                          <img
+                            className="h-[50px] rounded-md  w-[50px]"
+                            src={attachment?.ImagePath}
+                            alt={`attachment-${attachment?.id}`}
+                          />
+                        </div>
+                      ))}
                   </div>
                 )}
-                <span className="text-xs text-gray-500 mx-3">
-                  {moment(question?.createdAt).fromNow()}
-                </span>
-                {size === "large" && (
-                  <Button onClick={toggleReplyBox}>
-                    {showReplyBox ? "Cancel" : "Answer"}
-                  </Button>
-                )}
+                <div className="flex items-center">
+                  {location.pathname === "/pinned-questions" && (
+                    <div
+                      id="pin"
+                      onClick={pinQuestionAndChangeState}
+                      className="text-blue-500 transform rotate-[25deg] rounded-full shadow-lg text-xl w-fit"
+                    >
+                      <TbPinnedFilled />
+                    </div>
+                  )}
+                  <span className="text-xs text-gray-500 mx-1 sm:mx-3">
+                    {moment(question?.createdAt).fromNow()}
+                  </span>
+                  {size === "large" && (
+                    <Button onClick={toggleReplyBox}>
+                      {showReplyBox ? "Cancel" : "Answer"}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
-
-            {size === "large" && (
-              <div className="px-3 flex gap-2">
-                {question?.attachments?.length !== 0 &&
-                  question?.attachments?.map((attachment) => (
-                    <div
-                      onClick={() => openPopUp(attachment?.ImagePath)}
-                      key={attachment?.id}
-                      className="h-12 w-12 rounded-md"
-                    >
-                      <img
-                        className="h-12 rounded-md object-contain w-12"
-                        src={attachment?.ImagePath}
-                        alt={`attachment-${attachment?.id}`}
-                      />
-                    </div>
-                  ))}
-              </div>
-            )}
           </div>
         </Card>
 
@@ -428,7 +439,7 @@ const Question = ({
 
       {/* Reply Box */}
       <div
-        className={`ml-20 mr-10 transition-all ease-in-out duration-300 overflow-hidden ${
+        className={`md:ml-20 md:mr-10 transition-all mt-2 ease-in-out duration-300 overflow-hidden ${
           showReplyBox ? "h-56 shadow-md" : "h-0"
         }`}
       >
@@ -480,7 +491,7 @@ const Question = ({
                       ))}
                   </div>
 
-                  <div className="flex items-center gap-3 justify-betweenw-full">
+                  <div className="flex items-center gap-3 ">
                     <div className="flex gap-5 items-center">
                       <label
                         htmlFor="avatar"
@@ -498,8 +509,10 @@ const Question = ({
                 <div className="text-red-500 text-xs">
                   {replyError ? (
                     <p className="">{replyError}</p>
+                  ) : lengthError ? (
+                    <p className="">{lengthError}</p>
                   ) : (
-                    lengthError && <p className="">{lengthError}</p>
+                    sizeError && <p className="">{sizeError}</p>
                   )}
                   <p>{replyError}</p>
                 </div>

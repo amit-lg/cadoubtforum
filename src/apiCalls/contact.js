@@ -17,7 +17,7 @@ export const addFeedback = async (data) => {
       return successResponse("Feedback added successfully", 200, response.data);
     }
   } catch (error) {
-    return errorResponse(error.response.data.msg, error);
+    return errorResponse(500, error);
   }
 };
 
@@ -35,6 +35,6 @@ export const addIssue = async (data) => {
       return successResponse("Issue raised successfully", 200, response.data);
     }
   } catch (error) {
-    return errorResponse(error.response.data.msg, error);
+    return errorResponse(500, error);
   }
 };

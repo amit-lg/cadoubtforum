@@ -1,12 +1,17 @@
 import { useEffect } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { allQuestionSteps } from "../constants/tour-steps";
+import {
+  allQuestionSteps,
+  allQuestionStepsForMobile,
+} from "../constants/tour-steps";
+import { useResponsive } from "../hooks/useResponsive";
 
 const GuidedTourForAllQuestions = () => {
+  const { isDesktop } = useResponsive();
   const driverObjForAllQuestions = driver({
     showProgress: true,
-    steps: allQuestionSteps,
+    steps: isDesktop ? allQuestionSteps : allQuestionStepsForMobile,
   });
 
   useEffect(() => {

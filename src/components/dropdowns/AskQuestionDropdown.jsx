@@ -10,6 +10,8 @@ import useDidMountEffect from "../../hooks/useUpdateEffect";
 
 const AskQuestionDropdowns = ({
     pointError,
+    setPointError,
+    setError,
     type,
 }) => {
     const { subjects, topics, points, subjectName, topicName, pointsName, subjectValue, topicValue, pointsValue } = useSelector((state) => state.ask);
@@ -139,7 +141,7 @@ const AskQuestionDropdowns = ({
     },[]);
 
     return (
-        <div className="mt-4 w-full gap-5 grid grid-cols-12 justify-between">
+        <div className="mt-4 w-full md:gap-4 gap-2 grid grid-cols-12 justify-between">
             <SubjectDropdown
                 data={subjects}
                 id={"subject-dropdown"}
@@ -175,6 +177,8 @@ const AskQuestionDropdowns = ({
                             : false
                         : false
                 }
+                setPointError={setPointError}
+                setError={setError}
                 pointError={pointError}
                 name={"Los"}
                 data={points}
@@ -200,6 +204,8 @@ AskQuestionDropdowns.propTypes = {
     pointsValue: PropTypes.string,
     setPointsValue: PropTypes.func,
     pointError: PropTypes.bool,
+    setPointError: PropTypes.func,
+    setError: PropTypes.func,
 };
 
 export const SubjectDropdown = ({
@@ -351,6 +357,8 @@ export const PointDropdown = ({
     display,
     isTopicEmpty,
     pointError,
+    setPointError,
+    setError
 }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -383,6 +391,8 @@ export const PointDropdown = ({
         dispatch(setPointsValue(value));
         dispatch(setPointName(name));
         setShowMenu(false);
+        setPointError(false);
+        setError("");
     };
 
     return (
@@ -465,6 +475,7 @@ PointDropdown.propTypes = {
     setPoint: PropTypes.func,
     pointError: PropTypes.bool,
     disabled: PropTypes.bool,
+    setPointError: PropTypes.func,
 };
 TopicDropdown.propTypes = {
     data: PropTypes.array,

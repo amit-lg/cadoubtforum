@@ -46,13 +46,6 @@ const MyCalendar = () => {
   };
 
   const handleMonthChange = ({ activeStartDate }) => {
-    // console.log(
-    //   "Month changed to:",
-    //   activeStartDate.toLocaleString("en-US", {
-    //     month: "long",
-    //     year: "numeric",
-    //   })
-    // );
     setCurMonthYear(
       activeStartDate.toLocaleString("en-US", {
         month: "long",
@@ -116,7 +109,7 @@ const MyCalendar = () => {
       <div className="flex items-center justify-between">
         <SectionHeading text="Calender" />
         {/* <span className="cursor-pointer text-blue-500 font-semibold underline decoration-2">Set Goals</span> */}
-        <Button className="py-1 px-1">Set Goals</Button>
+        {/* <Button className="py-1 px-1">Set Goals</Button> */}
       </div>
       <Card className="mt-3 bg-white rounded-md flex flex-col md:flex-row w-full gap-3  h-[calc(100%-28px)]">
         <div className="w-full lg:w-1/2 border rounded-md">

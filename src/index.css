@@ -10,12 +10,14 @@
 }
 
 #root {
+  font-family: "Poppins", sans-serif;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
 }
 
 body{
+  font-family: "Poppins", sans-serif;
   background-color: rgb(243 244 246);
 }
 
@@ -386,4 +388,19 @@ abbr[title] {
   /* border-bottom-right-radius: 6px; */
   background: #3b82f6;
   color: white;
+}
+
+
+
+/* Driver js */
+.driver-popover {
+  font-family: "Poppins", sans-serif;
+}
+
+.driver{
+  font-family: "Poppins", sans-serif !important;
+}
+
+.font-popins {
+  font-family: "Poppins", sans-serif !important;
 }

@@ -139,7 +139,7 @@ const UnansweredQuestionDropdowns = ({
     },[]);
 
     return (
-        <div className="mt-4 w-full gap-5 grid grid-cols-12 justify-between">
+        <div className="mt-4 w-full md:gap-4 gap-2 grid grid-cols-12 justify-between">
             <SubjectDropdown
                 data={subjects}
                 id={"subject-dropdown"}

@@ -35,20 +35,22 @@ const RaiseIssuePopup = () => {
       setError("Please enter a feature description");
     }
 
-    dispatch(closeRaiseIssuePopup());
-
+    
     const data = {
       category,
       description,
     };
-
+    
     const response = await addIssue(data);
     if (response.status === 200) {
       dispatch(openSubmitSuccessPopopIssue());
-
+      
       setTimeout(() => {
         dispatch(closeSubmitSuccessPopopIssue());
       }, [3000]);
+    }else{
+      // dispatch(closeRaiseIssuePopup());
+      setError(response?.msg);
     }
   };
 
@@ -61,7 +63,7 @@ const RaiseIssuePopup = () => {
               <h3 className="text-2xl">Describe your issue</h3>
               <MdClose
                 onClick={handleClose}
-                className="text-xl cursor-pointer"
+                className="text-xl cursor-pointer absolute top-2 right-2"
               />
             </div>
 
@@ -120,7 +122,7 @@ const RaiseIssuePopup = () => {
                 type="text"
               />
 
-              <div className="h-2 flex items-center justify my-2">{error}</div>
+              <div className="h-2 w-full  flex items-center justify-center my-2 text-red-500 text-xs text-center">{error}</div>
 
               <Button className="self-end ">Submit</Button>
             </form>

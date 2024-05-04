@@ -12,11 +12,10 @@ import {
   initState,
   setImages,
   setImagesPreview,
-  // setImages,
-  // setImagesPreview,
   setIsAsked,
   setQuestionText,
 } from "../redux/reducers/askQuestionReducer";
+import Loader from "./Loader";
 
 const AskQuestion = ({ handleClose }) => {
   const navigate = useNavigate();
@@ -24,6 +23,9 @@ const AskQuestion = ({ handleClose }) => {
     useSelector((state) => state.ask);
   const [sizeError, setSizeError] = useState("");
   const [lengthError, setLengthError] = useState([]);
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -53,34 +55,28 @@ const AskQuestion = ({ handleClose }) => {
 
     const selectedFiles = files;
     const newFiles = Array.from(selectedFiles);
+    const tempImages = [...images];
+    const tempImagesPreview = [...imagesPreview];
 
-    let remainingSlots = 0;
-    if (images.length > 0) {
-      remainingSlots = 5 - images.length;
-    } else {
-      remainingSlots = 5;
-    }
+    newFiles.forEach((file) => {
+      if (file.type.startsWith("image/") && file.size <= 2000000) {
+        if (tempImages.length < 5) {
+          tempImages.push(file);
+          tempImagesPreview.push(URL.createObjectURL(file));
+        } else {
+          setError("You can only upload a maximum of 5 images");
+        }
+      } else {
+        if (!file.type.startsWith("image/")) {
+          setError("Selected file is not an image");
+        } else if (file.size > 2000000) {
+          setError("Image size should be less than 2MB");
+        }
+      }
+    });
 
-    if (files.length >= remainingSlots) {
-      setLengthError("You can only upload a maximum of 5 images");
-      dispatch(setImages([...images, ...newFiles.slice(0, remainingSlots)]));
-      dispatch(
-        setImagesPreview([
-          ...imagesPreview,
-          ...newFiles
-            .slice(0, remainingSlots)
-            .map((file) => URL.createObjectURL(file)),
-        ])
-      );
-    } else {
-      dispatch(setImages([...images, ...newFiles]));
-      dispatch(
-        setImagesPreview([
-          ...imagesPreview,
-          ...newFiles.map((file) => URL.createObjectURL(file)),
-        ])
-      );
-    }
+    dispatch(setImages(tempImages));
+    dispatch(setImagesPreview(tempImagesPreview));
   };
 
   const removeImg = (index) => {
@@ -97,6 +93,7 @@ const AskQuestion = ({ handleClose }) => {
     e.preventDefault();
     if (pointsValue === "") {
       setPointError(true);
+      setError("Please select a point");
       return;
     }
 
@@ -119,6 +116,7 @@ const AskQuestion = ({ handleClose }) => {
       data.append("pictures", images[i]);
     }
 
+    setLoading(true);
     const response = await addQuestion(data);
     if (response.status === 200) {
       handleClose();
@@ -126,7 +124,11 @@ const AskQuestion = ({ handleClose }) => {
       dispatch(setIsAsked(false));
       dispatch(initState());
       dispatch(clearFilters());
+    } else {
+      setError(response?.msg);
     }
+
+    setLoading(false);
   };
 
   const goToQuestion = async (id) => {
@@ -170,101 +172,96 @@ const AskQuestion = ({ handleClose }) => {
                 </div>
 
                 {/*body*/}
-                <form onSubmit={handleSubmit}>
-                  <div className="relative p-4 flex-auto flex flex-col">
-                    <AskQuestionDropdowns
-                      pointError={pointError}
-                      type={"ask-question"}
-                    />
-
-                    <div className="p-1 border flex flex-col gap-5 bg-slate-50 shadow rounded-sm">
-                      <textarea
-                        required
-                        className="w-full border-none outline-none rouded-md p-2 resize-none"
-                        rows={6}
-                        value={questionText}
-                        onChange={handleQuestion}
-                        placeholder="Enter your doubt here"
+                {loading ? (
+                  <div className="h-[350px] w-full bg-opacity-50">
+                    <Loader />
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <div className="relative p-4 flex-auto flex flex-col">
+                      <div className="text-xs text-center">
+                        {error && <p className="text-red-500">{error}</p>}
+                      </div>
+                      <AskQuestionDropdowns
+                        setError={setError}
+                        pointError={pointError}
+                        type={"ask-question"}
+                        setPointError={setPointError}
                       />
-                      <div className="px-2 relative  ">
-                        <div>
-                          <input
-                            onChange={onFileChange}
-                            type="file"
-                            id="question-image"
-                            className="hidden"
-                            multiple
-                            accept="image/*"
-                          />
-                          <div className="h-12 w-full flex items-center gap-3">
-                            {imagesPreview.length > 0 &&
-                              imagesPreview?.map((image, index) => (
-                                <div
-                                  key={index}
-                                  onClick={() => removeImg(index)}
-                                >
-                                  <div className="h-10 w-10 rounded-md relative flex items-center justify-center">
-                                    <img
-                                      className="h-full w-full rounded-md object-contain"
-                                      src={image}
-                                      alt=""
-                                    />
-                                    <div className="absolute cursor-pointer -right-2 -top-2 bg-white rounded-full flex items-center justify-center leading-3">
-                                      <div className="h-4 w-4 flex items-center justify-center">
-                                        <MdClose className="h-3 w-3" />
+
+                      <div className="p-1 border flex flex-col gap-5  shadow rounded-sm">
+                        <textarea
+                          required
+                          className="w-full border-none outline-none rouded-md p-2 resize-none"
+                          rows={6}
+                          value={questionText}
+                          onChange={handleQuestion}
+                          placeholder="Enter your doubt here"
+                        />
+                        <div className="px-2 relative  ">
+                          <div>
+                            <input
+                              onChange={onFileChange}
+                              type="file"
+                              id="question-image"
+                              className="hidden"
+                              multiple
+                              accept="image/*"
+                            />
+                            <div className="h-12 w-[150px] overflow-x-scroll sm:w-full flex items-center gap-3">
+                              {imagesPreview.length > 0 &&
+                                imagesPreview?.map((image, index) => (
+                                  <div
+                                    key={index}
+                                    onClick={() => removeImg(index)}
+                                  >
+                                    <div className="h-10 w-10 rounded-md relative flex items-center justify-center">
+                                      <img
+                                        className="h-full w-full rounded-md object-contain"
+                                        src={image}
+                                        alt=""
+                                      />
+                                      <div className="absolute cursor-pointer -right-2 -top-2 bg-white rounded-full flex items-center justify-center leading-3">
+                                        <div className="h-4 w-4 flex items-center justify-center">
+                                          <MdClose className="h-3 w-3" />
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              ))}
-                          </div>
+                                ))}
+                            </div>
 
-                          <label
-                            htmlFor="question-image"
-                            className="shadow bg-white p-2  rounded-full text-blue-500 absolute bottom-1 right-1"
-                          >
-                            <FaCamera />
-                          </label>
+                            <label
+                              htmlFor="question-image"
+                              className="shadow bg-white p-2  rounded-full text-blue-500 absolute bottom-1 right-1"
+                            >
+                              <FaCamera />
+                            </label>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/*footer*/}
-                  <div className="flex items-center justify-between px-6 py-2 border-t border-solid border-blueGray-200 rounded-b">
-                    <div className="text-xs">
-                      {pointError ? (
-                        <div className="text-red-500">
-                          Please select a point
-                        </div>
-                      ) : (
-                        <>
-                          {sizeError && (
-                            <div className="text-red-500">{sizeError}</div>
-                          )}
-                          {lengthError && (
-                            <div className="text-red-500">{lengthError}</div>
-                          )}
-                        </>
-                      )}
+                    {/*footer*/}
+                    <div className="flex items-center justify-end px-6 py-2 border-t border-solid border-blueGray-200 rounded-b">
+                      <div className=" flex items-center">
+                        <button
+                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={handleClose}
+                        >
+                          Close
+                        </button>
+                        <Button
+                          className=" text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="submit"
+                        >
+                          Submit
+                        </Button>
+                      </div>
                     </div>
-                    <div className=" flex items-center">
-                      <button
-                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={handleClose}
-                      >
-                        Close
-                      </button>
-                      <Button
-                        className=" text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="submit"
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                )}
               </div>
 
               <div

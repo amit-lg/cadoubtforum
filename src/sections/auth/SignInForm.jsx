@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/reducers/userReducer";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
-import { openVerifyEmail, setTempToken } from "../../redux/reducers/appReducer";
+import { openChooseCoursePopup, openVerifyEmail, setTempToken } from "../../redux/reducers/appReducer";
 
 const SigninForm = () => {
   const [email, setEmail] = useState("");
@@ -72,6 +72,10 @@ const SigninForm = () => {
 
     const response = await loginUser(email, password);
     if (response.status === 200) {
+      if(response?.data?.message){
+        dispatch(openChooseCoursePopup());
+        return;
+      }
       initializeForm();
       dispatch(loginSuccess(response.data));
       navigate("/dashboard");
@@ -85,7 +89,7 @@ const SigninForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
+    <form onSubmit={handleSubmit} className="w-full ">
       <div className="space-y-3 flex flex-col w-full">
         <Input
           type="text"

@@ -118,11 +118,11 @@ const AllQuestions = () => {
 
   return (
     <div className="fade-enter">
-      <GuidedTourForAllQuestions />
+      {/* <GuidedTourForAllQuestions /> */}
 
       <div className="flex items-center justify-between h-full">
         <SectionHeading text="All Questions" />
-        <QuestionFilters setFilters={setFilter} />
+        <QuestionFilters filter={filter} setFilters={setFilter} />
       </div>
 
       <div className="mt-4 w-full">

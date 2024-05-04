@@ -15,5 +15,5 @@ export const setAccessToken = (token) => {
 
 export const removeCookies = () => {
   const cookies = new Cookies();
-  cookies.remove("forum-access-token");
+  cookies.remove("forum-access-token" , {path: "/"});
 };

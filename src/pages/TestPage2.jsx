@@ -1,7 +1,6 @@
 import SectionHeading from "../components/SectionHeading";
 import Question from "../components/Question";
 import QuestionFilters from "../components/QuestionFilters";
-// import { getQuestions } from "../apiCalls/question";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Loader from "../components/Loader";
 import GuidedTourForAllQuestions from "../components/GuidedTourForAllQuestions";
@@ -18,6 +17,7 @@ import {
 import useDidMountEffect from "../hooks/useUpdateEffect";
 import AllQuestionDropdowns from "../components/dropdowns/AllQuestionDropdown";
 import { openAskQuestion } from "../redux/reducers/appReducer";
+import axios from "axios";
 const TestPage2 = () => {
   const {
     questions,
@@ -31,7 +31,6 @@ const TestPage2 = () => {
   const { searchText } = useSelector((state) => state.app);
   const { isAsked } = useSelector((state) => state.ask);
   const [loading, setLoading] = useState("");
-  // const [searchTextLocal, setSearchTextLocal] = useState("");
 
   const [filter, setFilter] = useState("");
 
@@ -43,21 +42,12 @@ const TestPage2 = () => {
     dispatch(openAskQuestion());
   };
 
-  // const handleSearchText = (e) => {
-  //   setSearchTextLocal(e.target.value);
-  //   const interval = setInterval(() => {
-  //     dispatch(setSearchText(e.target.value));
-  //   }, delay);
-
-  //   return () => clearInterval(interval);
-  // };
-
   const handleQuestionId = (id) => {
     dispatch(setQuestionId(id));
   };
 
   const fetchAllQuestions = useCallback(
-    async (page) => {
+    async (page , cancelToken) => {
       const response = await getQuestions({
         subject: subjectValue,
         topic: topicValue,
@@ -65,6 +55,7 @@ const TestPage2 = () => {
         cursor: page ? page : 0,
         filter: filter,
         searchText,
+        cancelToken: cancelToken ? cancelToken : "",
       });
 
       if (response?.status === 200) {
@@ -87,11 +78,13 @@ const TestPage2 = () => {
   useEffect(() => {
     const ref = observerTarget.current;
     const currentPage = page;
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          fetchAllQuestions(currentPage);
+          fetchAllQuestions(currentPage , source.token);
         }
       },
       {
@@ -108,6 +101,7 @@ const TestPage2 = () => {
     return () => {
       if (ref) {
         observer.unobserve(ref);
+        source.cancel();
       }
     };
   }, [
@@ -152,7 +146,7 @@ const TestPage2 = () => {
 
       <div className="flex items-center justify-between h-full">
         <SectionHeading text="All Questions" />
-        <QuestionFilters setFilters={setFilter} />
+        <QuestionFilters filter={filter} setFilters={setFilter} />
       </div>
 
       <div className="mt-4 w-full">
@@ -181,9 +175,8 @@ const TestPage2 = () => {
             <>
               {questions?.length === 0 ? (
                 <div
-                  className={`${
-                    hasMore ? "hidden" : "flex"
-                  } text-center h-full m-auto`}
+                  className={`${hasMore ? "hidden" : "flex"
+                    } text-center h-full m-auto`}
                 >
                   No questions
                 </div>

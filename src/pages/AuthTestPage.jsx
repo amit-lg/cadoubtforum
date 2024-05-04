@@ -6,12 +6,15 @@ import VerifyEmailPopup from "../components/VerifyEmailPopup";
 import { closeVerifyEmail } from "../redux/reducers/appReducer";
 import { useSelector } from "react-redux";
 import { AuthAnimationMemo } from "../components/AuthAnimation";
+import ChooseCoursePopup from "../components/ChooseCoursePopup";
 
 const AuthTest = () => {
   const [loginView, setLoginView] = useState(true);
   const [termsAndConditionView, setTermsAndConditionView] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const { showVerifyEmail } = useSelector((state) => state.app);
+  const { showVerifyEmail, chooseCoursePopupState } = useSelector(
+    (state) => state.app
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,9 +60,9 @@ const AuthTest = () => {
       <div
         className={`relative ${
           termsAndConditionView
-            ? "h-[50%] w-[80%] md:w-[45%] lg:w-[25%] rounded-md"
-            : "rounded-3xl h-[700px] lg:[95%] 2xl:w-[55%]  md:w-[70%]"
-        } hidden lg:flex items-center justify-center shadow-custom bg-white transition-all ease-in-out duration-500 py-10`}
+            ? "h-[50%] w-[80%] md:w-[60%] lg:w-[40%] rounded-md"
+            : "rounded-3xl h-[700px] 3xl:w-[55%] 2xl:w-[65%]  xl:w-[75%] md:w-[70%] py-10"
+        } hidden lg:flex items-center justify-center shadow-custom bg-white transition-all ease-in-out duration-500 `}
       >
         {termsAndConditionView ? (
           <div className="w-full fade-enter">
@@ -147,7 +150,13 @@ const AuthTest = () => {
         </div>
       )}
 
-      <div className="shadow overflow-hidden bg-white p-4 w-[90%] sm:w-[60%] md:w-[40%] h-fit rounded-3xl flex lg:hidden relative">
+      {chooseCoursePopupState && (
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[100] outline-none focus:outline-none">
+          <ChooseCoursePopup handleClose={closeVerifyEmail} />
+        </div>
+      )}
+
+      <div className="shadow overflow-hidden bg-white p-4 w-[90%] sm:w-[60%] md:w-[70%] h-fit rounded-3xl flex lg:hidden relative">
         {termsAndConditionView ? (
           <TermsAndConditions
             onAccept={onAccept}

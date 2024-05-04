@@ -86,7 +86,7 @@ const ForgetPassword = () => {
                       />
                     </div>
 
-                    <div className="h-2 flex items-center justify-center mt-2">
+                    <div className="h-2 flex items-center justify-center mt-4">
                       {error && (
                         <p
                           className="text-xs text-center text-red-600"

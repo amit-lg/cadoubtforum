@@ -22,8 +22,8 @@ export const calenderTabs = [
     name: "Dates",
     value: "dates",
   },
-  {
-    name: "Goals",
-    value: "goals",
-  },
+  // {
+  //   name: "Goals",
+  //   value: "goals",
+  // },
 ];

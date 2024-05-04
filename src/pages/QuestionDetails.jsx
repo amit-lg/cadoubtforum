@@ -59,8 +59,8 @@ const QuestionDetails = () => {
       {loading ? (
         <Loader  />
       ) : (
-        <>
-          <div>
+        <div className="flex flex-col ">
+          <div className="mb-3">
             <Breadcrum question={question} />
           </div>
 
@@ -98,7 +98,7 @@ const QuestionDetails = () => {
                 />
               ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

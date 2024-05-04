@@ -17,6 +17,7 @@ import {
 } from "../redux/reducers/pinnedQuestionsReducer";
 import useDidMountEffect from "../hooks/useUpdateEffect";
 import PinnedQuestionDropdowns from "../components/dropdowns/PinnedQuestionsDropdowns";
+import axios from "axios";
 
 const TestPage2 = () => {
   const {
@@ -45,7 +46,7 @@ const TestPage2 = () => {
   };
 
   const fetchAllQuestions = useCallback(
-    async (page) => {
+    async (page, cancelToken) => {
       const response = await getPinnedQuestions({
         subject: subjectValue,
         topic: topicValue,
@@ -53,6 +54,7 @@ const TestPage2 = () => {
         cursor: page,
         filter: filter,
         searchText,
+        cancelToken: cancelToken ? cancelToken : "",
       });
 
       if (response?.status === 200) {
@@ -74,11 +76,13 @@ const TestPage2 = () => {
   useEffect(() => {
     const ref = observerTarget.current;
     const currentPage = page;
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          fetchAllQuestions(currentPage);
+          fetchAllQuestions(currentPage, source.token);
         }
       },
       {
@@ -95,6 +99,7 @@ const TestPage2 = () => {
     return () => {
       if (ref) {
         observer.unobserve(ref);
+        source.cancel("Request canceled by user or replaced by new request");
       }
     };
   }, [
@@ -136,11 +141,11 @@ const TestPage2 = () => {
 
   return (
     <div className="fade-enter">
-      <GuidedTourForAllQuestions />
+      {/* <GuidedTourForAllQuestions /> */}
 
       <div className="flex items-center justify-between h-full">
         <SectionHeading text="Pinned Questions" />
-        <QuestionFilters setFilters={setFilter} />
+        <QuestionFilters filter={filter} setFilters={setFilter} />
       </div>
 
       <div className="mt-4 w-full">
@@ -157,28 +162,31 @@ const TestPage2 = () => {
       <div id="all-question-list" className="mt-5">
         <div className="py-3 col-span-9 h-[95%] overflow-y-scroll">
           <div className="flex flex-col">
-            {loading ? <Loader /> : null}
-            <>
-              {questions?.length === 0 ? (
-                <div
-                  className={`${
-                    hasMore ? "hidden" : "flex"
-                  } text-center h-full m-auto`}
-                >
-                  No questions
-                </div>
-              ) : (
-                questions?.map((question, idx) => (
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                {questions?.length === 0 ? (
                   <div
-                    id={"question" + question.id}
-                    onClick={() => handleQuestionId("question" + question.id)}
-                    key={idx}
+                    className={`${
+                      hasMore ? "hidden" : "flex"
+                    } text-center h-full m-auto`}
                   >
-                    <Question key={question._id} question={question} />
+                    No questions
                   </div>
-                ))
-              )}
-            </>
+                ) : (
+                  questions?.map((question, idx) => (
+                    <div
+                      id={"question" + question.id}
+                      onClick={() => handleQuestionId("question" + question.id)}
+                      key={idx}
+                    >
+                      <Question key={question._id} question={question} />
+                    </div>
+                  ))
+                )}
+              </>
+            )}
           </div>
           {hasMore ? (
             <div ref={observerTarget}>

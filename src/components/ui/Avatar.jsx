@@ -4,7 +4,7 @@ const Avatar = ({ className, user, size }) => {
   return (
     <div
       className={`
-        ${size === "small" ? "w-[30px] h-[30px]" : "h-[40px] w-[40px]"} flex items-center justify-center rounded-full ${
+        ${size === "small" ? "w-[30px] min-w-[30px] h-[30px]" : "h-[40px] w-[40px] min-w-[40px]"} flex items-center justify-center rounded-full ${
         user?.image ? "" : "bg-gray-400"
       }
         ${className}

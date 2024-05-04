@@ -42,16 +42,16 @@ export const dashBoardSteps = [
     },
   },
   {
-    element: "#profile",
+    element: "#feedback",
     popover: {
-      title: "Profile",
+      title: "By clicking this you can share your feedback",
       description: "This will redirect you to profile page",
     },
   },
   {
-    element: "#feedback",
+    element: "#profile",
     popover: {
-      title: "By clicking this you can share your feedback",
+      title: "Profile",
       description: "This will redirect you to profile page",
     },
   },
@@ -94,19 +94,61 @@ export const dashBoardSteps = [
   },
 ];
 
+export const dashBoardStepsForMobile = [
+  {
+    element: "#all-questions",
+    popover: {
+      title: "All Questions",
+      description: "Here is the the of total questions asked in this forum",
+    },
+  },
+  {
+    element: "#asked-questions",
+    popover: {
+      title: "Asked Questions",
+      description: "Here you will see the number of questions that have asked.",
+    },
+  },
+  {
+    element: "#pinned-questions",
+    popover: {
+      title: "Pinned Questions",
+      description:
+        "Here you will see the number of question that have been pinned",
+    },
+  },
+  {
+    element: "#unanswered-questions",
+    popover: {
+      title: "Unsanswered Questions",
+      description:
+        "Here you will see the number of questions that have not been answered in this forum.",
+    },
+  },
+  {
+    element: "#ask-doubt-btn",
+    popover: {
+      title: "Ask your doubts",
+      description: "By clicking this you can ask your doubts.",
+    },
+  },
+];
+
 export const allQuestionSteps = [
   {
     element: "#subject-dropdown",
     popover: {
       title: "Subject Dropdown",
-      description: "From here you can select your subject regarding which you want to see questions.",
+      description:
+        "From here you can select your subject regarding which you want to see questions.",
     },
   },
   {
     element: "#topic-dropdown",
     popover: {
       title: "Topic dropdown",
-      description: "From here you can select your topic regarding which you want to see questions.",
+      description:
+        "From here you can select your topic regarding which you want to see questions.",
     },
   },
   {
@@ -117,16 +159,31 @@ export const allQuestionSteps = [
         "From here you can select your point regarding which you want to see questions.",
     },
   },
+];
+
+export const allQuestionStepsForMobile = [
   {
-    element: "#all-question-list",
+    element: "#subject-dropdown",
     popover: {
-      title: "Questions",
+      title: "Subject Dropdown",
       description:
-        "Here you will see all the questions related to your selected filters.",
+        "From here you can select your subject regarding which you want to see questions.",
+    },
+  },
+  {
+    element: "#topic-dropdown",
+    popover: {
+      title: "Topic dropdown",
+      description:
+        "From here you can select your topic regarding which you want to see questions.",
+    },
+  },
+  {
+    element: "#point-dropdown",
+    popover: {
+      title: "Points dropdown",
+      description:
+        "From here you can select your point regarding which you want to see questions.",
     },
   },
 ];
-
-export const sidebarSteps = [
-  
-]

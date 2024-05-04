@@ -21,7 +21,7 @@ const CalenderPopup = () => {
   return (
     <div className="h-screen w-full">
       <div className="h-full w-full flex flex-col items-center justify-center">
-        <div className="bg-white relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] z-50 rounded-md space-y-3">
+        <div className="bg-white relative my-6 mx-auto w-[90%] sm:w-[75%] md:w-[75%] lg:w-[65%] xl:w-[35%] z-50 rounded-md space-y-3">
           <div className="space-y-5 flex flex-col p-4">
             <div className="flex items-center justify-between text-orange-300">
               <SectionHeading text={event.title} />

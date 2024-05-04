@@ -12,7 +12,7 @@ import {
 } from "../redux/reducers/appReducer";
 import { MdAdd } from "react-icons/md";
 import AskQuestion from "../components/AskQuestion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { getUser } from "../apiCalls/user/auth";
 import { setProfile } from "../redux/reducers/userReducer";
 import Report from "../components/Report";
@@ -23,6 +23,7 @@ import RaiseIssuePopup from "../components/RaiseIssuePopup";
 import FeedbackPopup from "../components/FeedbackPopup";
 import CalenderPopup from "../components/CalenderPopup";
 import FormSuccessPopup from "../components/FormSuccessPopup";
+import { useResponsive } from "../hooks/useResponsive";
 
 const AppLayout = () => {
   const { isAuthenticated } = useSelector((state) => state.user);
@@ -38,6 +39,7 @@ const AppLayout = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isDesktop } = useResponsive();
 
   const { collapsedSidebar } = useSelector((state) => state.app);
 
@@ -93,15 +95,16 @@ const AppLayout = () => {
         >
           <Navbar />
 
-          <div className="py-3 px-2 md:px-4 md:pl-10 md:pr-8 bg-transparent h-[92vh] overflow-auto">
+          <div className="py-3 px-3 md:px-4 md:pl-10 md:pr-8 bg-transparent h-[92vh] overflow-auto">
             <Outlet />
 
             <div
+              id={isDesktop ? "" : "ask-doubt-btn"}
               onClick={handleAskQuestionModal}
               className="flex md:hidden ask-doubt-btn overflow-hidden h-[50px] w-[50px] doubt-animation cursor-pointer absolute bottom-5 right-5 gap-3 rounded-full items-center justify-start p-2 text-white bg-blue-500"
             >
               <div
-                id="ask-doubt-btn"
+                // id="ask-doubt-btn"
                 className="w-[200px] h-[50px] flex gap-5 items-center"
               >
                 <div className="flex items-center justify-center w-[35px] h-[50px]">
@@ -112,13 +115,11 @@ const AppLayout = () => {
             </div>
 
             <div
+              id={isDesktop ? "ask-doubt-btn" : ""}
               onClick={handleAskQuestionModal}
               className="ask-doubt-btn hidden md:flex overflow-hidden h-[50px] w-max cursor-pointer absolute bottom-5 right-5 gap-3 rounded-full items-center justify-start p-2 text-white bg-blue-500"
             >
-              <div
-                id="ask-doubt-btn"
-                className="w-[200px] h-[50px] flex gap-5 items-center"
-              >
+              <div className="w-[200px] h-[50px] flex gap-5 items-center">
                 <div className="flex items-center justify-center w-[35px] h-[50px]">
                   <MdAdd className="text-xl" />
                 </div>
@@ -147,12 +148,6 @@ const AppLayout = () => {
             {feedBackPopup && (
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <FeedbackPopup handleClose={closeShowReportModal} />
-              </div>
-            )}
-
-            {raiseIssuePopup && (
-              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                <RaiseIssuePopup handleClose={closeShowReportModal} />
               </div>
             )}
 

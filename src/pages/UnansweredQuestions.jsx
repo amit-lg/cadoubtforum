@@ -17,6 +17,7 @@ import {
 } from "../redux/reducers/unansweredQuestionsReducer";
 import useDidMountEffect from "../hooks/useUpdateEffect";
 import UnansweredQuestionDropdowns from "../components/dropdowns/UnansweredQuestionsDropdowns";
+import axios from "axios";
 
 const TestPage2 = () => {
   const {
@@ -45,7 +46,7 @@ const TestPage2 = () => {
   };
 
   const fetchAllQuestions = useCallback(
-    async (page) => {
+    async (page , cancelToken) => {
       const response = await getUnansweredQuestions({
         subject: subjectValue,
         topic: topicValue,
@@ -53,6 +54,7 @@ const TestPage2 = () => {
         cursor: page,
         filter: filter,
         searchText,
+        cancelToken: cancelToken ? cancelToken : "",
       });
 
       if (response?.status === 200) {
@@ -75,11 +77,13 @@ const TestPage2 = () => {
   useEffect(() => {
     const ref = observerTarget.current;
     const currentPage = page;
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          fetchAllQuestions(currentPage);
+          fetchAllQuestions(currentPage , source.token);
         }
       },
       {
@@ -96,6 +100,7 @@ const TestPage2 = () => {
     return () => {
       if (ref) {
         observer.unobserve(ref);
+        source.cancel();
       }
     };
   }, [
@@ -138,11 +143,11 @@ const TestPage2 = () => {
 
   return (
     <div className="fade-enter">
-      <GuidedTourForAllQuestions />
+      {/* <GuidedTourForAllQuestions /> */}
 
       <div className="flex items-center justify-between h-full">
         <SectionHeading text="Unsanswered Questions" />
-        <QuestionFilters setFilters={setFilter} />
+        <QuestionFilters filter={filter} setFilters={setFilter} />
       </div>
 
       <div className="mt-4 w-full">
@@ -150,9 +155,9 @@ const TestPage2 = () => {
           topicValue={topicValue}
           subjectValue={subjectValue}
           pointsValue={pointsValue}
-          // setTopicValue={setTopicValue}
-          // setSubjectVlue={setSubjectVlue}
-          // setPointsValue={setPointsValue}
+        // setTopicValue={setTopicValue}
+        // setSubjectVlue={setSubjectVlue}
+        // setPointsValue={setPointsValue}
         />
       </div>
 
@@ -163,9 +168,8 @@ const TestPage2 = () => {
             <>
               {questions?.length === 0 ? (
                 <div
-                  className={`${
-                    hasMore ? "hidden" : "flex"
-                  } text-center h-full m-auto`}
+                  className={`${hasMore ? "hidden" : "flex"
+                    } text-center h-full m-auto`}
                 >
                   No questions
                 </div>

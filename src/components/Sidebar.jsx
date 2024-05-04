@@ -6,7 +6,7 @@ import SidebarLinks from "./SidebarLink";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MdArrowBack, MdFeedback } from "react-icons/md";
-import { openFeedbackPopup } from "../redux/reducers/appReducer";
+import { closeMobileSidebar, openFeedbackPopup } from "../redux/reducers/appReducer";
 
 const Sidebar = ({ handleSidebarState, forMobile }) => {
   const { collapsedSidebar } = useSelector((state) => state.app);
@@ -14,11 +14,15 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
   const dispatch = useDispatch();
   const openFeedbackForm = () => {
     dispatch(openFeedbackPopup());
+    dispatch(closeMobileSidebar());
   };
 
   const location = useLocation();
   return (
     <div className=" pt-4 pb-12 flex flex-col h-full text-white bg-blue-500">
+      {!forMobile && <div onClick={() => handleSidebarState()} className="cursor-pointer h-[100px] w-[50px] rounded-r-full rounfed-t-full absolute bg-blue-500 top-1/2 -right-5 -translate-y-1/2 flex items-center justify-end p-2">
+        <MdArrowBack  className={`${collapsedSidebar ? "rotate-180" : "rotate-0"} transition-all duration-200 ease-in-out`}/>
+      </div>}
       <div
         className={`py-3 flex-1 relative h-max ${
           !forMobile && collapsedSidebar
@@ -27,9 +31,9 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
         }`}
       >
         {/* Logo */}
-        {!forMobile && <div onClick={() => handleSidebarState()} className={`cursor-pointer absolute top-0 ${collapsedSidebar ? "left-1/2 -translate-x-1/2" : "right-2"} p-1 border rounded-full z-50 `}>
+        {/* {!forMobile && <div onClick={() => handleSidebarState()} className={`cursor-pointer absolute top-0 ${collapsedSidebar ? "left-1/2 -translate-x-1/2" : "right-2"} p-1 border rounded-full z-50 `}>
           <MdArrowBack className={`transition-all duration-300 ease-in-out ${collapsedSidebar ? "rotate-180" : "rotate-0"}`}/>
-        </div>}
+        </div>} */}
         <a
           href="https://aswinibajaj.com/"
           className={`relative flex items-center mt-10 mb-10 z-50 ${
@@ -64,10 +68,10 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
           ))}
         </div>
 
-        <div
+        {/* <div
           className="hidden lg:block absolute w-full h-full top-0 left-0 z-40"
           onClick={handleSidebarState}
-        ></div>
+        ></div> */}
       </div>
 
       {/* Help links */}

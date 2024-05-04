@@ -33,19 +33,21 @@ const FeedbackPopup = () => {
       setError("Please enter a feature description");
     }
     
-    dispatch(closeFeedbackPopup());
     const data = {
       title: featureTitle,
       description: featureDescription,
     };
-
+    
     const response = await addFeedback(data);
     if (response.status === 200) {
+      dispatch(closeFeedbackPopup());
       dispatch(openSubmitSuccessPopopForFeedback());
 
       setTimeout(() => {
         dispatch(closeSubmitSuccessPopopForFeedback());
       }, [3000]);
+    }else{
+      setError(response?.msg);
     }
   };
 
@@ -56,7 +58,7 @@ const FeedbackPopup = () => {
   return (
     <div className="h-screen w-full">
       <div className="h-full w-full flex items-center justify-center">
-        <div className="bg-white relative h-[90%] md:h-fit my-6 mx-auto z-50 w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] rounded-md space-y-3">
+        <div className="bg-white relative h-fit md:h-fit my-6 mx-auto z-50 w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] rounded-md space-y-3">
           <div
             onClick={handleClose}
             className="absolute top-0 right-0 p-2 cursor-pointer"
@@ -93,7 +95,7 @@ const FeedbackPopup = () => {
                 required
               ></textarea>
 
-              <div className="h-2 flex items-center justify my-2">{error}</div>
+              <div className="h-2 flex items-center justify-center text-center text-xs text- my-2 ">{error}</div>
 
               <Button className="w-max self-end" type="submit">
                 Submit

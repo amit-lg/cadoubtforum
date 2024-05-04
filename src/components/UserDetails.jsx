@@ -15,10 +15,10 @@ const UserDetails = () => {
     <Link id="profile" onClick={closeSidebar} to="/profile" className={`${collapsedSidebar ? "flex-col gap-2 p-1" : "flex-row p-3"} rounded-md flex items-center relative ${collapsedSidebar ? "bg-transparent" : "delay bg-blue-700"}`}>
       <Avatar user={user} />
 
-      <div className={`${collapsedSidebar ? "ml-0" : "ml-3"} flex flex-col`}>
+      {!collapsedSidebar &&<div className={`${collapsedSidebar ? "ml-0" : "ml-3"} flex flex-col`}>
         <span className={`${collapsedSidebar ? "hidden text-center text-xs" : "flex text-sm"}  text-white font-semibold`}>{user?.name}</span>
         <span className={`${collapsedSidebar ? "flex text-center text-xs" : "hidden text-sm"}  text-white font-semibold`}>{user?.name?.split(" ")[0]}</span>
-      </div>
+      </div>}
     </Link>
   );
 };
