@@ -4,18 +4,18 @@ import { MdArrowOutward } from "react-icons/md";
 
 const blogs = [
   {
-    title: "Monthly Snapshot – February 2024",
-    description:
-      "Embark on a journey of innovation with Praan, the brainchild of visionary founders crafting a new frontier in air purification since 2017.",
-    url: "https://blog.leveragedgrowth.in/monthly-snapshot-february-2024/",
-    img: "/blog-image-2.png",
-  },
-  {
     title: "Monthly Snapshot - March 2024",
     description:
       "Step into the world of H&M, where European flair meets American fashion sensibility. How does the brand balance quality and affordability?",
     url: "https://blog.leveragedgrowth.in/monthly-snapshot-march-2024/",
     img: "/blog-image-1.png",
+  },
+  {
+    title: "Monthly Snapshot – April 2024",
+    description:
+      "Step into the world of sweetness with Cadbury’s heartwarming campaign, #ThankYouFirstCoach, which shines a spotlight on cricket’s unsung heroes: the first coaches who nurture budding talent.",
+    url: "https://blog.leveragedgrowth.in/monthly-snapshot-april-2024/",
+    img: "/blog-image-3.png",
   },
 ];
 

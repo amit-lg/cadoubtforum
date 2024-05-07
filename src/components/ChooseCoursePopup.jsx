@@ -1,22 +1,39 @@
 import { closeChhoseCoursePopup } from "../redux/reducers/appReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect, useState } from "react";
 import Button from "./Button";
 import { MdClose } from "react-icons/md";
-import { getCourses } from "../apiCalls/courses";
+import { enrollCourse, getCourses } from "../apiCalls/courses";
+import { loginSuccess } from "../redux/reducers/userReducer";
+import { useNavigate } from "react-router-dom";
 
 const ChooseCoursePopup = () => {
   const [error, setError] = useState("");
   const [courseLevels, setCoursesLevels] = useState([]);
   const [batch, setBatch] = useState("");
 
+  const { tempToken } = useSelector((state) => state.app);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!batch) {
       setError("Please select a batch");
       return;
+    }
+
+    const data = {
+      batchID  : batch,
+      token : tempToken,
+    };
+
+    const response = await enrollCourse(data);
+    if (response.status === 200) {
+      dispatch(closeChhoseCoursePopup());
+      dispatch(loginSuccess(response.data));
+      navigate("/dashboard");
     }
   };
 

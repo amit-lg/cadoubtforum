@@ -45,12 +45,12 @@ const AuthAnimation = ({ loginView, handleLoginView, date }) => {
           />
           {/* )} */}
           {loginView ? (
-            <h3 className="text-white 2xl:text-lg text-base text-center w-[300px] mx-auto">
+            <h3 className="text-white  text-sm text-center w-[300px] mx-auto">
               Reconnect, participate in discussions, share insights, find solutions, and keep the
               momentum going!
             </h3>
           ) : (
-            <h3 className="px-3 text-white 2xl:text-lg text-base text-center w-[300px] xl:w-[420px] mx-auto">
+            <h3 className="px-3 text-white  text-sm text-center w-[300px] xl:w-[420px] mx-auto">
               Let&apos;s embark on this learning adventure together. Dive into discussions, seek
               answers, share experiences, and build connections with fellow learners on your CA
               journey. Let&apos;s grow together!

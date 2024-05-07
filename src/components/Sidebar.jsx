@@ -68,10 +68,10 @@ const Sidebar = ({ handleSidebarState, forMobile }) => {
           ))}
         </div>
 
-        {/* <div
+        <div
           className="hidden lg:block absolute w-full h-full top-0 left-0 z-40"
           onClick={handleSidebarState}
-        ></div> */}
+        ></div>
       </div>
 
       {/* Help links */}

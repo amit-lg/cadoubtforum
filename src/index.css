@@ -16,7 +16,7 @@
   overflow-x: hidden;
 }
 
-body{
+body {
   font-family: "Poppins", sans-serif;
   background-color: rgb(243 244 246);
 }
@@ -38,7 +38,6 @@ option:first {
 }
 
 /* create a class which I can use to view element afetr a delay of 3 s */
-
 
 .bg-blue-gradient {
   background: rgb(2, 0, 36);
@@ -113,12 +112,41 @@ option:first {
   }
 }
 
+.scale-enter {
+  animation: scale-0-100 0.2s ease-in;
+}
+
+.bg-fade-enter {
+  animation: bg-animate 0.2s ease-in;
+}
+
+@keyframes scale-0-100 {
+  0% {
+    transform: translateY(20%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bg-animate {
+  0% {
+    opacity: 0;
+  }
+  100%{
+    opacity: 0.25;
+  }
+}
+
 .delay {
   animation: delay 0.3s ease-in;
 }
 
 .fade-enter {
-  animation: fadeIn 0.3s ease-in;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .fade-out {
@@ -140,7 +168,7 @@ option:first {
   }
 
   100% {
-   display: none;
+    display: none;
   }
 }
 
@@ -390,17 +418,78 @@ abbr[title] {
   color: white;
 }
 
-
-
 /* Driver js */
 .driver-popover {
   font-family: "Poppins", sans-serif;
 }
 
-.driver{
+.driver {
   font-family: "Poppins", sans-serif !important;
 }
 
 .font-popins {
   font-family: "Poppins", sans-serif !important;
 }
+
+/* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
+
+
+ .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeInOverlay 0.3s ease forwards;
+}
+
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  animation: slideInPopup 0.3s ease forwards;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInPopup {
+  from {
+    transform: translate(-50%, -150%);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
+}
+
+

@@ -21,8 +21,6 @@ const AskQuestion = ({ handleClose }) => {
   const navigate = useNavigate();
   const { pointsValue, questionText, isAsked, images, imagesPreview } =
     useSelector((state) => state.ask);
-  const [sizeError, setSizeError] = useState("");
-  const [lengthError, setLengthError] = useState([]);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -144,7 +142,7 @@ const AskQuestion = ({ handleClose }) => {
         <div className="h-full w-full flex flex-col">
           <div className="h-full w-full flex items-center justify-center">
             <div
-              className={`rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${
+              className={`scale-enter rounded-md transition-all duration-700 ease-in-out bg-white relative my-6 mx-auto z-50 ${
                 alreadyAsked
                   ? "w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[30%]"
                   : "w-[90%] sm:w-[70%] md:w-[80%] lg:w-[70%] xl:w-[50%]"
@@ -154,10 +152,10 @@ const AskQuestion = ({ handleClose }) => {
               <div
                 className={`${
                   alreadyAsked ? "hidden" : "flex"
-                } fade-enter border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
+                } border-0 shadow-lg relative flex-col w-full outline-none focus:outline-none rounded-md`}
               >
                 {/*header*/}
-                <div className="bg-blue-500 flex items-start justify-between p-3 border-b border-solid border-blueGray-200 rounded-t-md">
+                <div className="bg-blue-500 flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t-md">
                   <h3 className="text-xl font-semibold text-white">
                     Ask your doubt
                   </h3>
@@ -189,7 +187,7 @@ const AskQuestion = ({ handleClose }) => {
                         setPointError={setPointError}
                       />
 
-                      <div className="p-1 border flex flex-col gap-5  shadow rounded-sm">
+                      <div className="p-1 border flex flex-col gap-5 shadow rounded-sm">
                         <textarea
                           required
                           className="w-full border-none outline-none rouded-md p-2 resize-none"
@@ -243,10 +241,10 @@ const AskQuestion = ({ handleClose }) => {
                     </div>
 
                     {/*footer*/}
-                    <div className="flex items-center justify-end px-6 py-2 border-t border-solid border-blueGray-200 rounded-b">
-                      <div className=" flex items-center">
+                    <div className="flex items-center justify-end px-3  py-2 border-t border-solid border-blueGray-200 rounded-b">
+                      <div className=" flex items-center mt-1">
                         <button
-                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          className=" text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={handleClose}
                         >
@@ -267,7 +265,7 @@ const AskQuestion = ({ handleClose }) => {
               <div
                 className={`${
                   alreadyAsked ? "flex" : "hidden"
-                } fade-enter p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
+                } p-5 rounded-md outline-none focus:outline-none relative my-6 mx-auto flex-col gap-4  items-center justify-center`}
               >
                 <img
                   src="https://img.freepik.com/free-vector/flat-people-asking-questions-illustration_23-2148910850.jpg?t=st=1712728997~exp=1712732597~hmac=1e304cae27f97a4c938f93bf09d49812c6c0f669b8e9d87be18462abf21b1fde&w=740"
@@ -285,7 +283,7 @@ const AskQuestion = ({ handleClose }) => {
             </div>
             <div
               onClick={handleClose}
-              className="absolute opacity-25 h-full w-full inset-0 z-40 bg-black"
+              className="bg-fade-enter absolute opacity-25 h-full w-full inset-0 z-40 bg-black"
             ></div>
           </div>
         </div>

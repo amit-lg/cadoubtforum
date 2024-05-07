@@ -58,7 +58,7 @@ const FeedbackPopup = () => {
   return (
     <div className="h-screen w-full">
       <div className="h-full w-full flex items-center justify-center">
-        <div className="bg-white relative h-fit md:h-fit my-6 mx-auto z-50 w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] rounded-md space-y-3">
+        <div className="scale-enter bg-white shadow-2xl relative h-fit md:h-fit my-6 mx-auto z-50 w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] rounded-md space-y-3 transition-all duration-700 ease-in-out ">
           <div
             onClick={handleClose}
             className="absolute top-0 right-0 p-2 cursor-pointer"
@@ -106,7 +106,7 @@ const FeedbackPopup = () => {
       </div>
       <div
         onClick={handleClose}
-        className="opacity-25 absolute h-full w-full inset-0 z-40 bg-black"
+        className="opacity-25 absolute h-full w-full inset-0 z-40 bg-black bg-fade-enter"
       ></div>
     </div>
   );

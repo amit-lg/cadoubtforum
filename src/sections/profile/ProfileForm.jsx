@@ -88,25 +88,21 @@ const ProfileForm = ({
 
     if (validateFacebookUrl(user?.fbUrl) === false) {
       setLoading(false);
-      alert("Enter valid facebook url");
       return;
     }
 
     if (validateInstagramUrl(user?.instaUrl) === false) {
       setLoading(false);
-      alert("Enter valid url");
       return;
     }
 
     if (validateTwitterUrl(user?.twitterUrl) === false) {
       setLoading(false);
-      alert("Enter valid twitter url");
       return;
     }
 
     if (validatelinkedInUrl(user?.linkedInUrl) === false) {
       setLoading(false);
-      alert("Enter valid linkedin url");
       return;
     }
 
@@ -191,25 +187,21 @@ const ProfileForm = ({
 
     if (validateFacebookUrl(user?.fbUrl) === false) {
       setLoading(false);
-      alert("Enter valid facebook url");
       return;
     }
 
     if (validateInstagramUrl(user?.instaUrl) === false) {
       setLoading(false);
-      alert("Enter valid url");
       return;
     }
 
     if (validateTwitterUrl(user?.twitterUrl) === false) {
       setLoading(false);
-      alert("Enter valid twitter url");
       return;
     }
 
     if (validatelinkedInUrl(user?.linkedInUrl) === false) {
       setLoading(false);
-      alert("Enter valid linkedin url");
       return;
     }
 

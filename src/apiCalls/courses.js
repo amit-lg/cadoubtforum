@@ -16,3 +16,22 @@ export const getCourses = async () => {
     return errorResponse(500, error);
   }
 };
+
+export const enrollCourse = async (data) => {
+  console.log(data)
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + data.token,
+  };
+  try {
+    const response = await instance.post("/doubtforum/enroll", data, {
+      headers,
+    });
+    if (response.status === 200) {
+      return successResponse("Course Enrolled", 200, response.data);
+    }
+  } catch (error) {
+    console.log(error);
+    return errorResponse(500, error);
+  }
+};

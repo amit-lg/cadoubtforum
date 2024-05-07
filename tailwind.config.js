@@ -9,7 +9,7 @@ export default {
       colors: {
         'primary': '#5A32EA',
         'background': '#bg-[#F5F6F8]',
-        'signin-btn' : "#FF9540"
+        'signin-btn' : "#FF9540",
       },
       fontWeight: {
         'md': 700

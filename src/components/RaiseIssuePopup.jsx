@@ -58,7 +58,7 @@ const RaiseIssuePopup = () => {
     <div className="h-screen w-full relative">
       <div className=" h-full w-full flex flex-col">
         <div className="h-full w-full flex items-center justify-center">
-          <div className="relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] z-50 rounded-md bg-white p-5">
+          <div className="scale-enter relative my-6 mx-auto w-[90%] sm:w-[70%] md:w-[70%] lg:w-[60%] xl:w-[30%] z-50 rounded-md bg-white p-5">
             <div className="w-full flex items-center justify-between">
               <h3 className="text-2xl">Describe your issue</h3>
               <MdClose
@@ -69,7 +69,7 @@ const RaiseIssuePopup = () => {
 
             {submitSuccessPopop && (
               <div className="z-60 absolute w-[90%] flex items-center justify-center h-full">
-                <div className="bg-white shadow-lg rounded-b-md w-fit h-fit z-50 relative p-5 flex items-center justify-center flex-col gap-3">
+                <div className=" bg-white shadow-lg rounded-b-md w-fit h-fit z-50 relative p-5 flex items-center justify-center flex-col gap-3">
                   <div className="absolute top-0 left-0 w-full">
                     <Progress />
                   </div>
@@ -130,7 +130,7 @@ const RaiseIssuePopup = () => {
 
           <div
             onClick={handleClose}
-            className="absolute opacity-25 h-full w-full inset-0 z-40 bg-black"
+            className="bg-fade-enter absolute opacity-25 h-full w-full inset-0 z-40 bg-black"
           ></div>
         </div>
       </div>

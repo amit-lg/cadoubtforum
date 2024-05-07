@@ -74,6 +74,7 @@ const SigninForm = () => {
     if (response.status === 200) {
       if(response?.data?.message){
         dispatch(openChooseCoursePopup());
+        dispatch(setTempToken(response?.data?.token));
         return;
       }
       initializeForm();

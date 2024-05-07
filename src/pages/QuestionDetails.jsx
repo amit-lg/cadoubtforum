@@ -48,12 +48,6 @@ const QuestionDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  // useEffect(() => {
-  //   setLikeValue(question?.answer?._count?.likes);
-  //   setLiked(question?.answers?.likes?.length !== 0);
-  // }, [question]);
-
   return (
     <div className="flex flex-col gap-5 h-full w-full fade-enter">
       {loading ? (

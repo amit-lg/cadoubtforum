@@ -44,13 +44,11 @@ const Profile = () => {
     setPicUpdated(true);
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
-      alert("Selected file is not an image");
       return;
     }
 
     // Check if its size is less than 2mb
     if (file.size > 2000000) {
-      alert("Image size should be less than 2mb");
       return;
     }
 

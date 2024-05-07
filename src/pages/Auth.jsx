@@ -6,12 +6,13 @@ import VerifyEmailPopup from "../components/VerifyEmailPopup";
 import { closeVerifyEmail } from "../redux/reducers/appReducer";
 import { useSelector } from "react-redux";
 import { AuthAnimationMemo } from "../components/AuthAnimation";
+import ChooseCoursePopup from "../components/ChooseCoursePopup";
 
 const Auth = () => {
   const [loginView, setLoginView] = useState(true);
   const [termsAndConditionView, setTermsAndConditionView] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const { showVerifyEmail } = useSelector((state) => state.app);
+  const { showVerifyEmail, chooseCoursePopupState } = useSelector((state) => state.app);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -18,13 +18,14 @@ const initialState = {
   tempToken: "",
   feedBackPopup: false,
   calenderPopup: false,
-  askQuestion : false,
-  chooseCoursePopupState : false,
+  askQuestion: false,
+  chooseCoursePopupState: false,
   event: {},
   searchText: "",
   submitSuccessPopopForFeedback: false, // submit successPopop
   submitSuccessPopopForIssue: false, // submit successPopop
   likedQuestion: [], // array of question id , question liked - true , false  , count
+  viewedQuestion: [], // array of question id , question viewed - true , false , count
 };
 
 export const counterSlice = createSlice({
@@ -72,10 +73,10 @@ export const counterSlice = createSlice({
       state.event = action.payload;
     },
 
-    openChooseCoursePopup : (state) => {
+    openChooseCoursePopup: (state) => {
       state.chooseCoursePopupState = true;
     },
-    closeChhoseCoursePopup : (state) =>{
+    closeChhoseCoursePopup: (state) => {
       state.chooseCoursePopupState = false;
     },
 
@@ -173,6 +174,24 @@ export const counterSlice = createSlice({
       // Add the new item
       state.likedQuestion.push({ liked, count, questionid });
     },
+
+    addToViewedQuestion: (state, action) => {
+      // Action.payload is an object with question id , liked - true , false , count find if question exists in the state.likedQuestion array if it exists update its count to the passed count and its liked to the liked value to the passed liked value
+      const { viewed, count, questionid } = action.payload;
+
+      // Find the index of the existing question with the same id
+      const existingIndex = state.viewedQuestion.findIndex(
+        (item) => item.questionid === questionid
+      );
+
+      if (existingIndex !== -1) {
+        // Remove the existing item
+        return;
+      }
+
+      // Add the new item
+      state.likedQuestion.push({ viewed, count, questionid });
+    },
   },
 });
 
@@ -214,6 +233,7 @@ export const {
   closeChhoseCoursePopup,
   openChooseCoursePopup,
   closeAskQuestion,
+  addToViewedQuestion,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

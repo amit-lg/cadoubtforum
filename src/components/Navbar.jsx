@@ -28,14 +28,17 @@ const Navbar = () => {
   const handleSearchTextLocal = (e) => {
     setSearchTextLocal(e.target.value);
 
-    const debouncedSearchData = debounceTest(() => handleSearchTextGlobal(e.target.value), 1000);
+    const debouncedSearchData = debounceTest(
+      () => handleSearchTextGlobal(e.target.value),
+      1000
+    );
 
     debouncedSearchData();
   };
 
   const toggleMobileSearch = () => {
     setShowMobileSearch((prev) => !prev);
-  }
+  };
 
   const handleSearchTextGlobal = (value) => {
     dispatch(setSearchText(value));
@@ -104,26 +107,24 @@ const Navbar = () => {
           >
             <Badge value={0} />
             <IoMdNotifications
-              className={`${notificationState
-                ? "text-3xl text-blue-500"
-                : "text-3xl hover:text-blue-500"
-                }`}
+              className={`${
+                notificationState
+                  ? "text-3xl text-blue-500"
+                  : "text-3xl hover:text-blue-500"
+              }`}
             />
           </div>
-          {showSearchBox && <div
-            onClick={toggleMobileSearch}
-            className="flex sm:hidden relative cursor-pointer"
-          >
-            <MdSearch
-              className={`text-3xl text-blue-500`}
-            />
-          </div>}
+          {showSearchBox && (
+            <div
+              onClick={toggleMobileSearch}
+              className="flex sm:hidden relative cursor-pointer"
+            >
+              <MdSearch className={`text-3xl text-blue-500`} />
+            </div>
+          )}
 
           {showSearchBox ? (
             <div className="hidden sm:flex h-full w-[250px] items-center bg-gray-100 rounded-md border border-white">
-              <div className="p-2 h-full rounded-r-md">
-                <MdSearch className="text-2xl" />
-              </div>
               <input
                 placeholder="Search"
                 type="text"
@@ -131,6 +132,9 @@ const Navbar = () => {
                 value={searchTextLocal}
                 onChange={handleSearchTextLocal}
               />
+              <div className="p-2 h-full rounded-r-md">
+                <MdSearch className="text-2xl" />
+              </div>
             </div>
           ) : null}
           {/* <div onClick={handleLogout} className="cursor-pointer">
@@ -139,7 +143,11 @@ const Navbar = () => {
         </div>
 
         {/* Mobile search  */}
-        <div className={`md:hidden bg-gray-200 rounded-md flex w-full items-center h-[60px] transition-all ease-in-out duration-300 absolute ${showMobileSearch ? "-top-1" : "-top-[80px]"}`}>
+        <div
+          className={`md:hidden bg-gray-200 rounded-md flex w-full items-center h-[60px] transition-all ease-in-out duration-300 absolute ${
+            showMobileSearch ? "-top-1" : "-top-[80px]"
+          }`}
+        >
           <input
             placeholder="Search"
             type="text"
@@ -147,7 +155,10 @@ const Navbar = () => {
             value={searchTextLocal}
             onChange={handleSearchTextLocal}
           />
-          <MdArrowUpward onClick={toggleMobileSearch} className="w-[5%] m-1 text-xl"/>
+          <MdArrowUpward
+            onClick={toggleMobileSearch}
+            className="w-[5%] m-1 text-xl"
+          />
         </div>
       </div>
     </div>

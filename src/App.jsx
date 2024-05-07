@@ -12,14 +12,16 @@ import ProtectRoute from "./components/ProtectRoute";
 import Help from "./pages/Help";
 import Profile from "./pages/Profile";
 // import Admin from "./pages/Admin";
-import InfiniteScrollWithFilters from "./pages/TestPage2";
+import InfiniteScrollWithFilters from "./pages/AllQuestions";
 import EmailVerification from "./pages/EmailVerification";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Calendar from "./pages/Calender";
 import PasswordLayout from "./layouts/PasswordLayout";
 import AuthTest from "./pages/AuthTestPage";
-import TestPage2 from "./pages/TestPage2";
+import TestPage2 from "./pages/AllQuestions";
+import AllQuestions from "./pages/AllQuestions";
+import TestPopup from "./components/TestPopup";
 
 function App() {
   return (
@@ -46,9 +48,10 @@ function App() {
                 <Route path="pinned-questions" element={<PinnedQuestions />} />
                 <Route path="question/:id" element={<QuestionDetails />} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="all-questions" element={<TestPage2 />} />
+                <Route path="all-questions" element={<AllQuestions />} />
                 <Route path="test2" element={<InfiniteScrollWithFilters />} />
 
+                <Route path="test-popup" element={<TestPopup />} />
                 <Route
                   path="unanswered-questions"
                   element={<UnansweredQuestions />}

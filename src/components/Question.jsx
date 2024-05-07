@@ -25,6 +25,7 @@ import { FaCamera } from "react-icons/fa6";
 import { addAnswer } from "../apiCalls/answer";
 import {
   addToLikedQuestion,
+  addToViewedQuestion,
   openImagePopup,
   setImagePopupImg,
   setReportData,
@@ -45,7 +46,7 @@ const Question = ({
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const { likedQuestion } = useSelector((state) => state.app);
+  const { likedQuestion, viewedQuestion } = useSelector((state) => state.app);
 
   const user = {
     name: question?.User?.fname,
@@ -209,6 +210,9 @@ const Question = ({
   };
 
   const goToQuestion = async () => {
+    if (location.pathname === "/question/" + question.id) {
+      return;
+    }
     navigate(`/question/${question.id}`, {
       state: { from: location.pathname },
     });
@@ -228,7 +232,34 @@ const Question = ({
     };
     const response = await viewAQuestion(data);
     if (response.status === 200) {
-      setViewed(true);
+      if (viewed) {
+        setViewValue((viewValue) => {
+          if (viewValue > 0) {
+            return viewValue - 1;
+          } else {
+            return 0;
+          }
+        });
+        setViewed(false);
+        const data = {
+          questionid: question.id,
+          liked: false,
+          count:
+            viewValue > question?._count?.likes
+              ? viewValue - 1
+              : question?._count?.likes - 1,
+        };
+        dispatch(addToViewedQuestion(data));
+      } else {
+        setViewValue((viewValue) => viewValue + 1);
+        setViewed(true);
+        const data = {
+          questionid: question.id,
+          liked: true,
+          count: question?._count?.likes + 1,
+        };
+        dispatch(addToViewedQuestion(data));
+      }
     }
   };
 
@@ -252,7 +283,10 @@ const Question = ({
     const exists = likedQuestion.findIndex(
       (item) => item.questionid === question.id
     );
-    setViewed(question?.views?.length !== 0);
+    const viewed = viewedQuestion.findIndex(
+      (item) => item.questionid === question.id
+    );
+
     if (exists >= 0) {
       setLikeValue(likedQuestion[exists]?.count);
       setLiked(likedQuestion[exists]?.liked);
@@ -260,14 +294,21 @@ const Question = ({
       setLikeValue(question?._count?.likes);
       setLiked(question?.likes?.length !== 0);
     }
+
+    if (viewed >= 0) {
+      setViewed(true);
+    } else {
+      setViewed(question?.views?.length !== 0);
+    }
+
     setPinned(question?.pins?.length !== 0);
   }, [question]);
 
   return (
     <div
       className={`
-      px-0
-      mb-7
+      p-1
+      mb-5
       rounded-md
         ${size === "large" ? "min-h-24 md:min-h-32" : "min-h-24 md:min-h-32"} 
         ${size === "large" ? "md:w-[95%] w-full" : "w-full"} 
@@ -279,7 +320,7 @@ const Question = ({
           flex items-center flex-col md:flex-row gap-3 rounded-md w-full
         `}
       >
-        <Card className="w-full mx-1 p-0 sm:p-1">
+        <Card className="w-full">
           <div
             className={`relative flex flex-col cursor-pointer rounded-md px-1 gap-1 sm:gap-2  w-full p-1 h-max `}
           >
