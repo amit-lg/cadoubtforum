@@ -32,10 +32,8 @@ const EmailVerification = () => {
 
   const verifyEmail = async () => {
     const response = await verifyToken(token);
-    console.log(response?.data);
     if (response.status === 200) {
       if (response?.data?.message) {
-        console.log(response?.data?.message);
         dispatch(setTempToken(response?.data?.token));
         dispatch(openChooseCoursePopup());
         userIsVerified();

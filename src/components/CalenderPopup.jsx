@@ -61,34 +61,3 @@ const CalenderPopup = () => {
 };
 
 export default CalenderPopup;
-
-/*
-  <div className="space-y-5 flex flex-col p-4">
-                <div className="flex items-center justify-between text-orange-400">
-                  <SectionHeading text={event.title} />
-
-                  <div className="flex items-center gap-2">
-                    <FaRegClock className="text-gray-500" />
-                    <div className="self-end font-semibold flex items-center w-max border-l-2 border-l-blue-500 px-2">
-                      <span className="text-xs text-gray-400">{newDate}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 space-y-3 bg-gray-100 rounded-md">
-                  <p className="text-base">{event?.description}</p>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Button
-                    onClick={handleClose}
-                    className="bg-red-400 w-max self-end"
-                  >
-                    Close
-                  </Button>
-                  <Button onClick={handleClose} className="w-max self-end">
-                    Visit now
-                  </Button>
-                </div>
-              </div>
-*/
