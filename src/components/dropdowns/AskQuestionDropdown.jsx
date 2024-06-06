@@ -332,7 +332,7 @@ export const TopicDropdown = ({
                     </div>
                     {data?.map((point, index) => {
                         return (
-                            <>
+                            <div key={point?.id}>
                                 {point?.name !== "empty" && (
                                     <div
                                         key={index}
@@ -342,7 +342,7 @@ export const TopicDropdown = ({
                                         {point?.name}
                                     </div>
                                 )}
-                            </>
+                            </div>
                         );
                     })}
                 </div>

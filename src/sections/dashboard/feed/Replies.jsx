@@ -10,6 +10,9 @@ import {
 } from "../../../redux/reducers/appReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { BiEdit } from "react-icons/bi";
+import { useState } from "react";
+import { MdClose } from "react-icons/md";
 
 const Replies = ({ replies, loading, size }) => {
   return (
@@ -27,7 +30,7 @@ const Replies = ({ replies, loading, size }) => {
             </div>
           ) : (
             replies?.map((reply) => (
-              <EachQuestionReplies size={size} key={reply?._id} reply={reply} />
+              <EachQuestionReplies size={size} key={reply?.id} reply={reply} />
             ))
           )}
         </div>
@@ -41,12 +44,16 @@ export default Replies;
 export const EachQuestionReplies = ({ size, reply }) => {
   return (
     <Link to={`/question/${reply?.question?.id}`}>
-      <Card className="flex bg-white flex-col cursor-pointer py-1 rounded-md">
+      <div className="flex bg-white flex-col cursor-pointer rounded-md shadow">
         <div className="flex overflow-hidden items-center mx-1 rounded-md">
           <div className="flex flex-col gap-2 relative w-full">
-            <div className="rounded-md">
+            <div className="rounded-md mt-2 ml-2">
               <span className="font-semibold text-sm">Question &nbsp;</span>
-              <span> - {reply?.question?.text?.slice(0, 100)} {reply?.question?.text?.length > 100 ? "..." : ""}</span>
+              <span>
+                {" "}
+                - {reply?.question?.text?.slice(0, 100)}{" "}
+                {reply?.question?.text?.length > 100 ? "..." : ""}
+              </span>
             </div>
             <div>
               {/* <span className="font-semibold text-sm">Replies &nbsp;</span> */}
@@ -56,13 +63,17 @@ export const EachQuestionReplies = ({ size, reply }) => {
             </div>
           </div>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 };
 
 export const Reply = ({ answer, bySelf, size }) => {
   const { user } = useSelector((state) => state.user);
+  const [editable, setEditable] = useState(false);
+  const [attachments, setAttachments] = useState(answer?.attachments || []);
+  const [imagesPreview, setImagesPreview] = useState([]);
+
   let replyBy = {
     name: "",
     image: "",
@@ -85,39 +96,127 @@ export const Reply = ({ answer, bySelf, size }) => {
     dispatch(openImagePopup());
     dispatch(setImagePopupImg(url));
   };
+
+  const handleEditable = () => {
+    setEditable(!editable);
+  };
+
+  const removeImgFromAttachments = (id) => {
+    setAttachments(attachments?.filter((attachment) => attachment?.id !== id));
+  };
+
+  const removeAddedImages = (idx) => {
+    const newImages = [...attachments];
+    const newImagesPreview = [...imagesPreview];
+
+    newImagesPreview.splice(idx, 1);
+    newImages.splice(idx, 1);
+
+    setAttachments(newImages);
+    setImagesPreview(newImagesPreview);
+  };
+
   return (
     <Card className="gap-2 text-sm flex items-start w-full">
       <Avatar user={replyBy} size="small" />
-      <div className=" w-full flex flex-col rounded-md">
+      <div className=" w-full flex flex-col rounded-md space-y-2">
         <div className="flex text-orange-300 font-semibold items-center gap-1 justify-between">
           <span>{replyBy?.name}</span>
+          {/* {
+            size === "large" && (
+              // If createat and date now is less than 1 hours
+              // new Date(answer?.createdAt) === new Date(answer?.updatedAt) && (
+              <div onClick={handleEditable}>
+                <BiEdit className="text-blue-500" />
+              </div>
+            )
+            // )
+          } */}
         </div>
+        {/* {editable ? (
+          <div className="w-full h-full">
+            <p
+              contentEditable={true}
+              className="min-h-[100px] bg-slate-200 p-1 rounded-md"
+            >
+              {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
+              {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+            </p>
+            <div>
+              <input type="file" multiple accept="image/*" />
+            </div>
+          </div>
+        ) : (
+          <p className="bg-slate-200 p-1 rounded-md">
+            {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
+            {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+          </p>
+        )} */}
+
         <p className="bg-slate-200 p-1 rounded-md">
           {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
           {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
         </p>
         <div>
-          <div className={`flex ${answer?.attachments?.length === 0 ? "justify-end" : "justify-between"} items-center self-end mt-2`}>
-            {answer?.attachments?.length !== 0 && (
-              <div className="flex gap-2 items-center w-[100px] sm:w-fit overflow-x-scroll">
-                {answer?.attachments?.map((item) => (
-                  <div
-                    key={item?.id}
-                    className="flex items-center gap-1 text-gray-400"
-                  >
-                    <img
-                      src={item?.ImagePath}
-                      onClick={() => dispatch(openPopUp(answer?.attachments))}
-                      alt=""
-                      className="w-[50px] min-w-[50px] h-[50px] rounded-md object-contain cursor-pointer"
-                    />
-                  </div>
-                ))}
+          <div
+            className={`flex mt-3 ${
+              answer?.attachments?.length === 0
+                ? "justify-end"
+                : "justify-between"
+            } items-end self-end`}
+          >
+            {size === "large" && (
+              <div className="px-3 flex gap-2 w-[100px]  items-center overflow-x-scroll sm:w-fit h-[70px]">
+                {attachments?.length !== 0 &&
+                  attachments?.map((attachment, index) => (
+                    <div
+                      onClick={() => openPopUp(attachments)}
+                      key={attachment?.id}
+                      className="relative h-[50px] min-w-[50px] rounded-md"
+                    >
+                      <img
+                        className="h-[50px] rounded-md  w-[50px]"
+                        src={attachment?.ImagePath}
+                        alt={`attachment-${attachment?.id}`}
+                      />
+
+                      {editable && (
+                        <div
+                          onClick={(e) => removeImgFromAttachments(e, index)}
+                          className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                        >
+                          <MdClose className="text-xs" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                {imagesPreview?.length !== 0 &&
+                  imagesPreview?.map((attachment, index) => (
+                    <div
+                      key={attachment}
+                      className="relative h-[50px] min-w-[50px] rounded-md"
+                    >
+                      <img
+                        className="h-[50px] rounded-md  w-[50px]"
+                        src={attachment}
+                        alt={`attachment-${index}`}
+                      />
+
+                      {editable && (
+                        <div
+                          onClick={(e) => removeAddedImages(e, index)}
+                          className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                        >
+                          <MdClose className="text-xs" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
             )}
-            <div className="mt-1 text-[10px] text-gray-500 text-right">
-              {moment(answer?.createdAt).fromNow()}
-            </div>
+          <div className="mt-1 text-[10px] text-gray-500 text-right flex">
+            {moment(answer?.createdAt).fromNow()}
+          </div>
           </div>
         </div>
       </div>

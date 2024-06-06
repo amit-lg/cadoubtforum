@@ -83,7 +83,7 @@ const VerifyEmailPopup = () => {
               <h2 className="text-2xl text-blue-500">
                 Please verify your email
               </h2>
-              <h4 className="text-lg">
+              <h4 className="text-lg text-center">
                 An email has been sent to your email id.
               </h4>
               <img

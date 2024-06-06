@@ -1,6 +1,6 @@
 import Breadcrum from "../components/Breadcrum";
 import Question from "../components/Question";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getQuestionDetails } from "../apiCalls/question";
 import { useDispatch } from "react-redux";
@@ -13,8 +13,8 @@ import Loader from "../components/Loader";
 
 const QuestionDetails = () => {
   const params = useParams();
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [question, setQuestion] = useState({});
   const [repliesAdded, setRepliesAdded] = useState([]);
@@ -28,6 +28,9 @@ const QuestionDetails = () => {
     setLoading(true);
     const response = await getQuestionDetails({ questionid: params.id });
     if (response.status === 200) {
+      if(!response?.data){
+        navigate("/not-found");
+      }
       setQuestion(response.data);
       setLoading(false);
     }

@@ -51,7 +51,7 @@ export const getPinnedQuestions = async (data) => {
       {
         headers,
         cancelToken: canCelToken,
-      },
+      }
     );
     if (response.status === 200) {
       return successResponse("Data fetched successfully", 200, response.data);
@@ -90,7 +90,7 @@ export const getUnansweredQuestions = async (data) => {
       data,
       {
         headers,
-        cancelToken : cancelToken
+        cancelToken: cancelToken,
       }
     );
     if (response.status === 200) {
@@ -256,6 +256,40 @@ export const getDashboardQuestionAndReplies = async () => {
     );
     if (response.status === 200) {
       return successResponse("Data fetched succesfully", 200, response.data);
+    }
+  } catch (error) {
+    return errorResponse(error.response.data.msg, error);
+  }
+};
+
+export const editQuestion = async (data) => {
+  const url = `${backendUrl}/doubtforum/editquestion`;
+  const headers = getHeadersWithFormData();
+  try {
+    const response = await axios.patch(url, data, { headers });
+    if (response.status === 200 || response.status === 201) {
+      return successResponse(
+        "Question edited successfully",
+        response.status,
+        response.data
+      );
+    }
+  } catch (error) {
+    return errorResponse(error.response.data.msg, error);
+  }
+};
+
+export const removeQuestionImage = async (id) => {
+  const url = `${backendUrl}/doubtforum/removequestionimage?attachmentID=${id}`;
+  const headers = getHeadersWithFormData();
+  try {
+    const response = await axios.delete(url, { headers });
+    if (response.status === 200 || response.status === 201) {
+      return successResponse(
+        "Image deleted successfully",
+        response.status,
+        response.data
+      );
     }
   } catch (error) {
     return errorResponse(error.response.data.msg, error);

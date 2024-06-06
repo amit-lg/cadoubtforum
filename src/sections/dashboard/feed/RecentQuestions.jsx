@@ -12,16 +12,16 @@ const RecentQuestions = ({ questions, loading }) => {
 
         <div className="mt-3 pr-2 pb-3 h-[calc(100%-28px)] flex flex-col overflow-y-scroll scrollbar-none">
           {loading ? (
-            <div className="h-full w-full flex items-center justify-center">
+            <div key="loading" className="h-full w-full flex items-center justify-center">
               <Loader />
             </div>
           ) : questions?.length === 0 ? (
-            <div className="text-center flex items-center justify-center h-full w-full">
+            <div key="zero" className="text-center flex items-center justify-center h-full w-full">
               No Questions yet
             </div>
           ) : (
             questions?.map((question) => (
-              <div className="w-full" key={question._id}>
+              <div className="w-full" key={question.id}>
                 <Question  question={question} />
               </div>
             ))

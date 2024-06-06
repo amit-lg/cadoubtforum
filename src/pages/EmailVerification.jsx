@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setAccessToken } from "../utils/cookies";
 import { loginSuccess } from "../redux/reducers/userReducer";
-import { closeChhoseCoursePopup, openChooseCoursePopup, setTempToken } from "../redux/reducers/appReducer";
+import {  openChooseCoursePopup, setTempToken } from "../redux/reducers/appReducer";
 import ChooseCoursePopup from "../components/ChooseCoursePopup";
 const successImgUrl =
   "https://images.hiverhq.com/blog/wp-content/uploads/2023/09/tr:h-360,w-362,pr-true,cm-pad_resize,bg-FFF4F6/Account-verification-email-templates.png";

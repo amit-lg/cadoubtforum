@@ -24,8 +24,14 @@ import FeedbackPopup from "../components/FeedbackPopup";
 import CalenderPopup from "../components/CalenderPopup";
 import FormSuccessPopup from "../components/FormSuccessPopup";
 import { useResponsive } from "../hooks/useResponsive";
+import { getSocket } from "../socket";
+import {
+  addToNotifications,
+  incrementCount,
+} from "../redux/reducers/notificationReducer";
 
 const AppLayout = () => {
+  const socket = getSocket();
   const { isAuthenticated } = useSelector((state) => state.user);
   const { showReportModal, notificationState, raiseIssuePopup, askQuestion } =
     useSelector((state) => state.app);
@@ -75,6 +81,18 @@ const AppLayout = () => {
       fetchUser();
     }
   }, [isAuthenticated, fetchUser]);
+
+  useEffect(() => {
+    console.log("Hello");
+    socket?.on("replied", (data) => {
+      dispatch(incrementCount());
+      dispatch(addToNotifications(data));
+    });
+
+    return () => {
+      socket?.off("replied");
+    };
+  }, [dispatch, socket]);
 
   return (
     <div className="relative w-full">
@@ -179,8 +197,8 @@ const AppLayout = () => {
         <MobileSidebar />
         <div
           className={`absolute ${
-            notificationState ? "right-0" : "-right-[300px]"
-          } top-0 h-full w-[300px] transition-all ease-in-out duration-300`}
+            notificationState ? "right-0" : "-right-[300px] md:-right-[400px]"
+          } top-0 h-full w-[300px] md:w-[400px] transition-all ease-in-out duration-300`}
         >
           <Notifications />
         </div>

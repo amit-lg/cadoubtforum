@@ -51,7 +51,7 @@ const Answer = ({ item, openReportModal, bySelf }) => {
           <MdOutlineReportProblem className="h-5 w-5 text-blue-500 cursor-pointer" />
         </div>
       </div>
-      <Reply bySelf={bySelf} answer={item} />
+      <Reply size={"large"} bySelf={bySelf} answer={item} />
     </div>
   );
 };

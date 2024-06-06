@@ -3,6 +3,7 @@ import Avatar from "./ui/Avatar";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "./ui/Card";
 import {
+  MdAdd,
   MdClose,
   MdComment,
   MdOutlineReportProblem,
@@ -14,8 +15,10 @@ import { TbPinned, TbPinnedFilled } from "react-icons/tb";
 import PropTypes from "prop-types";
 import EachActionButton from "./EachActionButton";
 import {
+  editQuestion,
   likeAQuestion,
   pinAQuestion,
+  removeQuestionImage,
   viewAQuestion,
 } from "../apiCalls/question";
 import { useEffect, useState } from "react";
@@ -33,6 +36,7 @@ import {
 } from "../redux/reducers/appReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { removeQuestion } from "../redux/reducers/pinnedQuestionsReducer";
+import { BiEdit } from "react-icons/bi";
 
 const Question = ({
   size,
@@ -60,14 +64,25 @@ const Question = ({
   const [viewed, setViewed] = useState(question?.views?.length !== 0);
   const [viewValue, setViewValue] = useState(question?._count?.views);
 
+  const [editable, setEditable] = useState(false);
+
   const [pinned, setPinned] = useState(question?.pins?.length !== 0);
 
   const [reply, setReply] = useState("");
   const [replyError, setReplyError] = useState("");
 
-  const [removed, setRemoved] = useState(false);
   const [lengthError, setLengthError] = useState("");
   const [sizeError, setSizeError] = useState("");
+
+  const [questionText, setQuestionText] = useState(question?.text);
+
+  const handleQuestionText = (e) => {
+    setQuestionText(e.target.value);
+  };
+
+  const handleEditable = () => {
+    setEditable(!editable);
+  };
 
   // const [showReplyBox, setShowReplyBox] = useState(false);
 
@@ -112,6 +127,26 @@ const Question = ({
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
 
+  const [attachments, setAttachments] = useState(question?.attachments);
+  const [imagesForQuestion, setImagesForQuestion] = useState([]);
+  const [imagesPreviewForQuestion, setImagesPreviewForQuestion] = useState([]);
+
+  const handleEditQuestion = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    const text = document.getElementById("edit-question-text").innerText;
+    formData.append("qText", text);
+    formData.append("qID", question.id);
+    for (let i = 0; i < imagesForQuestion.length; i++) {
+      formData.append("pictures", imagesForQuestion[i]);
+    }
+    const response = await editQuestion(formData);
+    if (response?.status === 200 || response?.status === 201) {
+      setQuestionText(text);
+      setEditable(!editable);
+    }
+  };
+
   const onFileChange = (event) => {
     let files = event?.target?.files;
 
@@ -141,6 +176,35 @@ const Question = ({
     setImagesPreview(tempImagesPreview);
   };
 
+  const handleQuestionImages = (event) => {
+    let files = event?.target?.files;
+
+    const selectedFiles = files;
+    const newFiles = Array.from(selectedFiles);
+    const tempImages = [...images];
+    const tempImagesPreview = [...imagesPreview];
+
+    newFiles.forEach((file) => {
+      if (file.type.startsWith("image/") && file.size <= 2000000) {
+        if (tempImages.length + attachments.length < 5) {
+          tempImages.push(file);
+          tempImagesPreview.push(URL.createObjectURL(file));
+        } else {
+          setLengthError("You can only upload a maximum of 5 images");
+        }
+      } else {
+        if (!file.type.startsWith("image/")) {
+          setSizeError("Selected file is not an image");
+        } else if (file.size > 2000000) {
+          setSizeError("Image size should be less than 2MB");
+        }
+      }
+    });
+
+    setImagesForQuestion(tempImages);
+    setImagesPreviewForQuestion(tempImagesPreview);
+  };
+
   const removeImg = (index) => {
     const newImages = [...images];
     newImages.splice(index, 1);
@@ -149,6 +213,27 @@ const Question = ({
     const newImagesPreview = [...imagesPreview];
     newImagesPreview.splice(index, 1);
     setImagesPreview(newImagesPreview);
+  };
+
+  const removeImgFromQuestion = async (e, index) => {
+    e.stopPropagation();
+    const response = await removeQuestionImage(attachments[index].id);
+    if (response.status === 200) {
+      const newImages = [...attachments];
+      newImages.splice(index, 1);
+      setAttachments(newImages);
+    }
+  };
+
+  const removedAddedImages = (index) => {
+    const newImages = [...imagesForQuestion];
+    const newImagesPreview = [...imagesPreviewForQuestion];
+
+    newImagesPreview.splice(index, 1);
+    newImages.splice(index, 1);
+
+    setImagesPreviewForQuestion(newImagesPreview);
+    setImagesForQuestion(newImages);
   };
 
   const pinQuestion = async () => {
@@ -265,17 +350,13 @@ const Question = ({
 
   const pinQuestionAndChangeState = async (e) => {
     e.stopPropagation();
-    setRemoved(true);
     const data = {
       questionid: question.id,
     };
 
     const response = await pinAQuestion(data);
     if (response.status === 200) {
-      // setTimeout(() => {
       dispatch(removeQuestion(question.id));
-      // setRemoved(false);
-      // }, 900);
     }
   };
 
@@ -359,16 +440,33 @@ const Question = ({
                   value={question?._count?.answers}
                 />
               </div>
+
+              {size === "large" &&
+                // If createat and date now is less than 1 hours
+                new Date(question?.createdAt) ===
+                  new Date(question?.updatedAt) && (
+                  <div onClick={handleEditable}>
+                    <BiEdit className="text-blue-500" />
+                  </div>
+                )}
             </div>
 
             <div
-              className={`flex ${
-                size === "large" ? "min-h-[80px]" : "h-auto"
+              className={`flex relative ${
+                size === "large" ? "min-h-[80px]" : "h-fit"
               } mx-1 sm:mx-3 bg-slate-200 p-2 rounded-md`}
             >
               {/* Truncate the text if it's length is greater than 60 */}
               {size === "large" ? (
-                <p className="whitespace-pre-line">{question?.text}</p>
+                <>
+                  <p
+                    className="h-auto w-full outline-none break-words"
+                    contentEditable={editable}
+                    id="edit-question-text"
+                  >
+                    {questionText}
+                  </p>
+                </>
               ) : (
                 <p className="">
                   {question?.text?.length > 120
@@ -376,6 +474,26 @@ const Question = ({
                     : question?.text}
                 </p>
               )}
+              <div className="absolute bottom-0 right-0">
+                {attachments?.length < 5 && editable && (
+                  <label
+                    htmlFor="edit-question-image"
+                    className="m-1 h-fit w-fit p-2 bg-gray-300 rounded-full flex items-center justify-center
+                      "
+                  >
+                    <FaCamera className="text-blue-500 text-xs" />
+                  </label>
+                )}
+                <input
+                  type="file"
+                  name="edit-question-image"
+                  id="edit-question-image"
+                  multiple
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleQuestionImages}
+                />
+              </div>
             </div>
 
             <div
@@ -406,19 +524,50 @@ const Question = ({
                 } self-end sm:pr-2 pr-0 w-full`}
               >
                 {size === "large" && (
-                  <div className="px-3 flex gap-2 w-[100px]  items-center overflow-x-scroll sm:w-fit">
-                    {question?.attachments?.length !== 0 &&
-                      question?.attachments?.map((attachment) => (
+                  <div className="px-3 flex gap-2 w-[100px]  items-center overflow-x-scroll sm:w-fit h-[70px]">
+                    {attachments?.length !== 0 &&
+                      attachments?.map((attachment, index) => (
                         <div
-                          onClick={() => openPopUp(question?.attachments)}
+                          onClick={() => openPopUp(attachments)}
                           key={attachment?.id}
-                          className="h-[50px] min-w-[50px] rounded-md"
+                          className="relative h-[50px] min-w-[50px] rounded-md"
                         >
                           <img
                             className="h-[50px] rounded-md  w-[50px]"
                             src={attachment?.ImagePath}
                             alt={`attachment-${attachment?.id}`}
                           />
+
+                          {editable && (
+                            <div
+                              onClick={(e) => removeImgFromQuestion(e, index)}
+                              className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                            >
+                              <MdClose className="text-xs" />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    {imagesPreviewForQuestion?.length !== 0 &&
+                      imagesPreviewForQuestion?.map((attachment, index) => (
+                        <div
+                          key={attachment}
+                          className="relative h-[50px] min-w-[50px] rounded-md"
+                        >
+                          <img
+                            className="h-[50px] rounded-md  w-[50px]"
+                            src={attachment}
+                            alt={`attachment-${index}`}
+                          />
+
+                          {editable && (
+                            <div
+                              onClick={(e) => removedAddedImages(e, index)}
+                              className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                            >
+                              <MdClose className="text-xs" />
+                            </div>
+                          )}
                         </div>
                       ))}
                   </div>
@@ -436,10 +585,13 @@ const Question = ({
                   <span className="text-xs text-gray-500 mx-1 sm:mx-3">
                     {moment(question?.createdAt).fromNow()}
                   </span>
-                  {size === "large" && (
+                  {size === "large" && !editable && (
                     <Button onClick={toggleReplyBox}>
                       {showReplyBox ? "Cancel" : "Answer"}
                     </Button>
+                  )}
+                  {editable && (
+                    <Button onClick={handleEditQuestion}>Submit</Button>
                   )}
                 </div>
               </div>
