@@ -28,6 +28,7 @@ import { getSocket } from "../socket";
 import {
   addToNotifications,
   incrementCount,
+  setNotifications,
 } from "../redux/reducers/notificationReducer";
 
 const AppLayout = () => {
@@ -69,7 +70,8 @@ const AppLayout = () => {
   const fetchUser = useCallback(async () => {
     const response = await getUser();
     if (response.status === 200) {
-      dispatch(setProfile(response.data));
+      dispatch(setProfile(response.data.user));
+      dispatch(setNotifications(response.data?.notify));
     } else {
       removeCookies();
       navigate("/");
@@ -85,6 +87,9 @@ const AppLayout = () => {
   useEffect(() => {
     console.log("Hello");
     socket?.on("replied", (data) => {
+      console.log("-------------------------");
+      console.log(data);
+      console.log("-------------------------");
       dispatch(incrementCount());
       dispatch(addToNotifications(data));
     });

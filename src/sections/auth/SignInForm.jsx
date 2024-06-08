@@ -9,6 +9,7 @@ import { loginSuccess } from "../../redux/reducers/userReducer";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
 import { openChooseCoursePopup, openVerifyEmail, setTempToken } from "../../redux/reducers/appReducer";
+import { setNotifications } from "../../redux/reducers/notificationReducer";
 
 const SigninForm = () => {
   const [email, setEmail] = useState("");
@@ -79,6 +80,7 @@ const SigninForm = () => {
       }
       initializeForm();
       dispatch(loginSuccess(response.data));
+      dispatch(setNotifications(response?.data?.notify));
       navigate("/dashboard");
     } else if (response?.status === 403) {
       dispatch(openVerifyEmail());

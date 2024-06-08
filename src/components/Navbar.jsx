@@ -11,6 +11,11 @@ import {
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { debounceTest } from "../utils/debounce";
+import { notificationSeen } from "../apiCalls/notifications";
+import {
+  setAllToSeen,
+  setNotificationCount,
+} from "../redux/reducers/notificationReducer";
 // import { removeCookies } from "../utils/cookies";
 // import { logoutSuccess } from "../redux/reducers/userReducer";
 // import { useNavigate } from "react-router-dom";
@@ -51,8 +56,13 @@ const Navbar = () => {
     dispatch(openMobileSidebar());
   };
 
-  const openNotificationMenu = () => {
+  const openNotificationMenu = async () => {
     dispatch(openNotification());
+    const response = await notificationSeen();
+    if (response?.status === 200 || response?.status === 201) {
+      dispatch(setAllToSeen());
+      dispatch(setNotificationCount(0));
+    }
   };
 
   useEffect(() => {
@@ -73,12 +83,11 @@ const Navbar = () => {
     <div className="flex items-center py-3 px-3 md:px-8 bg-white ">
       <div className="relative flex w-full items-center justify-between">
         <div className="flex items-center gap-5">
-          <div className="flex lg:hidden shadow-md p-2  rounded-full  cursor-pointer">
-            <MdMenu
-              onClick={openSidebar}
-              className="text-blue-500"
-              fontSize="1.5rem"
-            />
+          <div
+            onClick={openSidebar}
+            className="flex lg:hidden shadow-md p-2  rounded-full  cursor-pointer"
+          >
+            <MdMenu className="text-blue-500" fontSize="1.5rem" />
           </div>
 
           <a

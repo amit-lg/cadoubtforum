@@ -8,8 +8,8 @@ const NotificationItem = ({ notification }) => {
   const dispatch = useDispatch();
 
   const user = {
-    name: notification?.name,
-    image: notification?.image,
+    name: notification?.user?.name,
+    image: notification?.user?.profile,
   };
 
   const closeNotificationMenu = () => {
@@ -19,7 +19,7 @@ const NotificationItem = ({ notification }) => {
     <Link
       onClick={closeNotificationMenu}
       to={`/question/${notification?.questionid}`}
-      className="flex items-start space-x-3 bg-white border-b p-3"
+      className={`flex items-start space-x-3 ${notification?.notseen ? "bg-gray-100" : ""} bg-white border-b p-3`}
     >
       <Avatar user={user} />
       <div className="flex flex-col space-y-1">

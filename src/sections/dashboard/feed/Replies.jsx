@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
+import { FaCamera } from "react-icons/fa6";
+import { editAnswer, removeAnswerImage } from "../../../apiCalls/answer";
+import Button from "../../../components/Button";
 
 const Replies = ({ replies, loading, size }) => {
   return (
@@ -71,8 +74,11 @@ export const EachQuestionReplies = ({ size, reply }) => {
 export const Reply = ({ answer, bySelf, size }) => {
   const { user } = useSelector((state) => state.user);
   const [editable, setEditable] = useState(false);
+  const [error, setError] = useState("");
+
   const [attachments, setAttachments] = useState(answer?.attachments || []);
   const [imagesPreview, setImagesPreview] = useState([]);
+  const [images, setImages] = useState([]);
 
   let replyBy = {
     name: "",
@@ -101,19 +107,73 @@ export const Reply = ({ answer, bySelf, size }) => {
     setEditable(!editable);
   };
 
-  const removeImgFromAttachments = (id) => {
-    setAttachments(attachments?.filter((attachment) => attachment?.id !== id));
+  const handleImages = (event) => {
+    let files = event?.target?.files;
+
+    const selectedFiles = files;
+    const newFiles = Array.from(selectedFiles);
+    const tempImages = [...images];
+    const tempImagesPreview = [...imagesPreview];
+
+    newFiles.forEach((file) => {
+      if (file.type.startsWith("image/") && file.size <= 2000000) {
+        if (tempImages.length + attachments.length < 5) {
+          tempImages.push(file);
+          tempImagesPreview.push(URL.createObjectURL(file));
+        } else {
+          setError("You can only upload a maximum of 5 images");
+        }
+      } else {
+        if (!file.type.startsWith("image/")) {
+          setError("Selected file is not an image");
+        } else if (file.size > 2000000) {
+          setError("Image size should be less than 2MB");
+        }
+      }
+    });
+
+    setImages(tempImages);
+    setImagesPreview(tempImagesPreview);
+  };
+
+  const removeImgFromAttachments = async (id) => {
+    console.log(id);
+    const response = await removeAnswerImage(id);
+    if (response.status === 200) {
+      setAttachments(
+        attachments?.filter((attachment) => attachment?.id !== id)
+      );
+    }
   };
 
   const removeAddedImages = (idx) => {
-    const newImages = [...attachments];
+    console.log(idx);
+    const newImages = [...images];
     const newImagesPreview = [...imagesPreview];
 
     newImagesPreview.splice(idx, 1);
     newImages.splice(idx, 1);
 
-    setAttachments(newImages);
+    setImages(newImages);
     setImagesPreview(newImagesPreview);
+  };
+
+  const handleEdit = async () => {
+    console.log("Running");
+    const text = document.querySelector(
+      `#edit-question-text-${answer?.id}`
+    ).innerText;
+    const formData = new FormData();
+    formData.append("answerText", text);
+    formData.append("answerID", answer.id);
+    for (let i = 0; i < imagesPreview.length; i++) {
+      formData.append("pictures", imagesPreview[i]);
+    }
+    const response = await editAnswer(formData);
+    if (response?.status === 200 || response?.status === 201) {
+      // setQuestionText(text);
+      setEditable(!editable);
+    }
   };
 
   return (
@@ -122,59 +182,73 @@ export const Reply = ({ answer, bySelf, size }) => {
       <div className=" w-full flex flex-col rounded-md space-y-2">
         <div className="flex text-orange-300 font-semibold items-center gap-1 justify-between">
           <span>{replyBy?.name}</span>
-          {/* {
-            size === "large" && (
-              // If createat and date now is less than 1 hours
-              // new Date(answer?.createdAt) === new Date(answer?.updatedAt) && (
-              <div onClick={handleEditable}>
+          {answer?.userId === user?.userId &&
+            size === "large" &&
+            // If createat and date now is less than 1 hours
+            new Date(answer?.createdAt) === new Date(answer?.updatedAt) && (
+              <div className="cursor-pointer" onClick={handleEditable}>
                 <BiEdit className="text-blue-500" />
               </div>
-            )
-            // )
-          } */}
+            )}
         </div>
-        {/* {editable ? (
-          <div className="w-full h-full">
+        {editable ? (
+          <div className="w-full h-full min-h-[100px] bg-slate-200 p-1 rounded-md flex flex-col justify-between">
             <p
+              id={`edit-question-text-${answer?.id}`}
               contentEditable={true}
-              className="min-h-[100px] bg-slate-200 p-1 rounded-md"
+              className="h-[calc(100%-30px)] outline-none"
             >
               {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
-              {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+              {size === "large" ? (answer?.text?.length > 90 ? "..." : "") : ""}
             </p>
-            <div>
-              <input type="file" multiple accept="image/*" />
+            <div className="h-[30px] flex items-center justify-end">
+              <label
+                htmlFor="edit-answer-image"
+                className="m-1 h-fit w-fit p-1 bg-gray-300 rounded-full flex items-center justify-center
+                      "
+              >
+                <FaCamera className="text-blue-500 text-sm" />
+              </label>
+              <input
+                type="file"
+                name="edit-answer-image"
+                id="edit-answer-image"
+                multiple
+                accept="image/*"
+                className="hidden"
+                onChange={handleImages}
+              />
             </div>
           </div>
         ) : (
           <p className="bg-slate-200 p-1 rounded-md">
             {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
-            {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+            {size === "large" ? (answer?.text?.length > 90 ? "..." : "") : ""}
           </p>
-        )} */}
+        )}
 
-        <p className="bg-slate-200 p-1 rounded-md">
+        {/* <p className="bg-slate-200 p-1 rounded-md">
           {size === "small" ? answer?.text?.slice(0, 87) : answer?.text}{" "}
-          {size === "small" ? (answer?.text?.length > 90 ? "..." : "") : ""}
-        </p>
+          {size === "large" ? (answer?.text?.length > 90 ? "..." : "") : ""}
+        </p> */}
         <div>
           <div
-            className={`flex mt-3 ${
-              answer?.attachments?.length === 0
+            className={`w-full flex mt-3 ${
+              attachments?.length === 0 && imagesPreview?.length === 0
                 ? "justify-end"
                 : "justify-between"
             } items-end self-end`}
           >
-            {size === "large" && (
+            {size === "large" && attachments?.length !== 0 && (
               <div className="px-3 flex gap-2 w-[100px]  items-center overflow-x-scroll sm:w-fit h-[70px]">
                 {attachments?.length !== 0 &&
-                  attachments?.map((attachment, index) => (
+                  attachments?.map((attachment) => (
                     <div
-                      onClick={() => openPopUp(attachments)}
                       key={attachment?.id}
                       className="relative h-[50px] min-w-[50px] rounded-md"
                     >
                       <img
+                        onClick={() => openPopUp(attachments)}
                         className="h-[50px] rounded-md  w-[50px]"
                         src={attachment?.ImagePath}
                         alt={`attachment-${attachment?.id}`}
@@ -182,8 +256,10 @@ export const Reply = ({ answer, bySelf, size }) => {
 
                       {editable && (
                         <div
-                          onClick={(e) => removeImgFromAttachments(e, index)}
-                          className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                          onClick={() =>
+                            removeImgFromAttachments(attachment?.id)
+                          }
+                          className="cursor-pointer absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
                         >
                           <MdClose className="text-xs" />
                         </div>
@@ -204,8 +280,8 @@ export const Reply = ({ answer, bySelf, size }) => {
 
                       {editable && (
                         <div
-                          onClick={(e) => removeAddedImages(e, index)}
-                          className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600"
+                          onClick={() => removeAddedImages(index)}
+                          className="absolute -top-2 -right-2 bg-gray-200 rounded-full text-gray-600 cursor-pointer"
                         >
                           <MdClose className="text-xs" />
                         </div>
@@ -214,9 +290,14 @@ export const Reply = ({ answer, bySelf, size }) => {
                   ))}
               </div>
             )}
-          <div className="mt-1 text-[10px] text-gray-500 text-right flex">
-            {moment(answer?.createdAt).fromNow()}
-          </div>
+            <div className="mt-1 flex flex-col text-[10px] text-gray-500 text-right">
+              {editable && (
+                <Button onClick={handleEdit} className="px-1 py-2 text-xs">
+                  Submit
+                </Button>
+              )}
+              {moment(answer?.createdAt).fromNow()}
+            </div>
           </div>
         </div>
       </div>
