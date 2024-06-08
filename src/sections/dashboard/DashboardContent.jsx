@@ -14,6 +14,8 @@ import { RiCloseCircleFill } from "react-icons/ri";
 import GuidedTour from "../../components/GuidedTourForDashboard";
 import Calender from "../../pages/Calender";
 import Blogs from "../../components/Blogs";
+import { setDates } from "../../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
 
 export const DashBoardContent = () => {
   const [allQuestions, setAllQuestions] = useState(0);
@@ -23,6 +25,8 @@ export const DashBoardContent = () => {
   const [recentQuestions, setRecentQuestions] = useState([]);
   const [repliesOnMyQuestions, setRepliesOnMyQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const stats = [
     {
@@ -76,6 +80,7 @@ export const DashBoardContent = () => {
       setRecentQuestions(response?.data?.question);
       setRepliesOnMyQuestions(response?.data?.answers);
       setLoading(false);
+      dispatch(setDates(response?.data?.dates));
     }
   };
 
@@ -102,7 +107,11 @@ export const DashBoardContent = () => {
       </div>
 
       <div className="grid mt-5 lg:mt-0 grid-cols-1 xl:grid-cols-2 lg:space-y-0 bg-transparent">
-        <Replies size="small" loading={loading} replies={repliesOnMyQuestions} />
+        <Replies
+          size="small"
+          loading={loading}
+          replies={repliesOnMyQuestions}
+        />
         <Blogs />
       </div>
     </div>

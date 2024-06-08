@@ -4,6 +4,8 @@ const initialState = {
   subjects: [],
   topics: [],
   points: [],
+  isTopicEmpty: false,
+  isPointEmpty: false,
   subjectValue: "",
   topicValue: "",
   pointsValue: "",
@@ -58,7 +60,14 @@ export const askQuestionsSlice = createSlice({
       state.subjectValue = action.payload;
     },
     setPointsValue: (state, action) => {
+      console.log(action.payload);
       state.pointsValue = action.payload;
+    },
+    setIsTopicEmpty: (state, action) => {
+      state.isTopicEmpty = action.payload;
+    },
+    setIsPointEmpty: (state, action) => {
+      state.isPointEmpty = action.payload;
     },
     clearFilters: (state) => {
       state.pointsValue = "";
@@ -101,6 +110,8 @@ export const {
   setIsAsked,
   initState,
   setImagesPreview,
+  setIsPointEmpty,
+  setIsTopicEmpty,
 } = askQuestionsSlice.actions;
 
 export default askQuestionsSlice.reducer;

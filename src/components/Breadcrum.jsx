@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { MdArrowRight } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -283,7 +282,9 @@ const Breadcrum = ({ question }) => {
             : question?.fallnumber?.Points[0]?.topics?.name}
         </span>
 
-        <span className="mx-3">&gt;</span>
+        {question?.fallnumber?.Points[0]?.topics?.name !== "empty" && (
+          <span className="mx-3">&gt;</span>
+        )}
 
         <span
           onClick={() =>
@@ -304,7 +305,9 @@ const Breadcrum = ({ question }) => {
           }
           className="hover:text-blue-500 cursor-pointer"
         >
-          {question?.fallnumber?.Points[0]?.name}
+          {question?.fallnumber?.Points[0]?.name === "empty"
+            ? ""
+            : question?.fallnumber?.Points[0]?.name}
         </span>
       </p>
     </nav>
