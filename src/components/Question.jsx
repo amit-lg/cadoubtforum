@@ -514,7 +514,7 @@ const Question = ({
                       : question?.fallnumber?.Points[0]?.topics?.name}
                   </div>
                   <div className="flex">
-                    {question?.fallnumber?.Points[0]?.name}
+                    {question?.fallnumber?.Points[0]?.name === "empty" ? "" : question?.fallnumber?.Points[0]?.name}
                   </div>
                 </div>
               )}

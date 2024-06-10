@@ -78,6 +78,7 @@ const AllQuestionDropdowns = ({ pointError, type }) => {
         dispatch(setTopics([...tempTopic]));
         dispatch(setPoints([...tempPoint]));
         setIsTopicEmpty(false);
+        setIsPointEmpty(false);
         dispatch(setTopicValue(""));
         dispatch(setTopicName(""));
         dispatch(setPointsValue(""));

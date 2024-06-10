@@ -85,6 +85,7 @@ const AskQuestionDropdowns = ({
         dispatch(setTopics([...tempTopic]));
         dispatch(setPoints([...tempPoint]));
         dispatch(setIsTopicEmpty(false));
+        dispatch(setIsPointEmpty(false));
         dispatch(setTopicValue(""));
         dispatch(setTopicName(""));
         dispatch(setPointsValue(""));
